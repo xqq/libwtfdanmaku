@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="wrapper">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Noncopyable.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseDanmaku.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DCDanmaku.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DanmakuFactory.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SampleWindow.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TopDanmaku.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rect.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeviceManager.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Win32Mutex.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\R2LDanmaku.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalConfig.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Displayer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderable.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DanmakusRetainer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DanmakusManager.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ITimer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DCDanmaku.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseDanmaku.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DanmakuFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SampleWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TopDanmaku.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeviceManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\R2LDanmaku.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GlobalConfig.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Displayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DanmakusRetainer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DanmakusManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
