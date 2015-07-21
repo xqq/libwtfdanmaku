@@ -63,6 +63,9 @@
     <ClInclude Include="src\ITimer.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\WinmmTimer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DCDanmaku.cpp">
@@ -102,6 +105,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DanmakusManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WinmmTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

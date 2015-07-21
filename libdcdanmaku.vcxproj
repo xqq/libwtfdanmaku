@@ -93,6 +93,7 @@
     <ClInclude Include="src\Rect.hpp" />
     <ClInclude Include="src\SampleWindow.hpp" />
     <ClInclude Include="src\TopDanmaku.hpp" />
+    <ClInclude Include="src\WinmmTimer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -115,6 +116,7 @@
     <ClCompile Include="src\DanmakusRetainer.cpp" />
     <ClCompile Include="src\SampleWindow.cpp" />
     <ClCompile Include="src\TopDanmaku.cpp" />
+    <ClCompile Include="src\WinmmTimer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
