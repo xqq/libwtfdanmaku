@@ -19,7 +19,7 @@ namespace DCDanmaku {
     }
 
     void WinmmTimer::Pause() {
-        mTimeBase = timeGetTime() - mBeginTime;
+        mTimeBase += timeGetTime() - mBeginTime;
     }
 
     void WinmmTimer::Resume() {
