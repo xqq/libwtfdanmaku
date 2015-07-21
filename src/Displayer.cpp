@@ -12,9 +12,7 @@ namespace DCDanmaku {
         return 0;
     }
 
-    time_t Displayer::GetTime() {
-        // TODO
-        return 0;
-    }
+    void Displayer::DrawDanmakuItem(DanmakuRef item) {
 
+    }
 }

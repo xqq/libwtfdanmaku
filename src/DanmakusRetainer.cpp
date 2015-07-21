@@ -10,19 +10,19 @@ namespace DCDanmaku {
     typedef bool(*CompareFunction)(const int, const int);
     typedef std::map<int, DanmakuRef, std::less<int>> Danmakus;
     
-    void DanmakusRetainer::Add(DanmakuRef danmaku, Displayer* displayer) {
+    void DanmakusRetainer::Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) {
         switch (danmaku->GetType()) {
             case DanmakuType::kScrolling:
                 if (mR2LRetainer == nullptr) {
                     mR2LRetainer = std::move(unique_ptr<IDanmakusRetainer>(CreateR2LRetainer()));
                 }
-                mR2LRetainer->Add(danmaku, displayer);
+                mR2LRetainer->Add(danmaku, displayer, currentMillis);
                 break;
             case DanmakuType::kTop:
                 if (mTopRetainer == nullptr) {
                     mTopRetainer = std::move(unique_ptr<IDanmakusRetainer>(CreateTopRetainer()));
                 }
-                mTopRetainer->Add(danmaku, displayer);
+                mTopRetainer->Add(danmaku, displayer, currentMillis);
                 break;
             default:
                 break;
@@ -52,15 +52,14 @@ namespace DCDanmaku {
 
     class DanmakusRetainer::R2LRetainer : public IDanmakusRetainer {
     public:
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer) override {
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();
             }
+
+            RemoveTimeoutDanmakus(currentMillis);
             
-            time_t currentTime = displayer->GetTime();
-            RemoveTimeoutDanmakus(currentTime);
-            
-            if (!danmaku->IsAlive(currentTime)) {
+            if (!danmaku->IsAlive(currentMillis)) {
                 return;
             }
 
@@ -84,7 +83,7 @@ namespace DCDanmaku {
                         suitable = true;
                     }
                 } else {
-                    time_t meetDuration = static_cast<time_t>((item->GetSpeed() * (currentTime - item->GetStartTime()) - item->GetWidth()) / speedDiff);
+                    time_t meetDuration = static_cast<time_t>((item->GetSpeed() * (currentMillis - item->GetStartTime()) - item->GetWidth()) / speedDiff);
                     if (meetDuration * danmaku->GetSpeed() >= displayer->GetWidth() + 30) {
                         suitable = true;
                     }
@@ -133,15 +132,14 @@ namespace DCDanmaku {
 
     class DanmakusRetainer::TopRetainer : public IDanmakusRetainer {
     public:
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer) override {
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();
             }
 
-            time_t currentTime = displayer->GetTime();
-            RemoveTimeoutDanmakus(currentTime);
+            RemoveTimeoutDanmakus(currentMillis);
 
-            if (!danmaku->IsAlive(currentTime)) {
+            if (!danmaku->IsAlive(currentMillis)) {
                 return;
             }
 

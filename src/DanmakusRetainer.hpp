@@ -14,14 +14,14 @@ namespace DCDanmaku {
 
     class IDanmakusRetainer : public Noncopyable {
     public:
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer) = 0;
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) = 0;
         virtual void Clear() = 0;
         virtual void Release() = 0;
     };
 
     class DanmakusRetainer : public Noncopyable {
     public:
-        void Add(DanmakuRef danmaku, Displayer* displayer);
+        void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis);
         void Clear();
         void Release();
     private:

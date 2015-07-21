@@ -2,6 +2,8 @@
 #define _DCD_DISPLAYER_HPP
 
 #include <cstdint>
+#include "ITimer.hpp"
+#include "BaseDanmaku.hpp"
 #include "Noncopyable.hpp"
 
 namespace DCDanmaku {
@@ -13,9 +15,9 @@ namespace DCDanmaku {
         float GetDpiX();
         float GetDpiY();
         void Resize(int width, int height);
-        time_t GetTime();
+        void DrawDanmakuItem(DanmakuRef item);
     private:
-
+        TimerRef mTimer;
     };
 
 }
