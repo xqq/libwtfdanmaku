@@ -1,10 +1,10 @@
-#ifndef _DCD_R2L_DANMAKU_HPP
-#define _DCD_R2L_DANMAKU_HPP
+#ifndef _WTF_R2L_DANMAKU_HPP
+#define _WTF_R2L_DANMAKU_HPP
 
 #include "Noncopyable.hpp"
 #include "BaseDanmaku.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class Displayer;
 
@@ -35,4 +35,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_R2L_DANMAKU_HPP
+#endif // _WTF_R2L_DANMAKU_HPP

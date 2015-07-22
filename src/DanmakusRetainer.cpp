@@ -5,7 +5,7 @@
 #include "Displayer.hpp"
 #include "DanmakusRetainer.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     typedef bool(*CompareFunction)(const int, const int);
     typedef std::map<int, DanmakuRef, std::less<int>> Danmakus;

@@ -1,6 +1,6 @@
 #include "DisplayerImpl.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     DisplayerImpl::DisplayerImpl() {
 

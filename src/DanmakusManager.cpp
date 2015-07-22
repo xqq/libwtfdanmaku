@@ -1,7 +1,7 @@
 #include "Displayer.hpp"
 #include "DanmakusManager.hpp"
 
-namespace DCDanmaku { 
+namespace WTFDanmaku { 
 
     struct DanmakusManager::TimeComparator {
         bool operator() (DanmakuRef a, DanmakuRef b) {

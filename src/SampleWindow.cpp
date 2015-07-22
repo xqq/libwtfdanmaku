@@ -1,6 +1,6 @@
 #include "SampleWindow.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     SampleWindow::SampleWindow(HINSTANCE hInst, int nCmdShow) : m_hInstance(hInst), m_nCmdShow(nCmdShow) { }
 

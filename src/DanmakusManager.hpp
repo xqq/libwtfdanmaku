@@ -1,5 +1,5 @@
-#ifndef _DCD_DANMAKUS_MANAGER_HPP
-#define _DCD_DANMAKUS_MANAGER_HPP
+#ifndef _WTF_DANMAKUS_MANAGER_HPP
+#define _WTF_DANMAKUS_MANAGER_HPP
 
 #include <cstdint>
 #include <memory>
@@ -11,7 +11,7 @@
 
 using std::unique_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class Displayer;
 
@@ -37,4 +37,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DANMAKUS_MANAGER_HPP
+#endif // _WTF_DANMAKUS_MANAGER_HPP

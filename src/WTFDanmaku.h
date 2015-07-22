@@ -1,4 +1,4 @@
-#ifdef LIBDCDANMAKU_EXPORTS
+#ifdef LIBWTFDANMAKU_EXPORTS
 #define DCD_API __declspec(dllexport)
 #else
 #define DCD_API __declspec(dllimport)

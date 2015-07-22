@@ -1,10 +1,10 @@
-#ifndef _DCD_TOP_DANMAKU_HPP
-#define _DCD_TOP_DANMAKU_HPP
+#ifndef _WTF_TOP_DANMAKU_HPP
+#define _WTF_TOP_DANMAKU_HPP
 
 #include "Noncopyable.hpp"
 #include "BaseDanmaku.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class TopDanmaku : public BaseDanmaku {
     public:
@@ -27,4 +27,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_TOP_DANMAKU_HPP
+#endif // _WTF_TOP_DANMAKU_HPP

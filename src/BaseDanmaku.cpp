@@ -4,7 +4,7 @@
 #include "Renderable.hpp"
 #include "BaseDanmaku.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     BaseDanmaku::BaseDanmaku() {
     

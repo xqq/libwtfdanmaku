@@ -1,10 +1,10 @@
-#ifndef _DCD_WIN32_MUTEX_HPP
-#define _DCD_WIN32_MUTEX_HPP
+#ifndef _WTF_WIN32_MUTEX_HPP
+#define _WTF_WIN32_MUTEX_HPP
 
 #include <Windows.h>
 #include "Noncopyable.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class Win32Mutex : public Noncopyable {
     public:
@@ -28,4 +28,4 @@ namespace DCDanmaku {
     };
 
 }
-#endif // _DCD_WIN32_MUTEX_HPP
+#endif // _WTF_WIN32_MUTEX_HPP

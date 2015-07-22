@@ -1,7 +1,7 @@
 #include <mutex>
 #include "DeviceManager.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     unique_ptr<DeviceManager> DeviceManager::sInstance;
     Win32Mutex DeviceManager::sMutex;

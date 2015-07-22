@@ -1,5 +1,5 @@
-#ifndef _DCD_DISPLAYER_HPP
-#define _DCD_DISPLAYER_HPP
+#ifndef _WTF_DISPLAYER_HPP
+#define _WTF_DISPLAYER_HPP
 
 #include <cstdint>
 #include <memory>
@@ -8,7 +8,7 @@
 
 using std::unique_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class DisplayerImpl;
 
@@ -26,4 +26,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DISPLAYER_HPP
+#endif // _WTF_DISPLAYER_HPP

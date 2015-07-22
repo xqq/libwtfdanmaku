@@ -1,7 +1,7 @@
 #include "Displayer.hpp"
 #include "R2LDanmaku.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     R2LDanmaku::~R2LDanmaku() {
         

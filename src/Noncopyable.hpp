@@ -1,7 +1,7 @@
-#ifndef _DCD_NONCOPYABLE_HPP
-#define _DCD_NONCOPYABLE_HPP
+#ifndef _WTF_NONCOPYABLE_HPP
+#define _WTF_NONCOPYABLE_HPP
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class Noncopyable {
     public:
@@ -14,4 +14,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_NONCOPYABLE_HPP
+#endif // _WTF_NONCOPYABLE_HPP

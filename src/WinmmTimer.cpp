@@ -3,7 +3,7 @@
 
 #pragma comment (lib, "winmm.lib")
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     WinmmTimer::WinmmTimer() {
         timeBeginPeriod(1);

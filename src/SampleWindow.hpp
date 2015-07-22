@@ -1,11 +1,11 @@
-#ifndef _DCD_SAMPLE_WINDOW_HPP
-#define _DCD_SAMPLE_WINDOW_HPP
+#ifndef _WTF_SAMPLE_WINDOW_HPP
+#define _WTF_SAMPLE_WINDOW_HPP
 
 #include <Windows.h>
 #include <cstdint>
 #include "Noncopyable.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class SampleWindow : public Noncopyable {
     public:
@@ -28,4 +28,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_SAMPLE_WINDOW_HPP
+#endif // _WTF_SAMPLE_WINDOW_HPP

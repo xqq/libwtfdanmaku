@@ -1,6 +1,6 @@
 #include "GlobalConfig.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     bool sTopVisible = true;
     bool sR2LVisible = true;

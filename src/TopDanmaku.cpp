@@ -1,7 +1,7 @@
 #include "Displayer.hpp"
 #include "TopDanmaku.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     TopDanmaku::~TopDanmaku() {
 

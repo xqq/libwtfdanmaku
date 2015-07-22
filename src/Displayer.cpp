@@ -1,7 +1,7 @@
 #include "DisplayerImpl.hpp"
 #include "Displayer.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     int Displayer::GetWidth() {
         // TODO

@@ -1,7 +1,7 @@
-#include "DCDanmaku.h"
+#include "WTFDanmaku.h"
 #include "BaseDanmaku.hpp"
 
-using namespace DCDanmaku;
+using namespace WTFDanmaku;
 
 DCD_API int fuck(void) {
     //BaseDanmaku danmu;

@@ -1,7 +1,7 @@
-#ifndef _DCD_RECT_HPP
-#define _DCD_RECT_HPP
+#ifndef _WTF_RECT_HPP
+#define _WTF_RECT_HPP
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     template <typename T>
     struct Rect {
@@ -23,4 +23,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_RECT_HPP
+#endif // _WTF_RECT_HPP

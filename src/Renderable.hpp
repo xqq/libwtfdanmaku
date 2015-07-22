@@ -1,5 +1,5 @@
-#ifndef _DCD_RENDERABLE_HPP
-#define _DCD_RENDERABLE_HPP
+#ifndef _WTF_RENDERABLE_HPP
+#define _WTF_RENDERABLE_HPP
 
 #include <cstdint>
 #include <wrl.h>
@@ -9,7 +9,7 @@
 
 using namespace Microsoft::WRL;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class BaseDanmaku;
 
@@ -51,4 +51,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_RENDERABLE_HPP
+#endif // _WTF_RENDERABLE_HPP

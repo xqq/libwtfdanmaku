@@ -2,7 +2,7 @@
 #include "BaseDanmaku.hpp"
 #include "Renderable.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     bool Renderable::BuildTextLayout(ComPtr<IDWriteFactory> dwFactory) {
         ComPtr<IDWriteTextFormat> textFormat = nullptr;

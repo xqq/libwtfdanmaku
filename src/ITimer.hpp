@@ -1,5 +1,5 @@
-#ifndef _DCD_TIMER_HPP
-#define _DCD_TIMER_HPP
+#ifndef _WTF_TIMER_HPP
+#define _WTF_TIMER_HPP
 
 #include <cstdint>
 #include <memory>
@@ -7,7 +7,7 @@
 
 using std::shared_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class ITimer : public Noncopyable {
     public:
@@ -27,4 +27,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_TIMER_HPP
+#endif // _WTF_TIMER_HPP

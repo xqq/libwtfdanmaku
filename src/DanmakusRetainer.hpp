@@ -1,5 +1,5 @@
-#ifndef _DCD_DANMAKU_RETAINER_HPP
-#define _DCD_DANMAKU_RETAINER_HPP
+#ifndef _WTF_DANMAKU_RETAINER_HPP
+#define _WTF_DANMAKU_RETAINER_HPP
 
 #include <cstdint>
 #include <memory>
@@ -8,7 +8,7 @@
 
 using std::unique_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class Displayer;
 
@@ -37,4 +37,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DANMAKU_RETAINER_HPP
+#endif // _WTF_DANMAKU_RETAINER_HPP

@@ -1,11 +1,11 @@
-#ifndef _DCD_GLOBAL_CONFIG_HPP
-#define _DCD_GLOBAL_CONFIG_HPP
+#ifndef _WTF_GLOBAL_CONFIG_HPP
+#define _WTF_GLOBAL_CONFIG_HPP
 
 #include <cstdint>
 #include <dwrite.h>
 #include "Noncopyable.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     extern bool sTopVisible;
     extern bool sR2LVisible;
@@ -24,4 +24,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_GLOBAL_CONFIG_HPP
+#endif // _WTF_GLOBAL_CONFIG_HPP

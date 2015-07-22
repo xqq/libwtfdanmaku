@@ -1,5 +1,5 @@
-#ifndef _DCD_DANMAKU_FACTORY_HPP
-#define _DCD_DANMAKU_FACTORY_HPP
+#ifndef _WTF_DANMAKU_FACTORY_HPP
+#define _WTF_DANMAKU_FACTORY_HPP
 
 #include <cstdint>
 #include <string>
@@ -9,7 +9,7 @@
 
 using std::shared_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class DanmakuFactory : public Noncopyable {
     public:
@@ -18,4 +18,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DANMAKU_FACTORY_HPP
+#endif // _WTF_DANMAKU_FACTORY_HPP

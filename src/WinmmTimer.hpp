@@ -1,9 +1,9 @@
-#ifndef _DCD_WINMM_TIMER_HPP
-#define _DCD_WINMM_TIMER_HPP
+#ifndef _WTF_WINMM_TIMER_HPP
+#define _WTF_WINMM_TIMER_HPP
 
 #include "ITimer.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class WinmmTimer : public ITimer {
     public:
@@ -25,4 +25,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_WINMM_TIMER_HPP
+#endif // _WTF_WINMM_TIMER_HPP

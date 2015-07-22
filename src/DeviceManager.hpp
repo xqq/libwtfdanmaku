@@ -1,5 +1,5 @@
-#ifndef _DCD_DEVICE_MANAGER_HPP
-#define _DCD_DEVICE_MANAGER_HPP
+#ifndef _WTF_DEVICE_MANAGER_HPP
+#define _WTF_DEVICE_MANAGER_HPP
 
 #include <wrl.h>
 #include <d2d1_2.h>
@@ -13,7 +13,7 @@
 using std::unique_ptr;
 using namespace Microsoft::WRL;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     // TODO: refactor
 
@@ -39,4 +39,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DEVICE_MANAGER_HPP
+#endif // _WTF_DEVICE_MANAGER_HPP

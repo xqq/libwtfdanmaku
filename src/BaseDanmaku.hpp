@@ -1,5 +1,5 @@
-#ifndef _DCD_BASE_DANMAKU_HPP
-#define _DCD_BASE_DANMAKU_HPP
+#ifndef _WTF_BASE_DANMAKU_HPP
+#define _WTF_BASE_DANMAKU_HPP
 
 #include <cstdint>
 #include <string>
@@ -11,7 +11,7 @@
 using std::shared_ptr;
 using std::weak_ptr;
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     enum DanmakuType {
         kNull = 0,
@@ -105,4 +105,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_BASE_DANMAKU_HPP
+#endif // _WTF_BASE_DANMAKU_HPP

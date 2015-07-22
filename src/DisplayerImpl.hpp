@@ -1,9 +1,9 @@
-#ifndef _DCD_DISPLAYER_IMPL_HPP
-#define _DCD_DISPLAYER_IMPL_HPP
+#ifndef _WTF_DISPLAYER_IMPL_HPP
+#define _WTF_DISPLAYER_IMPL_HPP
 
 #include "Noncopyable.hpp"
 
-namespace DCDanmaku {
+namespace WTFDanmaku {
 
     class DisplayerImpl : public Noncopyable {
     public:
@@ -16,4 +16,4 @@ namespace DCDanmaku {
 
 }
 
-#endif // _DCD_DISPLAYER_IMPL_HPP
+#endif // _WTF_DISPLAYER_IMPL_HPP
