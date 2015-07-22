@@ -1,3 +1,4 @@
+#include "DisplayerImpl.hpp"
 #include "Displayer.hpp"
 
 namespace DCDanmaku {

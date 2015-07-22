@@ -80,6 +80,7 @@
     <ClInclude Include="src\BaseDanmaku.hpp" />
     <ClInclude Include="src\DanmakusManager.hpp" />
     <ClInclude Include="src\Displayer.hpp" />
+    <ClInclude Include="src\DisplayerImpl.hpp" />
     <ClInclude Include="src\GlobalConfig.hpp" />
     <ClInclude Include="src\ITimer.hpp" />
     <ClInclude Include="src\R2LDanmaku.hpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="src\WinmmTimer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DisplayerImpl.cpp" />
     <ClCompile Include="src\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

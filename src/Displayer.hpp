@@ -2,11 +2,15 @@
 #define _DCD_DISPLAYER_HPP
 
 #include <cstdint>
-#include "ITimer.hpp"
+#include <memory>
 #include "BaseDanmaku.hpp"
 #include "Noncopyable.hpp"
 
+using std::unique_ptr;
+
 namespace DCDanmaku {
+
+    class DisplayerImpl;
 
     class Displayer : public Noncopyable {
     public:
@@ -17,7 +21,7 @@ namespace DCDanmaku {
         void Resize(int width, int height);
         void DrawDanmakuItem(DanmakuRef item);
     private:
-        TimerRef mTimer;
+        unique_ptr<DisplayerImpl> pImpl;
     };
 
 }

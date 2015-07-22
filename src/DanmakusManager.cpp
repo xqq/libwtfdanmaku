@@ -1,3 +1,4 @@
+#include "Displayer.hpp"
 #include "DanmakusManager.hpp"
 
 namespace DCDanmaku { 
@@ -37,6 +38,41 @@ namespace DCDanmaku {
         }
         for (auto iter = danmakuArray->begin(); iter != danmakuArray->end(); ++iter) {
             mAllDanmakus->insert(*iter);
+        }
+
+    }
+
+    void DanmakusManager::SetTimer(TimerRef timer) {
+        mTimer = timer;
+    }
+
+    void DanmakusManager::AddDanmaku(DanmakuRef danmaku) {
+
+    }
+
+    void DanmakusManager::AddLiveDanmaku(DanmakuRef danmaku) {
+        mActiveDanmakus->insert(danmaku);
+    }
+
+    void DanmakusManager::FetchNewDanmakus() {
+
+    }
+
+    void DanmakusManager::RemoveTimeoutDanmakus() {
+        for (auto iter = mActiveDanmakus->begin(); iter != mActiveDanmakus->end(); /* ignore*/) {
+            if (!(*iter)->IsAlive(mTimer->GetMilliseconds())) {
+                iter = mActiveDanmakus->erase(iter);
+            } else {
+                ++iter;
+            }
+        }
+    }
+
+    void DanmakusManager::DrawDanmakus(Displayer* displayer) {
+        RemoveTimeoutDanmakus();
+        FetchNewDanmakus();
+        for (auto iter = mActiveDanmakus->begin(); iter != mActiveDanmakus->end(); ++iter) {
+            displayer->DrawDanmakuItem(*iter);
         }
     }
 
