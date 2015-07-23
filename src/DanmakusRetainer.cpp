@@ -69,6 +69,10 @@ namespace WTFDanmaku {
                 DanmakuRef item = iter->second;
                 Rect<float> itemRect = item->GetRect();
 
+                if (item.get() == danmaku.get()) {
+                    return;
+                }
+
                 if (itemRect.top > top) {
                     if (danmaku->GetHeight() <= itemRect.top - top) {
                         break;
@@ -148,6 +152,10 @@ namespace WTFDanmaku {
             for (auto iter = mDanmakus->begin(); iter != mDanmakus->end(); ++iter) {
                 DanmakuRef item = iter->second;
                 Rect<float> itemRect = item->GetRect();
+
+                if (item.get() == danmaku.get()) {
+                    return;
+                }
 
                 if (itemRect.top > top) {
                     if (danmaku->GetHeight() <= itemRect.top - top) {
