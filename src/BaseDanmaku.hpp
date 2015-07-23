@@ -42,7 +42,15 @@ namespace WTFDanmaku {
             return mTextHeight;
         }
 
-        bool IsMeasured();
+        bool HasMeasured();
+
+        inline bool HasLayout() {
+            return mHasLayout;
+        }
+
+        inline bool HasRenderable() {
+            return mRenderable != nullptr;
+        }
 
         weak_ptr<Renderable> BuildRenderable();
 
@@ -90,6 +98,7 @@ namespace WTFDanmaku {
         Rect<float> mRect;
         float mTextWidth = -1.0f;
         float mTextHeight = -1.0f;
+        bool mHasLayout = false;
     private:
         std::wstring mComment;
         float mTextSize = 0.0f;

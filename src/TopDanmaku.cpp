@@ -14,6 +14,7 @@ namespace WTFDanmaku {
     void TopDanmaku::Layout(Displayer* displayer, float x, float y) {
         this->y = y;
         mRect.top = y;
+        mHasLayout = true;
     }
 
     float TopDanmaku::GetSpeed() {
@@ -22,7 +23,7 @@ namespace WTFDanmaku {
 
     float TopDanmaku::GetLeftAtTime(Displayer* displayer, time_t time) {
         float screenWidth = static_cast<float>(displayer->GetWidth());
-        if (!this->IsMeasured())
+        if (!this->HasMeasured())
             this->Measure();
 
         return screenWidth / 2 - mTextWidth / 2;

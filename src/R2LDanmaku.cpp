@@ -21,11 +21,12 @@ namespace WTFDanmaku {
         mRect.top = y;
         int screenWidth = displayer->GetWidth();
         mDuration = static_cast<time_t>((screenWidth + mTextWidth) / mSpeed);
+        mHasLayout = true;
     }
 
     bool R2LDanmaku::IsAlive(time_t time) {
         time_t elapsed = time - this->mStartTime;
-        return elapsed >= 0 && elapsed < mDuration;
+        return elapsed >= 0 && elapsed <= mDuration;
     }
 
     float R2LDanmaku::GetSpeed() {

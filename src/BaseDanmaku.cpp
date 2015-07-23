@@ -18,7 +18,7 @@ namespace WTFDanmaku {
         return kNull;
     }
 
-    bool BaseDanmaku::IsMeasured() {
+    bool BaseDanmaku::HasMeasured() {
         return nullptr != mRenderable && mRenderable->HasTextLayout();
     }
 
