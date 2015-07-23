@@ -1,45 +1,43 @@
+#include <mutex>
 #include "Displayer.hpp"
+#include "DanmakusRetainer.hpp"
 #include "DanmakusManager.hpp"
 
 namespace WTFDanmaku { 
 
-    struct DanmakusManager::TimeComparator {
-        bool operator() (DanmakuRef a, DanmakuRef b) {
-            int64_t diff = 0;
+    bool DanmakusManager::TimeComparator::operator() (DanmakuRef a, DanmakuRef b) {
+        int64_t diff = 0;
 
-            diff = a->GetStartTime() - b->GetStartTime();
-            if (diff < 0)
-                return true;
-            else if (diff > 0)
-                return false;
-
-            diff = a->GetSendTimestamp() - b->GetSendTimestamp();
-            if (diff < 0)
-                return true;
-            else if (diff > 0)
-                return false;
-
-            diff = a->GetDanmakuId() - b->GetDanmakuId();
-            if (diff < 0)
-                return true;
-            else if (diff > 0)
-                return false;
-
+        diff = a->GetStartTime() - b->GetStartTime();
+        if (diff < 0)
             return true;
-        }
-    };
+        else if (diff > 0)
+            return false;
+
+        diff = a->GetSendTimestamp() - b->GetSendTimestamp();
+        if (diff < 0)
+            return true;
+        else if (diff > 0)
+            return false;
+
+        diff = a->GetDanmakuId() - b->GetDanmakuId();
+        if (diff < 0)
+            return true;
+        else if (diff > 0)
+            return false;
+
+        return true;
+    }
 
     void DanmakusManager::SetDanmakuList(unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
-        if (nullptr == mAllDanmakus) {
-            mAllDanmakus = std::make_unique<TimeSortedDanmakus>();
-        }
-        if (!mAllDanmakus->empty()) {
+        std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
+        if (!mAllDanmakus.empty()) {
             return;
         }
         for (auto iter = danmakuArray->begin(); iter != danmakuArray->end(); ++iter) {
-            mAllDanmakus->insert(*iter);
+            mAllDanmakus.insert(*iter);
         }
-
+        mNextFetchIter = mAllDanmakus.begin();
     }
 
     void DanmakusManager::SetTimer(TimerRef timer) {
@@ -47,21 +45,42 @@ namespace WTFDanmaku {
     }
 
     void DanmakusManager::AddDanmaku(DanmakuRef danmaku) {
-
+        std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
+        mAllDanmakus.insert(danmaku);
     }
 
     void DanmakusManager::AddLiveDanmaku(DanmakuRef danmaku) {
-        mActiveDanmakus->insert(danmaku);
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+        mActiveDanmakus.insert(danmaku);
     }
 
     void DanmakusManager::FetchNewDanmakus() {
+        std::lock_guard<Win32Mutex> locker1(mAllDanmakusMutex);
+        std::lock_guard<Win32Mutex> locker2(mActiveDanmakusMutex);
 
+        time_t current = mTimer->GetMilliseconds();
+        
+        auto iter = mNextFetchIter;
+        while (iter != mAllDanmakus.end()) {
+            if ((*iter)->GetStartTime() < current) {
+                mActiveDanmakus.insert(*iter);
+            } else {
+                mNextFetchIter = iter;
+                break;
+            }
+            ++iter;
+        }
+        
+        mLastFetchTime = current;
     }
 
     void DanmakusManager::RemoveTimeoutDanmakus() {
-        for (auto iter = mActiveDanmakus->begin(); iter != mActiveDanmakus->end(); /* ignore*/) {
-            if (!(*iter)->IsAlive(mTimer->GetMilliseconds())) {
-                iter = mActiveDanmakus->erase(iter);
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+
+        time_t current = mTimer->GetMilliseconds();
+        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore*/) {
+            if (!(*iter)->IsAlive(current)) {
+                iter = mActiveDanmakus.erase(iter);
             } else {
                 ++iter;
             }
@@ -69,9 +88,23 @@ namespace WTFDanmaku {
     }
 
     void DanmakusManager::DrawDanmakus(Displayer* displayer) {
-        RemoveTimeoutDanmakus();
-        FetchNewDanmakus();
-        for (auto iter = mActiveDanmakus->begin(); iter != mActiveDanmakus->end(); ++iter) {
+        mTimer->Update();
+        time_t current = mTimer->GetMilliseconds();
+        
+        if (current - mLastFetchTime >= 100) {
+            RemoveTimeoutDanmakus();
+            FetchNewDanmakus();
+        }
+
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+
+        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter) {
+            if (!(*iter)->HasMeasured()) {
+                (*iter)->Measure();
+            }
+            if (!(*iter)->HasLayout()) {
+                mRetainer.Add(*iter, displayer, current);
+            }
             displayer->DrawDanmakuItem(*iter);
         }
     }

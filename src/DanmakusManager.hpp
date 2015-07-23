@@ -2,11 +2,12 @@
 #define _WTF_DANMAKUS_MANAGER_HPP
 
 #include <cstdint>
-#include <memory>
-#include <vector>
 #include <set>
+#include <vector>
+#include <memory>
 #include "BaseDanmaku.hpp"
 #include "Noncopyable.hpp"
+#include "Win32Mutex.hpp"
 #include "ITimer.hpp"
 
 using std::unique_ptr;
@@ -14,6 +15,7 @@ using std::unique_ptr;
 namespace WTFDanmaku {
 
     class Displayer;
+    class DanmakusRetainer;
 
     class DanmakusManager : public Noncopyable {
     public:
@@ -26,13 +28,19 @@ namespace WTFDanmaku {
         void FetchNewDanmakus();
         void RemoveTimeoutDanmakus();
     private:
-        struct TimeComparator;
+        struct TimeComparator {
+            bool operator() (DanmakuRef a, DanmakuRef b);
+        };
         typedef std::set<DanmakuRef, TimeComparator> TimeSortedDanmakus;
     private:
         TimerRef mTimer;
         time_t mLastFetchTime = 0;
-        unique_ptr<TimeSortedDanmakus> mAllDanmakus;
-        unique_ptr<TimeSortedDanmakus> mActiveDanmakus;
+        TimeSortedDanmakus::iterator mNextFetchIter;
+        Win32Mutex mAllDanmakusMutex;
+        Win32Mutex mActiveDanmakusMutex;
+        TimeSortedDanmakus mAllDanmakus;
+        TimeSortedDanmakus mActiveDanmakus;
+        DanmakusRetainer mRetainer;
     };
 
 }
