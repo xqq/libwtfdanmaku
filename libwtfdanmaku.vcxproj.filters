@@ -33,9 +33,6 @@
     <ClInclude Include="src\Rect.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\DeviceManager.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Win32Mutex.hpp">
       <Filter>src</Filter>
     </ClInclude>
@@ -81,9 +78,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TopDanmaku.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DeviceManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\R2LDanmaku.cpp">

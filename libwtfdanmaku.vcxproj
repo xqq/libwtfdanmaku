@@ -89,7 +89,6 @@
     <ClInclude Include="src\Win32Mutex.hpp" />
     <ClInclude Include="src\DanmakuFactory.hpp" />
     <ClInclude Include="src\WTFDanmaku.h" />
-    <ClInclude Include="src\DeviceManager.hpp" />
     <ClInclude Include="src\Noncopyable.hpp" />
     <ClInclude Include="src\Rect.hpp" />
     <ClInclude Include="src\SampleWindow.hpp" />
@@ -109,7 +108,6 @@
     <ClCompile Include="src\BaseDanmaku.cpp" />
     <ClCompile Include="src\DanmakuFactory.cpp" />
     <ClCompile Include="src\DanmakusManager.cpp" />
-    <ClCompile Include="src\DeviceManager.cpp" />
     <ClCompile Include="src\Displayer.cpp" />
     <ClCompile Include="src\WTFDanmaku.cpp" />
     <ClCompile Include="src\GlobalConfig.cpp" />

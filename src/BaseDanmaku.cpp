@@ -1,6 +1,5 @@
 #include <dwrite.h>
 #include "GlobalConfig.hpp"
-#include "DeviceManager.hpp"
 #include "Renderable.hpp"
 #include "BaseDanmaku.hpp"
 
