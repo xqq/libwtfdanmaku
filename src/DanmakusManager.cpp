@@ -60,15 +60,13 @@ namespace WTFDanmaku {
 
         time_t current = mTimer->GetMilliseconds();
         
-        auto iter = mNextFetchIter;
-        while (iter != mAllDanmakus.end()) {
+        for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); ++iter) {
             if ((*iter)->GetStartTime() < current) {
                 mActiveDanmakus.insert(*iter);
             } else {
                 mNextFetchIter = iter;
                 break;
             }
-            ++iter;
         }
         
         mLastFetchTime = current;
@@ -98,15 +96,24 @@ namespace WTFDanmaku {
 
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
 
-        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter) {
+        auto iter = mActiveDanmakus.begin();
+        if (iter == mActiveDanmakus.end())
+            return;
+
+        displayer->BeginDraw();
+
+        for (/* iter */; iter != mActiveDanmakus.end(); ++iter) {
             if (!(*iter)->HasMeasured()) {
-                (*iter)->Measure();
+                (*iter)->Measure(displayer);
             }
             if (!(*iter)->HasLayout()) {
                 mRetainer.Add(*iter, displayer, current);
             }
-            displayer->DrawDanmakuItem(*iter);
+            displayer->DrawDanmakuItem(*iter, current);
         }
+
+        HRESULT hr = displayer->EndDraw();
+        // TODO: handle hr
     }
 
 }
