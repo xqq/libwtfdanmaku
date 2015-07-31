@@ -11,6 +11,7 @@ using namespace Microsoft::WRL;
 
 namespace WTFDanmaku {
 
+    class Displayer;
     class BaseDanmaku;
 
     class Renderable : public Noncopyable {
@@ -33,11 +34,11 @@ namespace WTFDanmaku {
             return mBitmap.Get() != nullptr;
         }
 
-        inline ComPtr<ID2D1Bitmap> GetBitmap() {
+        inline ComPtr<ID2D1Bitmap1> GetBitmap() {
             return mBitmap;
         }
 
-        bool BuildBitmap();
+        bool BuildBitmap(Displayer* displayer);
 
         inline void Release() {
             mTextLayout.Reset();
@@ -46,7 +47,7 @@ namespace WTFDanmaku {
     private:
         BaseDanmaku* mDanmaku = nullptr;
         ComPtr<IDWriteTextLayout> mTextLayout = nullptr;
-        ComPtr<ID2D1Bitmap> mBitmap = nullptr;
+        ComPtr<ID2D1Bitmap1> mBitmap = nullptr;
     };
 
 }

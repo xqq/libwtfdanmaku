@@ -1,6 +1,8 @@
 #include "GlobalConfig.hpp"
 #include "BaseDanmaku.hpp"
+#include "Displayer.hpp"
 #include "Renderable.hpp"
+
 
 namespace WTFDanmaku {
 
@@ -27,7 +29,34 @@ namespace WTFDanmaku {
         return true;
     }
         
-    bool Renderable::BuildBitmap() {
+    bool Renderable::BuildBitmap(Displayer* displayer) {
+        if (!HasTextLayout())
+            return false;
+
+        DWRITE_TEXT_METRICS metrices;
+        HRESULT hr = mTextLayout->GetMetrics(&metrices);
+        if (FAILED(hr))
+            return false;
+
+        auto bmp = displayer->CreateBitmap(metrices.width, metrices.height);
+        if (bmp == nullptr)
+            return false;
+
+        auto renderTarget = displayer->ObtainRenderTarget(bmp);
+        if (renderTarget == nullptr)
+            return false;
+
+        renderTarget->BeginDraw();
+
+        ComPtr<ID2D1SolidColorBrush> brush;
+        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
+        renderTarget->DrawTextLayout(D2D1::Point2F(), mTextLayout.Get(), brush.Get());
+
+        hr = renderTarget->EndDraw();
+        if (FAILED(hr))
+            return false;
+
+        mBitmap = bmp;
         return true;
     }
 
