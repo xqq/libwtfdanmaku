@@ -16,7 +16,7 @@ namespace WTFDanmaku {
 
         virtual DanmakuType GetType() override;
 
-        virtual void Measure() override;
+        virtual void Measure(Displayer* displayer) override;
 
         virtual void Layout(Displayer* displayer, float x, float y) override;
 

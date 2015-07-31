@@ -24,7 +24,7 @@ namespace WTFDanmaku {
     float TopDanmaku::GetLeftAtTime(Displayer* displayer, time_t time) {
         float screenWidth = static_cast<float>(displayer->GetWidth());
         if (!this->HasMeasured())
-            this->Measure();
+            this->Measure(displayer);
 
         return screenWidth / 2 - mTextWidth / 2;
     }

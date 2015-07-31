@@ -22,7 +22,7 @@ namespace WTFDanmaku {
         return nullptr != mRenderable && mRenderable->HasTextLayout();
     }
 
-    void BaseDanmaku::Measure() {
+    void BaseDanmaku::Measure(Displayer* displayer) {
         if (nullptr == mRenderable) {
             mRenderable = std::make_shared<Renderable>(this);
         }
@@ -31,7 +31,7 @@ namespace WTFDanmaku {
             // TODO
             ComPtr<IDWriteFactory> dwFactory = nullptr; //DM::GetInstance()->GetDWriteFactory();
             mRenderable->BuildTextLayout(dwFactory);
-        }        
+        }
     }
     
     void BaseDanmaku::ReleaseResources() {

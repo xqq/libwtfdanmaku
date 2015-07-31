@@ -64,7 +64,7 @@ namespace WTFDanmaku {
 
         virtual void ReleaseResources();
 
-        virtual void Measure();
+        virtual void Measure(Displayer* displayer);
 
         virtual void Layout(Displayer* displayer, float x, float y) = 0;
 

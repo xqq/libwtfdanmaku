@@ -11,8 +11,8 @@ namespace WTFDanmaku {
         return kScrolling;
     }
 
-    void R2LDanmaku::Measure() {
-        this->BaseDanmaku::Measure();
+    void R2LDanmaku::Measure(Displayer* displayer) {
+        this->BaseDanmaku::Measure(displayer);
         mSpeed = (sLogicalScreenWidth + mTextWidth) / sDanmakuDuration;
     }
 
