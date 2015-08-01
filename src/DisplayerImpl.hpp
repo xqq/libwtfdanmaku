@@ -34,8 +34,11 @@ namespace WTFDanmaku {
         void DrawDanmakuItem(DanmakuRef item, time_t current);
         void BeginDraw();
         HRESULT EndDraw();
+        ComPtr<IDWriteFactory> GetDWriteFactory();
     private:
         HWND mHwnd = 0;
+        int mWidth = 0;
+        int mHeight = 0;
         float mDpiX = 0.0f;
         float mDpiY = 0.0f;
         bool mHasBackend = false;
@@ -47,6 +50,7 @@ namespace WTFDanmaku {
         ComPtr<IDXGIDevice> mDxgiDevice;
         ComPtr<IDXGISurface> mDxgiSurface;
         ComPtr<IDXGISwapChain1> mSwapChain;
+        ComPtr<IDWriteFactory> mDWriteFactory;
         ComPtr<ID2D1Factory1> mD2DFactory;
         ComPtr<ID2D1Device> mD2DDevice;
         ComPtr<ID2D1DeviceContext> mDeviceContext;

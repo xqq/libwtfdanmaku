@@ -1,6 +1,7 @@
 #include <dwrite.h>
 #include "GlobalConfig.hpp"
 #include "Renderable.hpp"
+#include "Displayer.hpp"
 #include "BaseDanmaku.hpp"
 
 namespace WTFDanmaku {
@@ -27,8 +28,7 @@ namespace WTFDanmaku {
         }
 
         if (!mRenderable->HasTextLayout()) {
-            // TODO
-            ComPtr<IDWriteFactory> dwFactory = nullptr; //DM::GetInstance()->GetDWriteFactory();
+            ComPtr<IDWriteFactory> dwFactory = displayer->GetDWriteFactory();
             mRenderable->BuildTextLayout(dwFactory);
         }
     }
@@ -42,8 +42,14 @@ namespace WTFDanmaku {
         return elapsed >= 0 && elapsed <= sDanmakuDuration;
     }
 
-    weak_ptr<Renderable> BaseDanmaku::BuildRenderable() {
-        // TODO
+    weak_ptr<Renderable> BaseDanmaku::BuildRenderable(Displayer* displayer) {
+        if (nullptr == mRenderable || !mRenderable->HasTextLayout())
+            this->Measure(displayer);
+
+        if (!mRenderable->HasBitmap()) {
+            mRenderable->BuildBitmap(displayer);
+        }
+
         return mRenderable;
     }
 

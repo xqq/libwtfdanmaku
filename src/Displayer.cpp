@@ -49,6 +49,10 @@ namespace WTFDanmaku {
         return pImpl->ObtainRenderTarget(bitmap);
     }
 
+    ComPtr<IDWriteFactory> Displayer::GetDWriteFactory() {
+        return pImpl->GetDWriteFactory();
+    }
+
     void Displayer::DrawDanmakuItem(DanmakuRef item, time_t current) {
         pImpl->DrawDanmakuItem(item, current);
     }

@@ -3,7 +3,6 @@
 #include "Displayer.hpp"
 #include "Renderable.hpp"
 
-
 namespace WTFDanmaku {
 
     bool Renderable::BuildTextLayout(ComPtr<IDWriteFactory> dwFactory) {
@@ -28,7 +27,7 @@ namespace WTFDanmaku {
 
         return true;
     }
-        
+    
     bool Renderable::BuildBitmap(Displayer* displayer) {
         if (!HasTextLayout())
             return false;
@@ -47,6 +46,9 @@ namespace WTFDanmaku {
             return false;
 
         renderTarget->BeginDraw();
+
+        renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+        renderTarget->Clear();
 
         ComPtr<ID2D1SolidColorBrush> brush;
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);

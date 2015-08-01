@@ -3,6 +3,7 @@
 
 #include <wrl.h>
 #include <d2d1_1.h>
+#include <dwrite.h>
 #include <cstdint>
 #include <memory>
 #include "BaseDanmaku.hpp"
@@ -31,6 +32,7 @@ namespace WTFDanmaku {
         void DrawDanmakuItem(DanmakuRef item, time_t current);
         void BeginDraw();
         HRESULT EndDraw();
+        ComPtr<IDWriteFactory> GetDWriteFactory();
     private:
         std::unique_ptr<DisplayerImpl> pImpl;
     };

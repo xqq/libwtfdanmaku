@@ -52,7 +52,7 @@ namespace WTFDanmaku {
             return mRenderable != nullptr;
         }
 
-        weak_ptr<Renderable> BuildRenderable();
+        weak_ptr<Renderable> BuildRenderable(Displayer* displayer);
 
         inline weak_ptr<Renderable> GetRenderable() {
             return weak_ptr<Renderable>(mRenderable);

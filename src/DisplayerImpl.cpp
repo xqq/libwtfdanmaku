@@ -17,6 +17,9 @@ namespace WTFDanmaku {
     }
 
     bool DisplayerImpl::SetupBackend() {
+        if (mHasBackend)
+            return false;
+
         if (mHwnd == NULL)
             return false;
 
@@ -36,9 +39,12 @@ namespace WTFDanmaku {
         RECT rect = { 0 };
         GetClientRect(mHwnd, &rect);
 
+        mWidth = rect.right - rect.left;
+        mHeight = rect.bottom - rect.top;
+
         DXGI_SWAP_CHAIN_DESC1 description = { 0 };
-        description.Width = rect.right - rect.left;
-        description.Height = rect.bottom - rect.top;
+        description.Width = mWidth;
+        description.Height = mHeight;
         description.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
         description.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         description.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
@@ -51,6 +57,10 @@ namespace WTFDanmaku {
             return false;
 
         hr = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&mDxgiSurface));
+        if (FAILED(hr))
+            return false;
+
+        hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&mDWriteFactory);
         if (FAILED(hr))
             return false;
 
@@ -87,11 +97,11 @@ namespace WTFDanmaku {
     }
 
     int DisplayerImpl::GetWidth() {
-        return 0;
+        return mWidth;
     }
 
     int DisplayerImpl::GetHeight() {
-        return 0;
+        return mHeight;
     }
 
     float DisplayerImpl::GetDpiX() {
@@ -150,6 +160,10 @@ namespace WTFDanmaku {
     ComPtr<ID2D1RenderTarget> DisplayerImpl::ObtainRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
         // TODO
         return nullptr;
+    }
+
+    ComPtr<IDWriteFactory> DisplayerImpl::GetDWriteFactory() {
+        return mDWriteFactory;
     }
 
     void DisplayerImpl::DrawDanmakuItem(DanmakuRef item, time_t current) {
