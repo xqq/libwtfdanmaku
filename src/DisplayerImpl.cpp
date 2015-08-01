@@ -120,9 +120,7 @@ namespace WTFDanmaku {
         if (!mHasBackend)
             return nullptr;
 
-        ComPtr<ID2D1Bitmap1> bitmap;
         ComPtr<ID3D10Texture2D> texture;
-        ComPtr<IDXGISurface> texSurface;
 
         D3D10_TEXTURE2D_DESC texdesc = { 0 };
         texdesc.ArraySize = 1;
@@ -141,6 +139,7 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return nullptr;
 
+        ComPtr<IDXGISurface> texSurface;
         hr = texture.As(&texSurface);
         if (FAILED(hr))
             return nullptr;
@@ -150,6 +149,7 @@ namespace WTFDanmaku {
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
 
+        ComPtr<ID2D1Bitmap1> bitmap;
         hr = mDeviceContext->CreateBitmapFromDxgiSurface(texSurface.Get(), &props, &bitmap);
         if (FAILED(hr))
             return nullptr;
@@ -205,6 +205,8 @@ namespace WTFDanmaku {
 
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mRenderTarget->EndDraw();
+        mD3DDevice->Flush();
+        mSwapChain->Present(0, 0);
         mInRendering = false;
         mRenderMutex.unlock();
         return hr;

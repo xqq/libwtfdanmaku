@@ -5,7 +5,11 @@
 
 namespace WTFDanmaku {
 
-    bool Renderable::BuildTextLayout(ComPtr<IDWriteFactory> dwFactory) {
+    bool Renderable::BuildTextLayout(Displayer* displayer) {
+        ComPtr<IDWriteFactory> dwFactory = displayer->GetDWriteFactory();
+        if (nullptr == dwFactory)
+            return false;
+
         ComPtr<IDWriteTextFormat> textFormat = nullptr;
 
         HRESULT hr = dwFactory->CreateTextFormat(sFontName, nullptr, sFontWeight, sFontStyle,

@@ -1,9 +1,9 @@
 #ifdef LIBWTFDANMAKU_EXPORTS
-#define DCD_API __declspec(dllexport)
+#define WTF_APT __declspec(dllexport)
 #else
-#define DCD_API __declspec(dllimport)
+#define WTF_APT __declspec(dllimport)
 #endif
 
-DCD_API int fuck(void);
+WTF_APT int fuck(void);
 
-DCD_API int shit(void);
+WTF_APT int shit(void);

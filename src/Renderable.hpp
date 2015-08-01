@@ -3,11 +3,11 @@
 
 #include <cstdint>
 #include <wrl.h>
-#include <d2d1_2.h>
+#include <d2d1_1.h>
 #include <dwrite.h>
 #include "Noncopyable.hpp"
 
-using namespace Microsoft::WRL;
+using Microsoft::WRL::ComPtr;
 
 namespace WTFDanmaku {
 
@@ -28,7 +28,7 @@ namespace WTFDanmaku {
             return mTextLayout;
         }
 
-        bool BuildTextLayout(ComPtr<IDWriteFactory> dwFactory);
+        bool BuildTextLayout(Displayer* displayer);
 
         inline bool HasBitmap() {
             return mBitmap.Get() != nullptr;

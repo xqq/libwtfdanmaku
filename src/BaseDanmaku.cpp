@@ -1,7 +1,6 @@
 #include <dwrite.h>
 #include "GlobalConfig.hpp"
 #include "Renderable.hpp"
-#include "Displayer.hpp"
 #include "BaseDanmaku.hpp"
 
 namespace WTFDanmaku {
@@ -28,8 +27,7 @@ namespace WTFDanmaku {
         }
 
         if (!mRenderable->HasTextLayout()) {
-            ComPtr<IDWriteFactory> dwFactory = displayer->GetDWriteFactory();
-            mRenderable->BuildTextLayout(dwFactory);
+            mRenderable->BuildTextLayout(displayer);
         }
     }
     

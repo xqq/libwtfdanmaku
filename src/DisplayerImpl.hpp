@@ -11,7 +11,7 @@
 #include "Noncopyable.hpp"
 #include "BaseDanmaku.hpp"
 
-using namespace Microsoft::WRL;
+using Microsoft::WRL::ComPtr;
 
 namespace WTFDanmaku {
 
