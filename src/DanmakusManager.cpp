@@ -78,6 +78,7 @@ namespace WTFDanmaku {
         time_t current = mTimer->GetMilliseconds();
         for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore*/) {
             if (!(*iter)->IsAlive(current)) {
+                (*iter)->ReleaseResources();
                 iter = mActiveDanmakus.erase(iter);
             } else {
                 ++iter;

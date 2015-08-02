@@ -158,8 +158,14 @@ namespace WTFDanmaku {
     }
 
     ComPtr<ID2D1RenderTarget> DisplayerImpl::ObtainRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
-        // TODO
-        return nullptr;
+        ComPtr<ID2D1DeviceContext> devCtx;
+        HRESULT hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &devCtx);
+        if (FAILED(hr))
+            return nullptr;
+
+        devCtx->SetTarget(bitmap.Get());
+
+        return devCtx;
     }
 
     ComPtr<IDWriteFactory> DisplayerImpl::GetDWriteFactory() {
