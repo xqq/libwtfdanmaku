@@ -124,7 +124,7 @@ namespace WTFDanmaku {
         }
 
         virtual void Release() override {
-            mDanmakus.release();
+            mDanmakus.reset();
         }
     private:
         unique_ptr<Danmakus> mDanmakus;
