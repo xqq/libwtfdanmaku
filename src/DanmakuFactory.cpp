@@ -9,10 +9,10 @@ namespace WTFDanmaku {
 
         switch (type) {
             case kScrolling:
-                danmaku = std::make_shared<R2LDanmaku>();
+                danmaku = R2LDanmaku::Create();
                 break;
             case kTop:
-                danmaku = std::make_shared<TopDanmaku>();
+                danmaku = TopDanmaku::Create();
                 break;
             case kNull:
             default:

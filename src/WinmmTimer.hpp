@@ -7,6 +7,10 @@ namespace WTFDanmaku {
 
     class WinmmTimer : public ITimer {
     public:
+        static inline TimerRef Create() {
+            return std::make_shared<WinmmTimer>();
+        }
+    public:
         explicit WinmmTimer();
         virtual ~WinmmTimer() override;
         virtual void Start() override;

@@ -8,6 +8,10 @@ namespace WTFDanmaku {
 
     class TopDanmaku : public BaseDanmaku {
     public:
+        static inline DanmakuRef Create() {
+            return std::make_shared<TopDanmaku>();
+        }
+    public:
         explicit TopDanmaku() = default;
 
         virtual ~TopDanmaku() override;

@@ -10,6 +10,10 @@ namespace WTFDanmaku {
 
     class R2LDanmaku : public BaseDanmaku {
     public:
+        static inline DanmakuRef Create() {
+            return std::make_shared<R2LDanmaku>();
+        }
+    public:
         explicit R2LDanmaku() = default;
 
         virtual ~R2LDanmaku() override;
