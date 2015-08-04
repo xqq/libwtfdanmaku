@@ -87,6 +87,27 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
+
+        hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
+        if (FAILED(hr))
+            return false;
+
+        hr = mDCompDevice->CreateTargetForHwnd(mHwnd, true, &mDCompTarget);
+        if (FAILED(hr))
+            return false;
+
+        hr = mDCompDevice->CreateVisual(&mDCompVisual);
+        if (FAILED(hr))
+            return false;
+
+        mDCompVisual->SetBitmapInterpolationMode(DCOMPOSITION_BITMAP_INTERPOLATION_MODE_LINEAR);
+        mDCompVisual->SetCompositeMode(DCOMPOSITION_COMPOSITE_MODE_SOURCE_OVER);
+        mDCompVisual->SetContent(mSwapChain.Get());
+
+        mDCompTarget->SetRoot(mDCompVisual.Get());
+
+        mDCompDevice->Commit();
+
         mHasBackend = true;
         
         return true;
@@ -207,6 +228,7 @@ namespace WTFDanmaku {
         mRenderMutex.lock();
         mInRendering = true;
         mRenderTarget->BeginDraw();
+        mRenderTarget->Clear();
     }
 
     HRESULT DisplayerImpl::EndDraw() {

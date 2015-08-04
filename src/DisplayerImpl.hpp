@@ -6,6 +6,7 @@
 #include <d2d1_1.h>
 #include <d3d10_1.h>
 #include <dxgi1_3.h>
+#include <dcomp.h>
 #include <dwrite.h>
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
@@ -55,6 +56,9 @@ namespace WTFDanmaku {
         ComPtr<ID2D1Device> mD2DDevice;
         ComPtr<ID2D1DeviceContext> mDeviceContext;
         ComPtr<ID2D1RenderTarget> mRenderTarget;
+        ComPtr<IDCompositionDevice> mDCompDevice;
+        ComPtr<IDCompositionTarget> mDCompTarget;
+        ComPtr<IDCompositionVisual> mDCompVisual;
     };
 
 }
