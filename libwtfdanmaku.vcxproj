@@ -86,6 +86,7 @@
     <ClInclude Include="src\R2LDanmaku.hpp" />
     <ClInclude Include="src\Renderable.hpp" />
     <ClInclude Include="src\DanmakusRetainer.hpp" />
+    <ClInclude Include="src\Controller.hpp" />
     <ClInclude Include="src\Win32Mutex.hpp" />
     <ClInclude Include="src\DanmakuFactory.hpp" />
     <ClInclude Include="src\WTFDanmaku.h" />
@@ -109,6 +110,7 @@
     <ClCompile Include="src\DanmakuFactory.cpp" />
     <ClCompile Include="src\DanmakusManager.cpp" />
     <ClCompile Include="src\Displayer.cpp" />
+    <ClCompile Include="src\Controller.cpp" />
     <ClCompile Include="src\WTFDanmaku.cpp" />
     <ClCompile Include="src\GlobalConfig.cpp" />
     <ClCompile Include="src\R2LDanmaku.cpp" />

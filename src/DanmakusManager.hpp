@@ -7,6 +7,7 @@
 #include <memory>
 #include "BaseDanmaku.hpp"
 #include "Noncopyable.hpp"
+#include "DanmakusRetainer.hpp"
 #include "Win32Mutex.hpp"
 #include "ITimer.hpp"
 

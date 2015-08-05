@@ -41,7 +41,7 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        auto bmp = displayer->CreateBitmap(metrices.width, metrices.height);
+        ComPtr<ID2D1Bitmap1> bmp = displayer->CreateBitmap(metrices.width, metrices.height);
         if (bmp == nullptr)
             return false;
 

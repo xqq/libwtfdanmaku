@@ -66,6 +66,9 @@
     <ClInclude Include="src\WTFDanmaku.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Controller.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -108,6 +111,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\WTFDanmaku.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controller.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
