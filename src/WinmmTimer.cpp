@@ -30,17 +30,13 @@ namespace WTFDanmaku {
         mCurrent = timeGetTime() - mBeginTime + mTimeBase;
     }
 
-    void WinmmTimer::Increase(time_t offset) {
-        mTimeBase += offset;
-    }
-
-    void WinmmTimer::Decrease(time_t offset) {
-        mTimeBase -= offset;
-    }
-
     void WinmmTimer::Stop() {
         mBeginTime = 0;
         mTimeBase = 0;
+    }
+
+    void WinmmTimer::AddOffset(int64_t offset) {
+        mTimeBase += offset;
     }
 
     time_t WinmmTimer::GetMilliseconds() {

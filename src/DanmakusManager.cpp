@@ -44,6 +44,21 @@ namespace WTFDanmaku {
         mTimer = timer;
     }
 
+    void DanmakusManager::SeekTo(time_t timepoint) {
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+
+        time_t current = mTimer->GetMilliseconds();
+        int64_t diff = timepoint - current;
+
+        if (diff != 0) {
+            mTimer->AddOffset(diff);
+            mActiveDanmakus.clear();
+            if (diff < 0) {    // seek back, reset cached iteratorit 
+                mNextFetchIter = mAllDanmakus.begin();
+            }
+        }
+    }
+
     void DanmakusManager::AddDanmaku(DanmakuRef danmaku) {
         std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
         mAllDanmakus.insert(danmaku);
@@ -62,7 +77,9 @@ namespace WTFDanmaku {
         
         for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); ++iter) {
             if ((*iter)->GetStartTime() < current) {
-                mActiveDanmakus.insert(*iter);
+                if ((*iter)->IsAlive(current)) {
+                    mActiveDanmakus.insert(*iter);
+                }
             } else {
                 mNextFetchIter = iter;
                 break;

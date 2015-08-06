@@ -17,9 +17,8 @@ namespace WTFDanmaku {
         virtual void Pause() = 0;
         virtual void Resume() = 0;
         virtual void Update() = 0;
-        virtual void Increase(time_t offset) = 0;
-        virtual void Decrease(time_t offset) = 0;
         virtual void Stop() = 0;
+        virtual void AddOffset(int64_t offset) = 0;
         virtual time_t GetMilliseconds() = 0;
     };
 

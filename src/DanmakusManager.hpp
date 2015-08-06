@@ -22,6 +22,7 @@ namespace WTFDanmaku {
     public:
         void SetDanmakuList(unique_ptr<std::vector<DanmakuRef>> danmakuArray);
         void SetTimer(TimerRef timer);
+        void SeekTo(time_t timepoint);
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
         void DrawDanmakus(Displayer* displayer);

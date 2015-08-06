@@ -26,7 +26,7 @@ namespace WTFDanmaku {
 
     bool R2LDanmaku::IsAlive(time_t time) {
         time_t elapsed = time - this->mStartTime;
-        return elapsed >= 0 && elapsed <= mDuration;
+        return elapsed > 0 && elapsed <= mDuration;
     }
 
     float R2LDanmaku::GetSpeed() {

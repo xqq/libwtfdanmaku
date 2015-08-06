@@ -37,7 +37,7 @@ namespace WTFDanmaku {
 
     bool BaseDanmaku::IsAlive(time_t time) {
         time_t elapsed = time - this->mStartTime;
-        return elapsed >= 0 && elapsed <= sDanmakuDuration;
+        return elapsed > 0 && elapsed <= sDanmakuDuration;
     }
 
     weak_ptr<Renderable> BaseDanmaku::BuildRenderable(Displayer* displayer) {

@@ -87,7 +87,9 @@ namespace WTFDanmaku {
                         suitable = true;
                     }
                 } else {
-                    time_t meetDuration = static_cast<time_t>((item->GetSpeed() * (currentMillis - item->GetStartTime()) - item->GetWidth()) / speedDiff);
+                    time_t meetDuration = static_cast<time_t>(
+                        (item->GetSpeed() * (currentMillis - item->GetStartTime()) - item->GetWidth()) / speedDiff
+                    );
                     if (meetDuration * danmaku->GetSpeed() >= displayer->GetWidth() + 30) {
                         suitable = true;
                     }
