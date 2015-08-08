@@ -29,6 +29,10 @@ namespace WTFDanmaku {
         return true;
     }
 
+    DanmakusManager::DanmakusManager() {
+        mNextFetchIter = mAllDanmakus.begin();
+    }
+
     void DanmakusManager::SetDanmakuList(unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
         std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
         if (!mAllDanmakus.empty()) {

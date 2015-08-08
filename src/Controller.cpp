@@ -11,7 +11,7 @@ namespace WTFDanmaku {
     }
 
     Controller::~Controller() {
-
+        Stop();
     }
 
     void Controller::Initialize(void* windowHandle) {

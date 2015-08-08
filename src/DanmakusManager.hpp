@@ -20,6 +20,7 @@ namespace WTFDanmaku {
 
     class DanmakusManager : public Noncopyable {
     public:
+        explicit DanmakusManager();
         void SetDanmakuList(unique_ptr<std::vector<DanmakuRef>> danmakuArray);
         void SetTimer(TimerRef timer);
         void SeekTo(time_t timepoint);

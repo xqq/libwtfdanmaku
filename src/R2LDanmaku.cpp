@@ -14,13 +14,13 @@ namespace WTFDanmaku {
     void R2LDanmaku::Measure(Displayer* displayer) {
         this->BaseDanmaku::Measure(displayer);
         mSpeed = (sLogicalScreenWidth + mTextWidth) / sDanmakuDuration;
+        int screenWidth = displayer->GetWidth();
+        mDuration = static_cast<time_t>((screenWidth + mTextWidth) / mSpeed);
     }
 
     void R2LDanmaku::Layout(Displayer* displayer, float x, float y) {
         this->y = y;
         mRect.top = y;
-        int screenWidth = displayer->GetWidth();
-        mDuration = static_cast<time_t>((screenWidth + mTextWidth) / mSpeed);
         mHasLayout = true;
     }
 

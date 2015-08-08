@@ -55,7 +55,7 @@ namespace WTFDanmaku {
         ComPtr<ID2D1Factory1> mD2DFactory;
         ComPtr<ID2D1Device> mD2DDevice;
         ComPtr<ID2D1DeviceContext> mDeviceContext;
-        ComPtr<ID2D1RenderTarget> mRenderTarget;
+        //ComPtr<ID2D1RenderTarget> mRenderTarget;
         ComPtr<IDCompositionDevice> mDCompDevice;
         ComPtr<IDCompositionTarget> mDCompTarget;
         ComPtr<IDCompositionVisual> mDCompVisual;

@@ -24,7 +24,7 @@ namespace WTFDanmaku {
             return false;
 
         HRESULT hr = D3D10CreateDevice1(nullptr, D3D10_DRIVER_TYPE_HARDWARE, nullptr, D3D10_CREATE_DEVICE_BGRA_SUPPORT,
-            D3D10_FEATURE_LEVEL_10_1, D3D10_SDK_VERSION, &mD3DDevice);
+            D3D10_FEATURE_LEVEL_10_1, D3D10_1_SDK_VERSION, &mD3DDevice);
         if (FAILED(hr))
             return false;
 
@@ -77,16 +77,26 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        float dpiX, dpiY;
-        mD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
+        D2D1_BITMAP_PROPERTIES1 props = {};
+        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
+        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
 
-        D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
-            D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED), dpiX, dpiY);
-
-        hr = mD2DFactory->CreateDxgiSurfaceRenderTarget(mDxgiSurface.Get(), props, &mRenderTarget);
+        ComPtr<ID2D1Bitmap1> surfaceBitmap;
+        hr = mDeviceContext->CreateBitmapFromDxgiSurface(mDxgiSurface.Get(), props, &surfaceBitmap);
         if (FAILED(hr))
             return false;
 
+        mDeviceContext->SetTarget(surfaceBitmap.Get());
+
+        mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
+
+        //D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
+        //    D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED), mDpiX, mDpiY);
+
+        //hr = mD2DFactory->CreateDxgiSurfaceRenderTarget(mDxgiSurface.Get(), props, &mRenderTarget);
+        //if (FAILED(hr))
+        //    return false;
 
         hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
@@ -126,11 +136,11 @@ namespace WTFDanmaku {
     }
 
     float DisplayerImpl::GetDpiX() {
-        return 0;
+        return mDpiX;
     }
 
     float DisplayerImpl::GetDpiY() {
-        return 0;
+        return mDpiY;
     }
     
     void DisplayerImpl::Resize(int width, int height) {
@@ -168,7 +178,7 @@ namespace WTFDanmaku {
         D2D1_BITMAP_PROPERTIES1 props = {};
         props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
+        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
 
         ComPtr<ID2D1Bitmap1> bitmap;
         hr = mDeviceContext->CreateBitmapFromDxgiSurface(texSurface.Get(), &props, &bitmap);
@@ -221,18 +231,18 @@ namespace WTFDanmaku {
 
         D2D1_RECT_F dest = D2D1::RectF(rect.left, rect.top, rect.right, rect.bottom);
         
-        mRenderTarget->DrawBitmap(bitmap.Get(), dest);
+        mDeviceContext->DrawBitmap(bitmap.Get(), dest);
     }
 
     void DisplayerImpl::BeginDraw() {
         mRenderMutex.lock();
         mInRendering = true;
-        mRenderTarget->BeginDraw();
-        mRenderTarget->Clear();
+        mDeviceContext->BeginDraw();
+        mDeviceContext->Clear();
     }
 
     HRESULT DisplayerImpl::EndDraw() {
-        HRESULT hr = mRenderTarget->EndDraw();
+        HRESULT hr = mDeviceContext->EndDraw();
         mD3DDevice->Flush();
         mSwapChain->Present(0, 0);
         mInRendering = false;
