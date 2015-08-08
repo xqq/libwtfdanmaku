@@ -15,12 +15,14 @@ namespace WTFDanmaku {
         void SetHitTestOverEnabled(bool enabled);
         int Run();
     private:
-
+        ATOM RegisterWindowClass();
+    private:
+        static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     private:
         int m_nCmdShow = 0;
         HINSTANCE m_hInstance = NULL;
         HWND m_hWindow = NULL;
-        PWSTR m_WindowClassName = L"DCDanmamku";
+        PWSTR m_WindowClassName = L"WTFDanmaku";
 
         uint32_t m_ClientWidth = 0;
         uint32_t m_ClientHeight = 0;

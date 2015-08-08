@@ -154,14 +154,15 @@ namespace WTFDanmaku {
                 std::this_thread::yield();
                 continue;
             } else if (mStatus == State::kStopped) {
-                mTimer->Stop();
-                mDisplayer->TeardownBackend();
                 break;
             }
 
             mManager->DrawDanmakus(mDisplayer.get());
             // wait for vblank?
         }
+
+        mTimer->Stop();
+        mDisplayer->TeardownBackend();
     }
 
 }

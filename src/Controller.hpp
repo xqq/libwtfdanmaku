@@ -5,6 +5,7 @@
 #include <queue>
 #include <memory>
 #include <thread>
+#include "BaseDanmaku.hpp"
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
 #include "ITimer.hpp"
@@ -45,7 +46,7 @@ namespace WTFDanmaku {
         explicit Controller();
         ~Controller();
         void Initialize(void* windowHandle);
-        void Initialize(void* windowHandle, unique_ptr<std::vector<DanmakuRef>> danmakuArray);
+        void Initialize(void* windowHandle, std::unique_ptr<std::vector<DanmakuRef>> danmakuArray);
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
         void Start();
