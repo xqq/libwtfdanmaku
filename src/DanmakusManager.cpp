@@ -53,7 +53,7 @@ namespace WTFDanmaku {
         if (diff != 0) {
             mTimer->AddOffset(diff);
             mActiveDanmakus.clear();
-            if (diff < 0) {    // seek back, reset cached iteratorit 
+            if (diff < 0) {    // seek back, reset cached iterator
                 mNextFetchIter = mAllDanmakus.begin();
             }
         }

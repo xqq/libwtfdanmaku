@@ -18,10 +18,9 @@ namespace WTFDanmaku {
     private:
         enum State : int {
             kIdle = 0,
-            kInitializing = 1,
-            kRunning = 2,
-            kPaused = 3,
-            kStopped = 4
+            kRunning = 1,
+            kPaused = 2,
+            kStopped = 3
         };
 
         enum Cmd : int {
@@ -63,8 +62,7 @@ namespace WTFDanmaku {
         Command PopCommand();
         void HandleCommand();
     private:
-        int mCurrentState = State::kIdle;
-        int mTargetState = State::kIdle;
+        int mStatus = State::kIdle;
         std::thread mWorker;
         void* mHwnd = nullptr;
         TimerRef mTimer;

@@ -50,42 +50,49 @@ namespace WTFDanmaku {
     void Controller::AddDanmaku(DanmakuRef danmaku) {
         mManager->AddDanmaku(danmaku);
     }
+
     void Controller::AddLiveDanmaku(DanmakuRef danmaku) {
         mManager->AddLiveDanmaku(danmaku);
     }
 
     bool Controller::IsRunning() {
-        return mCurrentState == kInitializing || mCurrentState == kRunning;
+        return mStatus == State::kRunning;
     }
 
-    void Controller::Start() { // TODO
-        if (IsRunning()) {
+    void Controller::Start() {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
             PushCommand(Cmd::kStart);
         } else {
-            mTimer->Start();
+            if (mWorker.joinable()) {
+                mWorker.detach();
+            }
+            mWorker = std::thread(&Controller::Working, this);
         }
     }
     
-    void Controller::Pause() {  // TODO
-        if (IsRunning()) {
+    void Controller::Pause() {
+        if (mStatus == State::kRunning) {
             PushCommand(Cmd::kPause);
         }
     }
 
     void Controller::Resume() {
-        if (mCurrentState == kPause) {
-
+        if (mStatus == State::kPaused) {
+            PushCommand(Cmd::kResume);
         }
     }
 
     void Controller::Stop() {
-        if (IsRunning()) {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
             PushCommand(Cmd::kStop);
+            if (mWorker.joinable()) {
+                mWorker.join();
+            }
         }
     }
 
     void Controller::SeekTo(time_t milliseconds) {
-        if (IsRunning()) {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
             Command cmd(Cmd::kSeek);
             cmd.arg1 = *reinterpret_cast<int*>(&milliseconds);
             cmd.arg2 = *(reinterpret_cast<int*>(&milliseconds) + 1);
@@ -106,33 +113,51 @@ namespace WTFDanmaku {
 
             switch (cmd.what) {
                 case Cmd::kStart:
-
+                case Cmd::kResume:
+                    if (mStatus == State::kPaused) {
+                        mTimer->Resume();
+                        mStatus = State::kRunning;
+                    }
                     break;
                 case Cmd::kPause:
-
-                    break;
-                case Cmd::kResume:
-
+                    if (mStatus == State::kRunning) {
+                        mTimer->Pause();
+                        mStatus = State::kPaused;
+                    }
                     break;
                 case Cmd::kSeek:
-
+                    if (mStatus == State::kRunning) {
+                        time_t timepoint = 0;
+                        *reinterpret_cast<int*>(&timepoint) = cmd.arg1;
+                        *(reinterpret_cast<int*>(&timepoint) + 1) = cmd.arg2;
+                        mManager->SeekTo(timepoint);
+                    }
                     break;
                 case Cmd::kStop:
-
+                    mStatus = State::kStopped;
                     break;
             }
         }
     }
 
     void Controller::Working() {
+        mStatus = State::kRunning;
+        mTimer->Start();
         bool succeed = mDisplayer->SetupBackend();
         if (!succeed) {
-            // error handling?
             OutputDebugStringW(L"mDisplayer->SetupBackend() failed");
         }
 
-        while (mCurrentState == kRunning) {
+        while (mStatus == State::kRunning || mStatus == State::kPaused) {
             HandleCommand();
+            if (mStatus == State::kPaused) {
+                std::this_thread::yield();
+                continue;
+            } else if (mStatus == State::kStopped) {
+                mTimer->Stop();
+                mDisplayer->TeardownBackend();
+                break;
+            }
 
             mManager->DrawDanmakus(mDisplayer.get());
             // wait for vblank?
