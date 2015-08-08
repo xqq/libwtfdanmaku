@@ -1,9 +1,9 @@
 #ifdef LIBWTFDANMAKU_EXPORTS
-#define WTF_APT __declspec(dllexport)
+#define WTF_API __declspec(dllexport)
 #else
-#define WTF_APT __declspec(dllimport)
+#define WTF_API __declspec(dllimport)
 #endif
 
-WTF_APT int fuck(void);
+WTF_API int fuck(void);
 
-WTF_APT int shit(void);
+WTF_API int shit(void);

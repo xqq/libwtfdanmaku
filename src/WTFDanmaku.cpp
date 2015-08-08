@@ -3,13 +3,12 @@
 
 using namespace WTFDanmaku;
 
-WTF_APT int fuck(void) {
+WTF_API int fuck(void) {
     //BaseDanmaku danmu;
-    
 	return 42;
 }
 
-WTF_APT int shit(void) {
+WTF_API int shit(void) {
     //Noncopyable cp;
     return 0;
 }
