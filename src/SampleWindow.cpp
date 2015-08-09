@@ -97,8 +97,6 @@ namespace WTFDanmaku {
             }
             case WM_COMMAND:
                 break;
-            case WM_PAINT:
-                break;
             case WM_LBUTTONDOWN:
                 break;
             case WM_LBUTTONUP:
