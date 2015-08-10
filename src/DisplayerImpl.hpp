@@ -49,6 +49,8 @@ namespace WTFDanmaku {
             return mDpiY;
         }
     private:
+        static HRESULT CreateD3D10Device(IDXGIAdapter* adapter, D3D10_DRIVER_TYPE driverType, UINT flags, ID3D10Device1** ppDevice);
+    private:
         HWND mHwnd = 0;
         int mWidth = 0;
         int mHeight = 0;

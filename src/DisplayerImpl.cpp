@@ -16,6 +16,30 @@ namespace WTFDanmaku {
         mHwnd = windowHandle;
     }
 
+    HRESULT DisplayerImpl::CreateD3D10Device(IDXGIAdapter* adapter, D3D10_DRIVER_TYPE driverType, UINT flags, ID3D10Device1** ppDevice) {
+        HRESULT hr = S_OK;
+
+        static const D3D10_FEATURE_LEVEL1 levelAttempts[] = {
+            D3D10_FEATURE_LEVEL_10_1,
+            D3D10_FEATURE_LEVEL_10_0,
+            D3D10_FEATURE_LEVEL_9_3,
+            D3D10_FEATURE_LEVEL_9_2,
+            D3D10_FEATURE_LEVEL_9_1
+        };
+
+        for (int i = 0; i < sizeof(levelAttempts) / sizeof(levelAttempts[0]); i++) {
+            ID3D10Device1* device = nullptr;
+            hr = D3D10CreateDevice1(adapter, driverType, NULL, flags, levelAttempts[i], D3D10_1_SDK_VERSION, &device);
+            if (SUCCEEDED(hr)) {
+                *ppDevice = device;
+                device = nullptr;
+                break;
+            }
+        }
+
+        return hr;
+    }
+
     bool DisplayerImpl::SetupBackend() {
         if (mHasBackend)
             return false;
@@ -23,8 +47,11 @@ namespace WTFDanmaku {
         if (mHwnd == NULL)
             return false;
 
-        HRESULT hr = D3D10CreateDevice1(nullptr, D3D10_DRIVER_TYPE_HARDWARE, nullptr, D3D10_CREATE_DEVICE_BGRA_SUPPORT,
-            D3D10_FEATURE_LEVEL_10_1, D3D10_1_SDK_VERSION, &mD3DDevice);
+        HRESULT hr = CreateD3D10Device(nullptr, D3D10_DRIVER_TYPE_HARDWARE, D3D10_CREATE_DEVICE_BGRA_SUPPORT, &mD3DDevice);
+        if (FAILED(hr)) {    // fallback to software D3D10 backend
+            hr = CreateD3D10Device(nullptr, D3D10_DRIVER_TYPE_WARP, D3D10_CREATE_DEVICE_BGRA_SUPPORT, &mD3DDevice);
+        }
+
         if (FAILED(hr))
             return false;
 
