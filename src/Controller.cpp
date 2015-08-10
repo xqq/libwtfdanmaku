@@ -60,8 +60,10 @@ namespace WTFDanmaku {
     }
 
     void Controller::Start() {
-        if (mStatus == State::kRunning || mStatus == State::kPaused) {
-            PushCommand(Cmd::kStart);
+        if (mStatus == State::kRunning) {
+            // ignore
+        } else if (mStatus == State::kPaused) {
+            Resume();
         } else {
             if (mWorker.joinable()) {
                 mWorker.detach();
@@ -78,12 +80,19 @@ namespace WTFDanmaku {
 
     void Controller::Resume() {
         if (mStatus == State::kPaused) {
+            std::unique_lock<std::mutex> locker(mConditionMutex);
+            mStatus = State::kRunning;
             PushCommand(Cmd::kResume);
+            mCondition.notify_all();
         }
     }
 
     void Controller::Stop() {
         if (mStatus == State::kRunning || mStatus == State::kPaused) {
+            if (mStatus == State::kPaused) {
+                Resume();
+            }
+
             PushCommand(Cmd::kStop);
             if (mWorker.joinable()) {
                 mWorker.join();
@@ -112,17 +121,18 @@ namespace WTFDanmaku {
             Command cmd = PopCommand();
 
             switch (cmd.what) {
-                case Cmd::kStart:
                 case Cmd::kResume:
-                    if (mStatus == State::kPaused) {
-                        mTimer->Resume();
-                        mStatus = State::kRunning;
-                    }
+                    mTimer->Resume();
+                    mStatus = State::kRunning;
                     break;
                 case Cmd::kPause:
                     if (mStatus == State::kRunning) {
                         mTimer->Pause();
+                        std::unique_lock<std::mutex> locker(mConditionMutex);
                         mStatus = State::kPaused;
+                        while (mStatus == State::kPaused) {
+                            mCondition.wait(locker);
+                        }
                     }
                     break;
                 case Cmd::kSeek:

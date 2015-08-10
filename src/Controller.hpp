@@ -5,6 +5,8 @@
 #include <queue>
 #include <memory>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include "BaseDanmaku.hpp"
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
@@ -65,6 +67,8 @@ namespace WTFDanmaku {
     private:
         int mStatus = State::kIdle;
         std::thread mWorker;
+        std::mutex mConditionMutex;
+        std::condition_variable mCondition;
         void* mHwnd = nullptr;
         TimerRef mTimer;
         Win32Mutex mCommandQueueMutex;
