@@ -25,10 +25,6 @@ namespace WTFDanmaku {
         void SetTarget(HWND windowHandle);
         bool SetupBackend();
         bool TeardownBackend();
-        int GetWidth();
-        int GetHeight();
-        float GetDpiX();
-        float GetDpiY();
         void Resize(int width, int height);
         ComPtr<ID2D1Bitmap1> CreateBitmap(float width, float height);
         ComPtr<ID2D1RenderTarget> ObtainRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
@@ -36,6 +32,22 @@ namespace WTFDanmaku {
         void BeginDraw();
         HRESULT EndDraw();
         ComPtr<IDWriteFactory> GetDWriteFactory();
+    public:
+        inline int GetWidth() {
+            return mWidth;
+        }
+
+        inline int GetHeight() {
+            return mHeight;
+        }
+
+        inline float GetDpiX() {
+            return mDpiX;
+        }
+
+        inline float GetDpiY() {
+            return mDpiY;
+        }
     private:
         HWND mHwnd = 0;
         int mWidth = 0;

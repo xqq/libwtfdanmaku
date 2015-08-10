@@ -142,11 +142,12 @@ namespace WTFDanmaku {
 
     void Controller::Working() {
         mStatus = State::kRunning;
-        mTimer->Start();
         bool succeed = mDisplayer->SetupBackend();
         if (!succeed) {
             OutputDebugStringW(L"mDisplayer->SetupBackend() failed");
+            DebugBreak();
         }
+        mTimer->Start();
 
         while (mStatus == State::kRunning || mStatus == State::kPaused) {
             HandleCommand();

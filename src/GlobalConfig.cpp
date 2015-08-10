@@ -12,7 +12,7 @@ namespace WTFDanmaku {
 
     float sFontScaleFactor = 1.0f;
     wchar_t* sFontName = L"SimHei";
-    DWRITE_FONT_WEIGHT sFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
+    DWRITE_FONT_WEIGHT sFontWeight = DWRITE_FONT_WEIGHT_BOLD;
     DWRITE_FONT_STYLE sFontStyle = DWRITE_FONT_STYLE_NORMAL;
     DWRITE_FONT_STRETCH sFontStretch = DWRITE_FONT_STRETCH_NORMAL;
 

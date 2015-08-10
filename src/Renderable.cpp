@@ -24,8 +24,11 @@ namespace WTFDanmaku {
         if (FAILED(hr) || nullptr == mTextLayout)
             return false;
 
-        DWRITE_TEXT_METRICS metrics;
-        mTextLayout->GetMetrics(&metrics);
+        DWRITE_TEXT_METRICS metrics = {0};
+        hr = mTextLayout->GetMetrics(&metrics);
+        if (FAILED(hr))
+            return false;
+
         mDanmaku->mTextWidth = metrics.width;
         mDanmaku->mTextHeight = metrics.height;
 
@@ -36,7 +39,7 @@ namespace WTFDanmaku {
         if (!HasTextLayout())
             return false;
 
-        DWRITE_TEXT_METRICS metrices;
+        DWRITE_TEXT_METRICS metrices = {0};
         HRESULT hr = mTextLayout->GetMetrics(&metrices);
         if (FAILED(hr))
             return false;

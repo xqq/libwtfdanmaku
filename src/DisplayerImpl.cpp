@@ -116,31 +116,16 @@ namespace WTFDanmaku {
 
         mDCompTarget->SetRoot(mDCompVisual.Get());
 
-        mDCompDevice->Commit();
+        hr = mDCompDevice->Commit();
+        if (FAILED(hr))
+            return false;
 
         mHasBackend = true;
-        
         return true;
     }
 
     bool DisplayerImpl::TeardownBackend() {
         return true;
-    }
-
-    int DisplayerImpl::GetWidth() {
-        return mWidth;
-    }
-
-    int DisplayerImpl::GetHeight() {
-        return mHeight;
-    }
-
-    float DisplayerImpl::GetDpiX() {
-        return mDpiX;
-    }
-
-    float DisplayerImpl::GetDpiY() {
-        return mDpiY;
     }
     
     void DisplayerImpl::Resize(int width, int height) {
@@ -232,6 +217,11 @@ namespace WTFDanmaku {
         D2D1_RECT_F dest = D2D1::RectF(rect.left, rect.top, rect.right, rect.bottom);
         
         mDeviceContext->DrawBitmap(bitmap.Get(), dest);
+
+        ComPtr<ID2D1SolidColorBrush> brush;
+        mDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.18f, 0.55f, 0.84f, 0.75f), &brush);
+        mDeviceContext->DrawRectangle(dest, brush.Get());
+        mDeviceContext->DrawTextLayout(D2D1::Point2F(rect.left, rect.top), renderable->GetTextLayout().Get(), brush.Get());
     }
 
     void DisplayerImpl::BeginDraw() {
@@ -244,7 +234,7 @@ namespace WTFDanmaku {
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mDeviceContext->EndDraw();
         mD3DDevice->Flush();
-        mSwapChain->Present(0, 0);
+        mSwapChain->Present(1, 0);
         mInRendering = false;
         mRenderMutex.unlock();
         return hr;
