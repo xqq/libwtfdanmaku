@@ -17,13 +17,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -67,6 +67,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBWTFDANMAKU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,11 +79,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseDanmaku.hpp" />
+    <ClInclude Include="src\BilibiliParser.hpp" />
     <ClInclude Include="src\DanmakusManager.hpp" />
     <ClInclude Include="src\Displayer.hpp" />
     <ClInclude Include="src\DisplayerImpl.hpp" />
     <ClInclude Include="src\GlobalConfig.hpp" />
     <ClInclude Include="src\ITimer.hpp" />
+    <ClInclude Include="src\IParser.hpp" />
     <ClInclude Include="src\R2LDanmaku.hpp" />
     <ClInclude Include="src\Renderable.hpp" />
     <ClInclude Include="src\DanmakusRetainer.hpp" />
@@ -97,6 +100,7 @@
     <ClInclude Include="src\WinmmTimer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BilibiliParser.cpp" />
     <ClCompile Include="src\DisplayerImpl.cpp" />
     <ClCompile Include="src\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>

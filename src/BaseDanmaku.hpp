@@ -13,7 +13,7 @@ using std::weak_ptr;
 
 namespace WTFDanmaku {
 
-    enum DanmakuType {
+    enum DanmakuType : int {
         kNull = 0,
         kScrolling = 1,
         kBottom = 4,
