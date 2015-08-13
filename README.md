@@ -5,7 +5,7 @@ High-performance danmaku engine for Windows, based on Direct2D and DirectComposi
 Still under developing and is not stable for now. Support Windows 8+ for current.
 
 ### Features
-- Hardware accelerated by Direct2D, DirectWrite, Direct3D 10.1 and DXGI1.3
+- Hardware accelerated by Direct2D, DirectWrite, Direct3D 10.1 and DXGI 1.3
 - Few cpu usage (<= 5%)
 - Accurate danmaku layout
 
@@ -19,4 +19,5 @@ Still under developing and is not stable for now. Support Windows 8+ for current
 - C++/CLI wrapper for .NET
 - Optimize Renderable building (maybe concurrent)
 - Windows 7 compatible (maybe LayeredWindow?)
+- Move to Direct3D 11 (?)
 - Extensible architecture
