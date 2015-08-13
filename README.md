@@ -1,0 +1,22 @@
+libwtfdanmaku
+=============
+High-performance danmaku engine for Windows, based on Direct2D and DirectComposition API.
+
+Still under developing and is not stable for now. Support Windows 8+ for current.
+
+### Features
+- Hardware accelerated by Direct2D, DirectWrite, Direct3D 10.1 and DXGI1.3
+- Few cpu usage (<= 5%)
+- Accurate danmaku layout
+
+### TODO
+- Renderable's bitmap invalid issue
+- Further performance optimization
+- Resize support (need rebuild device-dependent resources)
+- BottomDanmaku, L2RDanmaku, Mode7 support, etc.
+- Refined error handling
+- User-friendly C & C++ API
+- C++/CLI wrapper for .NET
+- Optimize Renderable building (maybe concurrent)
+- Windows 7 compatible (maybe LayeredWindow?)
+- Extensible architecture
