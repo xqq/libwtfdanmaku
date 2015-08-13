@@ -1,0 +1,3 @@
+[submodule "3rdparty/rapidxml"]
+	path = 3rdparty/rapidxml
+	url = https://github.com/xqq/rapidxml.git
