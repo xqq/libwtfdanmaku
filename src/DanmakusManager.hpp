@@ -28,7 +28,7 @@ namespace WTFDanmaku {
         void AddLiveDanmaku(DanmakuRef danmaku);
         void DrawDanmakus(Displayer* displayer);
     private:
-        void FetchNewDanmakus();
+        void FetchNewDanmakus(Displayer* displayer);
         void RemoveTimeoutDanmakus();
     private:
         struct TimeComparator {

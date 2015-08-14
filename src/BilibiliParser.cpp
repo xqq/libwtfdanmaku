@@ -27,7 +27,7 @@ namespace WTFDanmaku {
 
         int bufferSize = strlen(data) + 1;
         char* buf = new char[bufferSize];
-        std::unique_ptr<char> buffer(buf);
+        std::unique_ptr<char[]> buffer(buf);
         memset(buf, 0, bufferSize);
         strcpy_s(buf, bufferSize, data);
 

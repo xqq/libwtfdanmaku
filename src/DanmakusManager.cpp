@@ -73,7 +73,7 @@ namespace WTFDanmaku {
         mActiveDanmakus.insert(danmaku);
     }
 
-    void DanmakusManager::FetchNewDanmakus() {
+    void DanmakusManager::FetchNewDanmakus(Displayer* displayer) {
         std::lock_guard<Win32Mutex> locker1(mAllDanmakusMutex);
         std::lock_guard<Win32Mutex> locker2(mActiveDanmakusMutex);
 
@@ -81,6 +81,9 @@ namespace WTFDanmaku {
         
         for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); ++iter) {
             if ((*iter)->GetStartTime() < current) {
+                if (!(*iter)->HasMeasured()) {
+                    (*iter)->Measure(displayer);
+                }
                 if ((*iter)->IsAlive(current)) {
                     mActiveDanmakus.insert(*iter);
                 }
@@ -113,7 +116,7 @@ namespace WTFDanmaku {
         
         if (current - mLastFetchTime >= 100) {
             RemoveTimeoutDanmakus();
-            FetchNewDanmakus();
+            FetchNewDanmakus(displayer);
         }
 
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
