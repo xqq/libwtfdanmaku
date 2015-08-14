@@ -24,6 +24,12 @@ namespace WTFDanmaku {
                 }
                 mTopRetainer->Add(danmaku, displayer, currentMillis);
                 break;
+            case DanmakuType::kBottom:
+                if (mBottomRetainer == nullptr) {
+                    mBottomRetainer = std::move(unique_ptr<IDanmakusRetainer>(CreateBottomRetainer()));
+                }
+                mBottomRetainer->Add(danmaku, displayer, currentMillis);
+                break;
             default:
                 break;
         }
@@ -213,6 +219,81 @@ namespace WTFDanmaku {
 
     IDanmakusRetainer* DanmakusRetainer::CreateTopRetainer() {
         return new TopRetainer();
+    }
+
+    class DanmakusRetainer::BottomRetainer : public IDanmakusRetainer {
+    public:
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
+            if (nullptr == mDanmakus) {
+                mDanmakus = std::make_unique<Danmakus>();
+            }
+
+            RemoveTimeoutDanmakus(currentMillis);
+
+            if (!danmaku->IsAlive(currentMillis)) {
+                return;
+            }
+
+            float bottom = static_cast<float>(displayer->GetHeight());
+
+            for (auto iter = mDanmakus->begin(); iter != mDanmakus->end(); ++iter) {
+                DanmakuRef item = iter->second;
+                Rect<float> itemRect = item->GetRect();
+
+                if (item.get() == danmaku.get()) {
+                    return;
+                }
+
+                if (itemRect.bottom < bottom) {
+                    if (danmaku->GetHeight() <= bottom - itemRect.bottom) {
+                        break;
+                    }
+                }
+
+                bottom = itemRect.top - 1.0f;
+                if (bottom - danmaku->GetHeight() <= 0) {
+                    bottom = static_cast<float>(displayer->GetHeight());
+                    break;
+                }
+            }
+            float top = bottom - danmaku->GetHeight();
+            danmaku->Layout(displayer, 0.0f, top);
+
+            int topint = static_cast<int>(top);
+            auto iter = mDanmakus->find(topint);
+            if (iter != mDanmakus->end()) {
+                iter->second = danmaku;
+            } else {
+                mDanmakus->insert(std::make_pair(topint, danmaku));
+            }
+
+        }
+
+        void RemoveTimeoutDanmakus(time_t time) {
+            auto iter = mDanmakus->begin();
+            while (iter != mDanmakus->end()) {
+                if (iter->second->IsAlive(time) == false) {
+                    iter = mDanmakus->erase(iter);
+                }
+                else {
+                    ++iter;
+                }
+            }
+        }
+
+        virtual void Clear() override {
+            mDanmakus->clear();
+        }
+
+        virtual void Release() override {
+            mDanmakus.reset();
+        }
+    private:
+        unique_ptr<Danmakus> mDanmakus;
+    };
+
+    IDanmakusRetainer* DanmakusRetainer::CreateBottomRetainer() {
+        return new BottomRetainer();
     }
 
 }

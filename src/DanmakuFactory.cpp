@@ -1,5 +1,6 @@
 #include "R2LDanmaku.hpp"
 #include "TopDanmaku.hpp"
+#include "BottomDanmaku.hpp"
 #include "DanmakuFactory.hpp"
 
 namespace WTFDanmaku {
@@ -13,6 +14,9 @@ namespace WTFDanmaku {
                 break;
             case kTop:
                 danmaku = TopDanmaku::Create();
+                break;
+            case kBottom:
+                danmaku = BottomDanmaku::Create();
                 break;
             case kNull:
             default:

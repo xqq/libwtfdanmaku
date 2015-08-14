@@ -27,12 +27,15 @@ namespace WTFDanmaku {
     private:
         IDanmakusRetainer* CreateR2LRetainer();
         IDanmakusRetainer* CreateTopRetainer();
+        IDanmakusRetainer* CreateBottomRetainer();
     private:
         class R2LRetainer;
         class TopRetainer;
+        class BottomRetainer;
     private:
         unique_ptr<IDanmakusRetainer> mR2LRetainer = nullptr;
         unique_ptr<IDanmakusRetainer> mTopRetainer = nullptr;
+        unique_ptr<IDanmakusRetainer> mBottomRetainer = nullptr;
     };
 
 }
