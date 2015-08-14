@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClInclude Include="src\BaseDanmaku.hpp" />
     <ClInclude Include="src\BilibiliParser.hpp" />
+    <ClInclude Include="src\BottomDanmaku.hpp" />
     <ClInclude Include="src\DanmakusManager.hpp" />
     <ClInclude Include="src\Displayer.hpp" />
     <ClInclude Include="src\DisplayerImpl.hpp" />
@@ -101,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BilibiliParser.cpp" />
+    <ClCompile Include="src\BottomDanmaku.cpp" />
     <ClCompile Include="src\DisplayerImpl.cpp" />
     <ClCompile Include="src\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>

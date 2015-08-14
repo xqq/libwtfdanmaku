@@ -75,6 +75,9 @@
     <ClInclude Include="src\IParser.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BottomDanmaku.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -123,6 +126,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\BilibiliParser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BottomDanmaku.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
