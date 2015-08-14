@@ -41,7 +41,7 @@ namespace WTFDanmaku {
         mR2LRetainer.reset();
         mTopRetainer.reset();
     }
-        
+
     static bool CompareByYPos(const int item1, const int item2) {
         return item1 < item2;
     }
@@ -102,12 +102,19 @@ namespace WTFDanmaku {
                 
                 top = itemRect.bottom + 1.0f;
                 if (top + danmaku->GetHeight() > displayer->GetHeight()) {
+                    danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), -danmaku->GetHeight());
                     return;
                 }
             }
 
             danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), top);
-            mDanmakus->insert(std::make_pair(static_cast<int>(top), danmaku));
+            int topint = static_cast<int>(top);
+            auto iter = mDanmakus->find(topint);
+            if (iter != mDanmakus->end()) {
+                iter->second = danmaku;
+            } else {
+                mDanmakus->insert(std::make_pair(topint, danmaku));
+            }
         }
 
         void RemoveTimeoutDanmakus(time_t time) {
@@ -173,7 +180,13 @@ namespace WTFDanmaku {
             }
             
             danmaku->Layout(displayer, 0.0f, top);
-            mDanmakus->insert(std::make_pair(static_cast<int>(top), danmaku));
+            int topint = static_cast<int>(top);
+            auto iter = mDanmakus->find(topint);
+            if (iter != mDanmakus->end()) {
+                iter->second = danmaku;
+            } else {
+                mDanmakus->insert(std::make_pair(topint, danmaku));
+            }
         }
 
         void RemoveTimeoutDanmakus(time_t time) {
