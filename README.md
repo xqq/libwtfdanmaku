@@ -12,6 +12,7 @@ Still under developing and is not stable for now. Support Windows 8+ for current
 ### TODO
 - Renderable's bitmap invalid issue
 - Multiple instance
+- Rendering Statistics
 - Further performance optimization
 - Resize support (need rebuild device-dependent resources)
 - BottomDanmaku, L2RDanmaku, Mode7 support, etc.

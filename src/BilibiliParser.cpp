@@ -1,5 +1,4 @@
-#include <clocale>
-#include <codecvt>
+#include <Windows.h>
 #include "../3rdparty/rapidxml/rapidxml.hpp"
 #include "../3rdparty/rapidxml/rapidxml_utils.hpp"
 #include "DanmakuFactory.hpp"
@@ -76,9 +75,13 @@ namespace WTFDanmaku {
     }
 
     std::wstring BilibiliParser::UTF8ToWideString(const char* input) {
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> u8to16conv;
-        std::wstring wide = u8to16conv.from_bytes(input);
-        return wide;
+        int length = MultiByteToWideChar(CP_UTF8, 0, input, -1, nullptr, 0);
+        std::wstring result;
+        if (length > 0) {
+            result.resize(length);
+            MultiByteToWideChar(CP_UTF8, 0, input, -1, const_cast<LPWSTR>(result.c_str()), length);
+        }
+        return result;
     }
 
 }
