@@ -20,6 +20,7 @@ Still under developing and is not stable for now. Support Windows 8+ for current
 - User-friendly C & C++ API
 - C++/CLI wrapper for .NET
 - Optimize Renderable building (maybe concurrent)
+- Windows Phone / UWP compatible
 - Windows 7 compatible (maybe LayeredWindow?)
 - Move to Direct3D 11 (?)
 - Extensible architecture
