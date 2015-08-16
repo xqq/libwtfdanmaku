@@ -28,8 +28,8 @@ namespace WTFDanmaku {
         bool TeardownBackend();
         void Resize(int width, int height);
         ComPtr<ID2D1Bitmap1> CreateBitmap(float width, float height);
-        ComPtr<ID2D1DeviceContext> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
-        void ReleaseRenderTarget(ComPtr<ID2D1DeviceContext> renderTarget);
+        ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
+        void ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget);
         void DrawDanmakuItem(DanmakuRef item, time_t current);
         void BeginDraw();
         HRESULT EndDraw();
@@ -76,7 +76,6 @@ namespace WTFDanmaku {
         ComPtr<IDCompositionDevice> mDCompDevice;
         ComPtr<IDCompositionTarget> mDCompTarget;
         ComPtr<IDCompositionVisual> mDCompVisual;
-        ComPtr<IWICImagingFactory> mWICFactory;
     };
 
 }

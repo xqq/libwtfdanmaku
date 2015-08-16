@@ -1,4 +1,3 @@
-#include <wincodec.h>
 #include <cmath>
 #include "Renderable.hpp"
 #include "DisplayerImpl.hpp"
@@ -147,10 +146,6 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        hr = CoCreateInstance(CLSID_WICImagingFactory1, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mWICFactory));
-        if (FAILED(hr))
-            return false;
-
         mHasBackend = true;
         return true;
     }
@@ -219,33 +214,32 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return nullptr;*/
 
-        ComPtr<IWICBitmap> wicbitmap;
-        HRESULT hr = mWICFactory->CreateBitmap(static_cast<UINT>(std::ceilf(width)), static_cast<UINT>(std::ceilf(height)),
-                                               GUID_WICPixelFormat32bppBGRA, WICBitmapCacheOnLoad, &wicbitmap);
-        if (FAILED(hr))
-            return nullptr;
+        D2D1_SIZE_U size;
+        size.width = static_cast<uint32_t>(std::ceilf(width));
+        size.height = static_cast<uint32_t>(std::ceilf(height));
 
         D2D1_BITMAP_PROPERTIES1 props = {};
-        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
-        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
+        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
 
         ComPtr<ID2D1Bitmap1> bitmap;
-        hr = mDeviceContext->CreateBitmapFromWicBitmap(wicbitmap.Get(), props, &bitmap);
+
+        HRESULT hr = mDeviceContext->CreateBitmap(size, nullptr, size.width * 4, props, &bitmap);
         if (FAILED(hr))
             return nullptr;
 
         return bitmap;
     }
 
-    ComPtr<ID2D1DeviceContext> DisplayerImpl::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
+    ComPtr<ID2D1RenderTarget> DisplayerImpl::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
         HRESULT hr = mDeviceContext->EndDraw();
         mDeviceContext->SetTarget(bitmap.Get());
 
         return mDeviceContext;
     }
 
-    void DisplayerImpl::ReleaseRenderTarget(ComPtr<ID2D1DeviceContext> renderTarget) {
+    void DisplayerImpl::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
         mDeviceContext->SetTarget(mSurfaceBitmap.Get());
         mDeviceContext->BeginDraw();
     }
@@ -280,14 +274,13 @@ namespace WTFDanmaku {
         if (bitmap == nullptr)
             return;
 
-        D2D1_RECT_F dest = D2D1::RectF(rect.left, rect.top, rect.right, rect.bottom);
+        D2D1_SIZE_U size = bitmap->GetPixelSize();
+        D2D1_RECT_F dest = D2D1::RectF(
+            rect.left, rect.top,
+            rect.left + size.width, rect.top + size.height
+        );
 
         mDeviceContext->DrawBitmap(bitmap.Get(), dest);
-
-        //ComPtr<ID2D1SolidColorBrush> brush;
-        //mDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.18f, 0.55f, 0.84f, 0.75f), &brush);
-        //mDeviceContext->DrawRectangle(dest, brush.Get());
-        //mDeviceContext->DrawTextLayout(D2D1::Point2F(rect.left, rect.top), renderable->GetTextLayout().Get(), brush.Get());
     }
 
     void DisplayerImpl::BeginDraw() {

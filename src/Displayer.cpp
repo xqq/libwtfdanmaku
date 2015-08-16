@@ -45,11 +45,11 @@ namespace WTFDanmaku {
         return pImpl->CreateBitmap(width, height);
     }
 
-    ComPtr<ID2D1DeviceContext> Displayer::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
+    ComPtr<ID2D1RenderTarget> Displayer::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
         return pImpl->AcquireRenderTarget(bitmap);
     }
 
-    void Displayer::ReleaseRenderTarget(ComPtr<ID2D1DeviceContext> renderTarget) {
+    void Displayer::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
         pImpl->ReleaseRenderTarget(renderTarget);
     }
 
