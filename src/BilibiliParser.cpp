@@ -40,7 +40,9 @@ namespace WTFDanmaku {
 
         for (auto node = root->first_node("d"); node != nullptr; node = node->next_sibling()) {
             const char* attr = node->first_attribute("p")->value();
-            auto attributes = SplitString(attr, ',');
+            std::vector<std::string> attributes;
+            attributes.reserve(8);
+            SplitString(attr, ',', attributes);
 
             if (attributes.size() >= 8) {
                 time_t time = static_cast<time_t>(std::stod(attributes[0]) * 1000);
@@ -64,14 +66,12 @@ namespace WTFDanmaku {
         return std::move(mDanmakus);
     }
 
-    std::vector<std::string> BilibiliParser::SplitString(const char* input, char delimiter) {
-        std::vector<std::string> fragments;
+    void BilibiliParser::SplitString(const char* input, char delimiter, std::vector<std::string>& output) {
         while (auto next = strchr(input, delimiter)) {
-            fragments.push_back(std::string(input, next));
+            output.push_back(std::string(input, next));
             input = next + 1;
         }
-        fragments.push_back(std::string(input));
-        return fragments;
+        output.push_back(std::string(input));
     }
 
     std::wstring BilibiliParser::UTF8ToWideString(const char* input) {
