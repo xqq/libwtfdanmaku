@@ -104,6 +104,10 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
+        hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &mLendContext);
+        if (FAILED(hr))
+            return false;
+
         D2D1_BITMAP_PROPERTIES1 props = {};
         props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -116,13 +120,6 @@ namespace WTFDanmaku {
         mDeviceContext->SetTarget(mSurfaceBitmap.Get());
 
         mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
-
-        //D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
-        //    D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED), mDpiX, mDpiY);
-
-        //hr = mD2DFactory->CreateDxgiSurfaceRenderTarget(mDxgiSurface.Get(), props, &mRenderTarget);
-        //if (FAILED(hr))
-        //    return false;
 
         hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
@@ -157,6 +154,7 @@ namespace WTFDanmaku {
         mDCompTarget.Reset();
         mDCompVisual.Reset();
         mDCompDevice.Reset();
+        mLendContext.Reset();
         mDeviceContext->SetTarget(nullptr);
         mDeviceContext.Reset();
         mSurfaceBitmap.Reset();
@@ -179,41 +177,6 @@ namespace WTFDanmaku {
         if (!mHasBackend)
             return nullptr;
 
-        /*ComPtr<ID3D10Texture2D> texture;
-
-        D3D10_TEXTURE2D_DESC texdesc = { 0 };
-        texdesc.ArraySize = 1;
-        texdesc.BindFlags = D3D10_BIND_RENDER_TARGET | D3D10_BIND_SHADER_RESOURCE;
-        texdesc.CPUAccessFlags = 0;
-        texdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        texdesc.Width = static_cast<UINT>(std::ceilf(width));
-        texdesc.Height = static_cast<UINT>(std::ceilf(height));
-        texdesc.MipLevels = 1;
-        texdesc.MiscFlags = 0;
-        texdesc.SampleDesc.Count = 1;
-        texdesc.SampleDesc.Quality = 0;
-        texdesc.Usage = D3D10_USAGE_DEFAULT;
-
-        HRESULT hr = mD3DDevice->CreateTexture2D(&texdesc, nullptr, &texture);
-        if (FAILED(hr))
-            return nullptr;
-
-        ComPtr<IDXGISurface> texSurface;
-        hr = texture.As(&texSurface);
-        if (FAILED(hr))
-            return nullptr;
-
-        D2D1_BITMAP_PROPERTIES1 props = {};
-        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
-        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
-
-        ComPtr<ID2D1Bitmap1> bitmap;
-
-        hr = mDeviceContext->CreateBitmapFromDxgiSurface(texSurface.Get(), &props, &bitmap);
-        if (FAILED(hr))
-            return nullptr;*/
-
         D2D1_SIZE_U size;
         size.width = static_cast<uint32_t>(std::ceilf(width));
         size.height = static_cast<uint32_t>(std::ceilf(height));
@@ -233,15 +196,15 @@ namespace WTFDanmaku {
     }
 
     ComPtr<ID2D1RenderTarget> DisplayerImpl::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
-        HRESULT hr = mDeviceContext->EndDraw();
-        mDeviceContext->SetTarget(bitmap.Get());
+        mLendMutex.lock();
+        mLendContext->SetTarget(bitmap.Get());
 
-        return mDeviceContext;
+        return mLendContext;
     }
 
     void DisplayerImpl::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
-        mDeviceContext->SetTarget(mSurfaceBitmap.Get());
-        mDeviceContext->BeginDraw();
+        mLendContext->SetTarget(nullptr);
+        mLendMutex.unlock();
     }
 
     ComPtr<IDWriteFactory> DisplayerImpl::GetDWriteFactory() {
