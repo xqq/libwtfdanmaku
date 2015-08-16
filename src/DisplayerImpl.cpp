@@ -1,4 +1,5 @@
 #include <cmath>
+#include <mutex>
 #include "Renderable.hpp"
 #include "DisplayerImpl.hpp"
 
@@ -155,7 +156,8 @@ namespace WTFDanmaku {
         mDCompVisual.Reset();
         mDCompDevice.Reset();
         mLendContext.Reset();
-        mDeviceContext->SetTarget(nullptr);
+        if (mDeviceContext != nullptr)
+            mDeviceContext->SetTarget(nullptr);
         mDeviceContext.Reset();
         mSurfaceBitmap.Reset();
         mD2DDevice.Reset();
@@ -170,7 +172,7 @@ namespace WTFDanmaku {
     }
     
     void DisplayerImpl::Resize(int width, int height) {
-
+        // TODO
     }
 
     ComPtr<ID2D1Bitmap1> DisplayerImpl::CreateBitmap(float width, float height) {
@@ -188,7 +190,8 @@ namespace WTFDanmaku {
 
         ComPtr<ID2D1Bitmap1> bitmap;
 
-        HRESULT hr = mDeviceContext->CreateBitmap(size, nullptr, size.width * 4, props, &bitmap);
+        std::lock_guard<Win32Mutex> locker(mLendMutex);
+        HRESULT hr = mLendContext->CreateBitmap(size, nullptr, size.width * 4, props, &bitmap);
         if (FAILED(hr))
             return nullptr;
 
