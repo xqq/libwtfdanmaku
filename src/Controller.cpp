@@ -55,6 +55,10 @@ namespace WTFDanmaku {
         mManager->AddLiveDanmaku(danmaku);
     }
 
+    void Controller::SetDanmakuList(std::unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
+        mManager->SetDanmakuList(std::move(danmakuArray));
+    }
+
     bool Controller::IsRunning() {
         return mStatus == State::kRunning;
     }
@@ -159,6 +163,8 @@ namespace WTFDanmaku {
         }
         mTimer->Start();
 
+        RenderingStatistics statistics;
+
         while (mStatus == State::kRunning || mStatus == State::kPaused) {
             HandleCommand();
             if (mStatus == State::kPaused) {
@@ -168,7 +174,9 @@ namespace WTFDanmaku {
                 break;
             }
 
-            mManager->DrawDanmakus(mDisplayer.get());
+            statistics = mManager->DrawDanmakus(mDisplayer.get());
+            if (FAILED(statistics.lastHr))
+                DebugBreak();
             // wait for vblank?
         }
 

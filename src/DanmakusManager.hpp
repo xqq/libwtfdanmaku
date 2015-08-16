@@ -18,6 +18,14 @@ namespace WTFDanmaku {
     class Displayer;
     class DanmakusRetainer;
 
+    struct RenderingStatistics {
+    public:
+        float fps = 0.0f;
+        time_t lastFrameTime = 0;
+        int lastFrameDanmakuCount = 0;
+        HRESULT lastHr = NULL;
+    };
+
     class DanmakusManager : public Noncopyable {
     public:
         explicit DanmakusManager();
@@ -26,7 +34,8 @@ namespace WTFDanmaku {
         void SeekTo(time_t timepoint);
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
-        void DrawDanmakus(Displayer* displayer);
+        RenderingStatistics DrawDanmakus(Displayer* displayer);
+        RenderingStatistics GetRenderingStatistics();
     private:
         void FetchNewDanmakus(Displayer* displayer);
         void RemoveTimeoutDanmakus();
@@ -44,6 +53,7 @@ namespace WTFDanmaku {
         TimeSortedDanmakus mAllDanmakus;
         TimeSortedDanmakus mActiveDanmakus;
         DanmakusRetainer mRetainer;
+        RenderingStatistics mStatistics;
     };
 
 }

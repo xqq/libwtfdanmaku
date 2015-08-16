@@ -110,7 +110,7 @@ namespace WTFDanmaku {
         }
     }
 
-    void DanmakusManager::DrawDanmakus(Displayer* displayer) {
+    RenderingStatistics DanmakusManager::DrawDanmakus(Displayer* displayer) {
         mTimer->Update();
         time_t current = mTimer->GetMilliseconds();
         
@@ -120,14 +120,12 @@ namespace WTFDanmaku {
         }
 
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
-
-        auto iter = mActiveDanmakus.begin();
-        if (iter == mActiveDanmakus.end())
-            return;
+                
+        int count = 0;
 
         displayer->BeginDraw();
 
-        for (/* iter */; iter != mActiveDanmakus.end(); ++iter) {
+        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter, ++count) {
             if (!(*iter)->HasMeasured()) {
                 (*iter)->Measure(displayer);
             }
@@ -138,7 +136,15 @@ namespace WTFDanmaku {
         }
 
         HRESULT hr = displayer->EndDraw();
-        // TODO: handle hr
+        mStatistics.lastHr = hr;
+        mStatistics.lastFrameDanmakuCount = count;
+        mStatistics.lastFrameTime = current;
+
+        return mStatistics;
+    }
+
+    RenderingStatistics DanmakusManager::GetRenderingStatistics() {
+        return mStatistics;
     }
 
 }
