@@ -1,6 +1,6 @@
 #include <cmath>
 #include <map>
-#include <set>
+#include <functional>
 #include "BaseDanmaku.hpp"
 #include "Displayer.hpp"
 #include "DanmakusRetainer.hpp"
@@ -46,14 +46,6 @@ namespace WTFDanmaku {
         Clear();
         mR2LRetainer.reset();
         mTopRetainer.reset();
-    }
-
-    static bool CompareByYPos(const int item1, const int item2) {
-        return item1 < item2;
-    }
-
-    static bool CompareByYPosDesc(const int item1, const int item2) {
-        return item1 > item2;
     }
 
     class DanmakusRetainer::R2LRetainer : public IDanmakusRetainer {
@@ -222,10 +214,12 @@ namespace WTFDanmaku {
     }
 
     class DanmakusRetainer::BottomRetainer : public IDanmakusRetainer {
+    private:
+        typedef std::map<int, DanmakuRef, std::greater<int>> DecDanmakus;
     public:
         virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
-                mDanmakus = std::make_unique<Danmakus>();
+                mDanmakus = std::make_unique<DecDanmakus>();
             }
 
             RemoveTimeoutDanmakus(currentMillis);
@@ -234,7 +228,8 @@ namespace WTFDanmaku {
                 return;
             }
 
-            float bottom = static_cast<float>(displayer->GetHeight());
+            float screenBottom = static_cast<float>(displayer->GetHeight() - 1);
+            float bottom = screenBottom;
 
             for (auto iter = mDanmakus->begin(); iter != mDanmakus->end(); ++iter) {
                 DanmakuRef item = iter->second;
@@ -251,20 +246,20 @@ namespace WTFDanmaku {
                 }
 
                 bottom = itemRect.top - 1.0f;
-                if (bottom - danmaku->GetHeight() <= 0) {
-                    bottom = static_cast<float>(displayer->GetHeight());
+                if (bottom - danmaku->GetHeight() < 0.0f) {
+                    bottom = screenBottom;
                     break;
                 }
             }
             float top = bottom - danmaku->GetHeight();
             danmaku->Layout(displayer, 0.0f, top);
 
-            int topint = static_cast<int>(top);
-            auto iter = mDanmakus->find(topint);
+            int bottomInt = static_cast<int>(bottom);
+            auto iter = mDanmakus->find(bottomInt);
             if (iter != mDanmakus->end()) {
                 iter->second = danmaku;
             } else {
-                mDanmakus->insert(std::make_pair(topint, danmaku));
+                mDanmakus->insert(std::make_pair(bottomInt, danmaku));
             }
 
         }
@@ -274,8 +269,7 @@ namespace WTFDanmaku {
             while (iter != mDanmakus->end()) {
                 if (iter->second->IsAlive(time) == false) {
                     iter = mDanmakus->erase(iter);
-                }
-                else {
+                } else {
                     ++iter;
                 }
             }
@@ -289,7 +283,7 @@ namespace WTFDanmaku {
             mDanmakus.reset();
         }
     private:
-        unique_ptr<Danmakus> mDanmakus;
+        unique_ptr<DecDanmakus> mDanmakus;
     };
 
     IDanmakusRetainer* DanmakusRetainer::CreateBottomRetainer() {
