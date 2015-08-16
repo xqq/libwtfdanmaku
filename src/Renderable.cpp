@@ -57,6 +57,10 @@ namespace WTFDanmaku {
         renderTarget->Clear();
         renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 
+        ComPtr<ID2D1SolidColorBrush> bottomBrush;
+        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 0.9f), &bottomBrush);
+        renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 1.0f), mTextLayout.Get(), bottomBrush.Get());
+
         ComPtr<ID2D1SolidColorBrush> brush;
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
         renderTarget->DrawTextLayout(D2D1::Point2F(), mTextLayout.Get(), brush.Get());
