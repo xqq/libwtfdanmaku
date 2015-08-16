@@ -20,7 +20,7 @@ namespace WTFDanmaku {
         textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
         textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 
-        hr = dwFactory->CreateTextLayout(mDanmaku->mComment.c_str(), mDanmaku->mComment.length(), textFormat.Get(), 4096.f, 1024.f, &mTextLayout);
+        hr = dwFactory->CreateTextLayout(mDanmaku->mComment.c_str(), mDanmaku->mComment.length(), textFormat.Get(), 8192.0f, 1024.0f, &mTextLayout);
         if (FAILED(hr) || nullptr == mTextLayout)
             return false;
 
@@ -48,20 +48,23 @@ namespace WTFDanmaku {
         if (bmp == nullptr)
             return false;
 
-        auto renderTarget = displayer->ObtainRenderTarget(bmp);
+        auto renderTarget = displayer->AcquireRenderTarget(bmp);
         if (renderTarget == nullptr)
             return false;
 
         renderTarget->BeginDraw();
 
-        renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
         renderTarget->Clear();
+        renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 
         ComPtr<ID2D1SolidColorBrush> brush;
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
         renderTarget->DrawTextLayout(D2D1::Point2F(), mTextLayout.Get(), brush.Get());
 
         hr = renderTarget->EndDraw();
+
+        displayer->ReleaseRenderTarget(renderTarget);
+
         if (FAILED(hr))
             return false;
 

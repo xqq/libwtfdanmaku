@@ -8,6 +8,7 @@
 #include <dxgi1_3.h>
 #include <dcomp.h>
 #include <dwrite.h>
+#include <wincodec.h>
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
 #include "BaseDanmaku.hpp"
@@ -27,7 +28,8 @@ namespace WTFDanmaku {
         bool TeardownBackend();
         void Resize(int width, int height);
         ComPtr<ID2D1Bitmap1> CreateBitmap(float width, float height);
-        ComPtr<ID2D1RenderTarget> ObtainRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
+        ComPtr<ID2D1DeviceContext> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
+        void ReleaseRenderTarget(ComPtr<ID2D1DeviceContext> renderTarget);
         void DrawDanmakuItem(DanmakuRef item, time_t current);
         void BeginDraw();
         HRESULT EndDraw();
@@ -64,6 +66,7 @@ namespace WTFDanmaku {
         ComPtr<IDXGIFactory2> mDxgiFactory;
         ComPtr<IDXGIDevice> mDxgiDevice;
         ComPtr<IDXGISurface> mDxgiSurface;
+        ComPtr<ID2D1Bitmap1> mSurfaceBitmap;
         ComPtr<IDXGISwapChain1> mSwapChain;
         ComPtr<IDWriteFactory> mDWriteFactory;
         ComPtr<ID2D1Factory1> mD2DFactory;
@@ -73,6 +76,7 @@ namespace WTFDanmaku {
         ComPtr<IDCompositionDevice> mDCompDevice;
         ComPtr<IDCompositionTarget> mDCompTarget;
         ComPtr<IDCompositionVisual> mDCompVisual;
+        ComPtr<IWICImagingFactory> mWICFactory;
     };
 
 }

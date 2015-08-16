@@ -1,3 +1,4 @@
+#include <wincodec.h>
 #include <cmath>
 #include "Renderable.hpp"
 #include "DisplayerImpl.hpp"
@@ -109,12 +110,11 @@ namespace WTFDanmaku {
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
 
-        ComPtr<ID2D1Bitmap1> surfaceBitmap;
-        hr = mDeviceContext->CreateBitmapFromDxgiSurface(mDxgiSurface.Get(), props, &surfaceBitmap);
+        hr = mDeviceContext->CreateBitmapFromDxgiSurface(mDxgiSurface.Get(), props, &mSurfaceBitmap);
         if (FAILED(hr))
             return false;
 
-        mDeviceContext->SetTarget(surfaceBitmap.Get());
+        mDeviceContext->SetTarget(mSurfaceBitmap.Get());
 
         mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
 
@@ -147,11 +147,32 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
+        hr = CoCreateInstance(CLSID_WICImagingFactory1, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mWICFactory));
+        if (FAILED(hr))
+            return false;
+
         mHasBackend = true;
         return true;
     }
 
     bool DisplayerImpl::TeardownBackend() {
+        if (mInRendering) {
+            return false;
+        }
+        mDCompTarget.Reset();
+        mDCompVisual.Reset();
+        mDCompDevice.Reset();
+        mDeviceContext->SetTarget(nullptr);
+        mDeviceContext.Reset();
+        mSurfaceBitmap.Reset();
+        mD2DDevice.Reset();
+        mD2DFactory.Reset();
+        mDWriteFactory.Reset();
+        mDxgiSurface.Reset();
+        mSwapChain.Reset();
+        mDxgiDevice.Reset();
+        mDxgiFactory.Reset();
+        mD3DDevice.Reset();
         return true;
     }
     
@@ -163,7 +184,7 @@ namespace WTFDanmaku {
         if (!mHasBackend)
             return nullptr;
 
-        ComPtr<ID3D10Texture2D> texture;
+        /*ComPtr<ID3D10Texture2D> texture;
 
         D3D10_TEXTURE2D_DESC texdesc = { 0 };
         texdesc.ArraySize = 1;
@@ -193,22 +214,40 @@ namespace WTFDanmaku {
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
 
         ComPtr<ID2D1Bitmap1> bitmap;
+
         hr = mDeviceContext->CreateBitmapFromDxgiSurface(texSurface.Get(), &props, &bitmap);
+        if (FAILED(hr))
+            return nullptr;*/
+
+        ComPtr<IWICBitmap> wicbitmap;
+        HRESULT hr = mWICFactory->CreateBitmap(static_cast<UINT>(std::ceilf(width)), static_cast<UINT>(std::ceilf(height)),
+                                               GUID_WICPixelFormat32bppBGRA, WICBitmapCacheOnLoad, &wicbitmap);
+        if (FAILED(hr))
+            return nullptr;
+
+        D2D1_BITMAP_PROPERTIES1 props = {};
+        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
+        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
+
+        ComPtr<ID2D1Bitmap1> bitmap;
+        hr = mDeviceContext->CreateBitmapFromWicBitmap(wicbitmap.Get(), props, &bitmap);
         if (FAILED(hr))
             return nullptr;
 
         return bitmap;
     }
 
-    ComPtr<ID2D1RenderTarget> DisplayerImpl::ObtainRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
-        ComPtr<ID2D1DeviceContext> devCtx;
-        HRESULT hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &devCtx);
-        if (FAILED(hr))
-            return nullptr;
+    ComPtr<ID2D1DeviceContext> DisplayerImpl::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
+        HRESULT hr = mDeviceContext->EndDraw();
+        mDeviceContext->SetTarget(bitmap.Get());
 
-        devCtx->SetTarget(bitmap.Get());
+        return mDeviceContext;
+    }
 
-        return devCtx;
+    void DisplayerImpl::ReleaseRenderTarget(ComPtr<ID2D1DeviceContext> renderTarget) {
+        mDeviceContext->SetTarget(mSurfaceBitmap.Get());
+        mDeviceContext->BeginDraw();
     }
 
     ComPtr<IDWriteFactory> DisplayerImpl::GetDWriteFactory() {
@@ -242,13 +281,13 @@ namespace WTFDanmaku {
             return;
 
         D2D1_RECT_F dest = D2D1::RectF(rect.left, rect.top, rect.right, rect.bottom);
-        
+
         mDeviceContext->DrawBitmap(bitmap.Get(), dest);
 
-        ComPtr<ID2D1SolidColorBrush> brush;
-        mDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.18f, 0.55f, 0.84f, 0.75f), &brush);
-        mDeviceContext->DrawRectangle(dest, brush.Get());
-        mDeviceContext->DrawTextLayout(D2D1::Point2F(rect.left, rect.top), renderable->GetTextLayout().Get(), brush.Get());
+        //ComPtr<ID2D1SolidColorBrush> brush;
+        //mDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.18f, 0.55f, 0.84f, 0.75f), &brush);
+        //mDeviceContext->DrawRectangle(dest, brush.Get());
+        //mDeviceContext->DrawTextLayout(D2D1::Point2F(rect.left, rect.top), renderable->GetTextLayout().Get(), brush.Get());
     }
 
     void DisplayerImpl::BeginDraw() {
