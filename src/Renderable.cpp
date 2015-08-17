@@ -1,3 +1,4 @@
+#include <cmath>
 #include "GlobalConfig.hpp"
 #include "BaseDanmaku.hpp"
 #include "Displayer.hpp"
@@ -29,8 +30,8 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        mDanmaku->mTextWidth = metrics.width;
-        mDanmaku->mTextHeight = metrics.height;
+        mDanmaku->mTextWidth = std::ceilf(metrics.width);
+        mDanmaku->mTextHeight = std::ceilf(metrics.height);
 
         return true;
     }
@@ -39,12 +40,10 @@ namespace WTFDanmaku {
         if (!HasTextLayout())
             return false;
 
-        DWRITE_TEXT_METRICS metrices = {0};
-        HRESULT hr = mTextLayout->GetMetrics(&metrices);
-        if (FAILED(hr))
-            return false;
-
-        ComPtr<ID2D1Bitmap1> bmp = displayer->CreateBitmap(metrices.width, metrices.height);
+        ComPtr<ID2D1Bitmap1> bmp = displayer->CreateBitmap(
+            static_cast<uint32_t>(mDanmaku->mTextWidth),
+            static_cast<uint32_t>(mDanmaku->mTextHeight)
+        );
         if (bmp == nullptr)
             return false;
 
@@ -65,7 +64,7 @@ namespace WTFDanmaku {
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
         renderTarget->DrawTextLayout(D2D1::Point2F(), mTextLayout.Get(), brush.Get());
 
-        hr = renderTarget->EndDraw();
+        HRESULT hr = renderTarget->EndDraw();
 
         displayer->ReleaseRenderTarget(renderTarget);
 

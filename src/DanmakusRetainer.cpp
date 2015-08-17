@@ -40,12 +40,15 @@ namespace WTFDanmaku {
             mR2LRetainer->Clear();
         if (mTopRetainer != nullptr)
             mTopRetainer->Clear();
+        if (mBottomRetainer != nullptr)
+            mBottomRetainer->Clear();
     }
 
     void DanmakusRetainer::Release() {
         Clear();
         mR2LRetainer.reset();
         mTopRetainer.reset();
+        mBottomRetainer.reset();
     }
 
 }

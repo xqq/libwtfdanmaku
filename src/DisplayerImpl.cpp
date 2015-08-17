@@ -175,13 +175,13 @@ namespace WTFDanmaku {
         // TODO
     }
 
-    ComPtr<ID2D1Bitmap1> DisplayerImpl::CreateBitmap(float width, float height) {
+    ComPtr<ID2D1Bitmap1> DisplayerImpl::CreateBitmap(uint32_t width, uint32_t height) {
         if (!mHasBackend)
             return nullptr;
 
         D2D1_SIZE_U size;
-        size.width = static_cast<uint32_t>(std::ceilf(width));
-        size.height = static_cast<uint32_t>(std::ceilf(height));
+        size.width = width;
+        size.height = height;
 
         D2D1_BITMAP_PROPERTIES1 props = {};
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;

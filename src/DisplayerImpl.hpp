@@ -27,7 +27,7 @@ namespace WTFDanmaku {
         bool SetupBackend();
         bool TeardownBackend();
         void Resize(int width, int height);
-        ComPtr<ID2D1Bitmap1> CreateBitmap(float width, float height);
+        ComPtr<ID2D1Bitmap1> CreateBitmap(uint32_t width, uint32_t height);
         ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
         void ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget);
         void DrawDanmakuItem(DanmakuRef item, time_t current);
