@@ -51,6 +51,7 @@ namespace WTFDanmaku {
         void Initialize(void* windowHandle, std::unique_ptr<std::vector<DanmakuRef>> danmakuArray);
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
+        void SetDanmakuList(std::unique_ptr<std::vector<DanmakuRef>> danmakuArray);
         void Start();
         void Pause();
         void Resume();

@@ -6,13 +6,14 @@
 
 namespace WTFDanmaku {
 
-    class Displayer;
+    class IDanmakusRetainer;
 
     class R2LDanmaku : public BaseDanmaku {
     public:
         static inline DanmakuRef Create() {
             return std::make_shared<R2LDanmaku>();
         }
+        static std::unique_ptr<IDanmakusRetainer> CreateRetainer();
     public:
         explicit R2LDanmaku() = default;
 
@@ -31,6 +32,8 @@ namespace WTFDanmaku {
         virtual float GetLeftAtTime(Displayer* displayer, time_t time) override;
 
         virtual Rect<float> GetRectAtTime(Displayer* displayer, time_t time) override;
+    private:
+        class R2LRetainer;
     private:
         float y = 0.0f;
         float mSpeed = 0.0f;

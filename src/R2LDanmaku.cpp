@@ -1,5 +1,6 @@
 #include "Displayer.hpp"
 #include "R2LDanmaku.hpp"
+#include "DanmakusRetainer.hpp"
 
 namespace WTFDanmaku {
 
@@ -46,6 +47,99 @@ namespace WTFDanmaku {
         mRect.bottom = mRect.top + mTextHeight;
         
         return mRect;
+    }
+
+    class R2LDanmaku::R2LRetainer : public IDanmakusRetainer {
+    public:
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
+            if (nullptr == mDanmakus) {
+                mDanmakus = std::make_unique<Danmakus>();
+            }
+
+            RemoveTimeoutDanmakus(currentMillis);
+
+            if (!danmaku->IsAlive(currentMillis)) {
+                return;
+            }
+
+            float top = 0.0f;
+
+            for (auto iter = mDanmakus->begin(); iter != mDanmakus->end(); ++iter) {
+                DanmakuRef item = iter->second;
+                Rect<float> itemRect = item->GetRect();
+
+                if (item.get() == danmaku.get()) {
+                    return;
+                }
+
+                if (itemRect.top > top) {
+                    if (danmaku->GetHeight() <= itemRect.top - top) {
+                        break;
+                    }
+                }
+
+                bool suitable = false;
+                float speedDiff = danmaku->GetSpeed() - item->GetSpeed();
+
+                if (speedDiff <= 0) {
+                    if (itemRect.right <= displayer->GetWidth() - 30) {
+                        suitable = true;
+                    }
+                } else {
+                    time_t meetDuration = static_cast<time_t>(
+                        (item->GetSpeed() * (currentMillis - item->GetStartTime()) - item->GetWidth()) / speedDiff
+                    );
+                    if (meetDuration * danmaku->GetSpeed() >= displayer->GetWidth() + 30) {
+                        suitable = true;
+                    }
+                }
+
+                if (suitable) {
+                    top = itemRect.top;
+                    break;
+                }
+
+                top = itemRect.bottom + 1.0f;
+                if (top + danmaku->GetHeight() > displayer->GetHeight()) {
+                    danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), -danmaku->GetHeight() - 1);
+                    return;
+                }
+            }
+
+            danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), top);
+            int topint = static_cast<int>(top);
+            auto iter = mDanmakus->find(topint);
+            if (iter != mDanmakus->end()) {
+                iter->second = danmaku;
+            } else {
+                mDanmakus->insert(std::make_pair(topint, danmaku));
+            }
+        }
+
+        void RemoveTimeoutDanmakus(time_t time) {
+            auto iter = mDanmakus->begin();
+            while (iter != mDanmakus->end()) {
+                if (iter->second->IsAlive(time) == false) {
+                    iter = mDanmakus->erase(iter);
+                } else {
+                    ++iter;
+                }
+            }
+        }
+
+        virtual void Clear() override {
+            mDanmakus->clear();
+        }
+
+        virtual void Release() override {
+            mDanmakus.reset();
+        }
+    private:
+        unique_ptr<Danmakus> mDanmakus;
+    };
+
+    std::unique_ptr<IDanmakusRetainer> R2LDanmaku::CreateRetainer() {
+        return std::unique_ptr<IDanmakusRetainer>(new R2LRetainer);
     }
 
 }

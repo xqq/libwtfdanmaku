@@ -10,10 +10,13 @@ namespace WTFDanmaku {
         static inline DanmakuRef Create() {
             return std::make_shared<BottomDanmaku>();
         }
+        static std::unique_ptr<IDanmakusRetainer> CreateRetainer();
     public:
         explicit BottomDanmaku() = default;
         virtual ~BottomDanmaku() override;
         virtual DanmakuType GetType() override;
+    private:
+        class BottomRetainer;
     };
 
 }
