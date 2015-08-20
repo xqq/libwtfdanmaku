@@ -15,7 +15,7 @@ WTF_Instance* wtf = NULL;
 int main(int argc, char** argv) {
     if (argv[1]) {
         if (strlen(argv[1]) > 0) {
-            strcpy_s(optFileName, strlen(argv[1]), argv[1]);
+            strcpy_s(optFileName, sizeof(optFileName), argv[1]);
             hasArgFile = true;
         }
     }
