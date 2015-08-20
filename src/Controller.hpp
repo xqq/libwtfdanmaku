@@ -18,14 +18,14 @@ namespace WTFDanmaku {
     class DanmakusManager;
 
     class Controller : public Noncopyable {
-    private:
+    public:
         enum State : int {
             kIdle = 0,
             kRunning = 1,
             kPaused = 2,
             kStopped = 3
         };
-
+    private:
         enum Cmd : int {
             kNull = 0,
             kBase = 0x12450,
@@ -47,11 +47,8 @@ namespace WTFDanmaku {
     public:
         explicit Controller();
         ~Controller();
-        void Initialize(void* windowHandle);
-        void Initialize(void* windowHandle, std::unique_ptr<std::vector<DanmakuRef>> danmakuArray);
-        void AddDanmaku(DanmakuRef danmaku);
-        void AddLiveDanmaku(DanmakuRef danmaku);
-        void SetDanmakuList(std::unique_ptr<std::vector<DanmakuRef>> danmakuArray);
+        void Initialize(void* hwnd);
+        DanmakusManager* GetManager();
         void Start();
         void Pause();
         void Resume();
@@ -59,6 +56,7 @@ namespace WTFDanmaku {
         void SeekTo(time_t milliseconds);
         time_t GetCurrentPosition();
         bool IsRunning();
+        State GetState();
     private:
         void Working();
         bool HasCommands();
@@ -66,7 +64,7 @@ namespace WTFDanmaku {
         Command PopCommand();
         void HandleCommand();
     private:
-        int mStatus = State::kIdle;
+        State mStatus = State::kIdle;
         std::thread mWorker;
         std::mutex mConditionMutex;
         std::condition_variable mCondition;

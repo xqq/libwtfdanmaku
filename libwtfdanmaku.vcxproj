@@ -17,13 +17,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -57,6 +57,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxgi.lib;d3d10_1.lib;d2d1.lib;dcomp.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>src\export.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,9 +76,13 @@
       <AdditionalDependencies>dxgi.lib;d3d10_1.lib;d2d1.lib;dcomp.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>src\export.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\WTFDanmaku.h" />
+    <ClInclude Include="include\WTFEngine.hpp" />
+    <ClInclude Include="include\WTF_API.h" />
     <ClInclude Include="src\BaseDanmaku.hpp" />
     <ClInclude Include="src\BilibiliParser.hpp" />
     <ClInclude Include="src\BottomDanmaku.hpp" />
@@ -93,7 +98,6 @@
     <ClInclude Include="src\Controller.hpp" />
     <ClInclude Include="src\Win32Mutex.hpp" />
     <ClInclude Include="src\DanmakuFactory.hpp" />
-    <ClInclude Include="src\WTFDanmaku.h" />
     <ClInclude Include="src\Noncopyable.hpp" />
     <ClInclude Include="src\Rect.hpp" />
     <ClInclude Include="src\SampleWindow.hpp" />
@@ -104,20 +108,11 @@
     <ClCompile Include="src\BilibiliParser.cpp" />
     <ClCompile Include="src\BottomDanmaku.cpp" />
     <ClCompile Include="src\DisplayerImpl.cpp" />
-    <ClCompile Include="src\dllmain.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="src\BaseDanmaku.cpp" />
     <ClCompile Include="src\DanmakuFactory.cpp" />
     <ClCompile Include="src\DanmakusManager.cpp" />
     <ClCompile Include="src\Displayer.cpp" />
     <ClCompile Include="src\Controller.cpp" />
-    <ClCompile Include="src\WTFDanmaku.cpp" />
     <ClCompile Include="src\GlobalConfig.cpp" />
     <ClCompile Include="src\R2LDanmaku.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
@@ -125,6 +120,12 @@
     <ClCompile Include="src\SampleWindow.cpp" />
     <ClCompile Include="src\TopDanmaku.cpp" />
     <ClCompile Include="src\WinmmTimer.cpp" />
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\WTFEngine.cpp" />
+    <ClCompile Include="src\WTFDanmaku.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\export.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

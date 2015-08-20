@@ -14,19 +14,14 @@ namespace WTFDanmaku {
         Stop();
     }
 
-    void Controller::Initialize(void* windowHandle) {
-        mHwnd = windowHandle;
+    void Controller::Initialize(void* hwnd) {
+        mHwnd = hwnd;
         mTimer = WinmmTimer::Create();
         mManager = std::make_unique<DanmakusManager>();
         mManager->SetTimer(mTimer);
 
         mDisplayer = std::make_unique<Displayer>();
         mDisplayer->SetTarget(mHwnd);
-    }
-
-    void Controller::Initialize(void* windowHandle, unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
-        Initialize(windowHandle);
-        mManager->SetDanmakuList(std::move(danmakuArray));
     }
 
     bool Controller::HasCommands() {
@@ -47,20 +42,16 @@ namespace WTFDanmaku {
         return cmd;
     }
 
-    void Controller::AddDanmaku(DanmakuRef danmaku) {
-        mManager->AddDanmaku(danmaku);
-    }
-
-    void Controller::AddLiveDanmaku(DanmakuRef danmaku) {
-        mManager->AddLiveDanmaku(danmaku);
-    }
-
-    void Controller::SetDanmakuList(std::unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
-        mManager->SetDanmakuList(std::move(danmakuArray));
+    DanmakusManager* Controller::GetManager() {
+        return mManager.get();
     }
 
     bool Controller::IsRunning() {
         return mStatus == State::kRunning;
+    }
+
+    Controller::State Controller::GetState() {
+        return mStatus;
     }
 
     void Controller::Start() {

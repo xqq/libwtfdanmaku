@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libwtfdanmaku", "libwtfdanmaku.vcxproj", "{817EBE08-2BE4-4251-92D0-117822D8F16A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo\demo.vcxproj", "{6C6C2A8C-E868-4343-BD6E-6D164BF25134}"
+	ProjectSection(ProjectDependencies) = postProject
+		{817EBE08-2BE4-4251-92D0-117822D8F16A} = {817EBE08-2BE4-4251-92D0-117822D8F16A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{817EBE08-2BE4-4251-92D0-117822D8F16A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{817EBE08-2BE4-4251-92D0-117822D8F16A}.Debug|Win32.Build.0 = Debug|Win32
+		{817EBE08-2BE4-4251-92D0-117822D8F16A}.Release|Win32.ActiveCfg = Release|Win32
+		{817EBE08-2BE4-4251-92D0-117822D8F16A}.Release|Win32.Build.0 = Release|Win32
+		{6C6C2A8C-E868-4343-BD6E-6D164BF25134}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6C6C2A8C-E868-4343-BD6E-6D164BF25134}.Debug|Win32.Build.0 = Debug|Win32
+		{6C6C2A8C-E868-4343-BD6E-6D164BF25134}.Release|Win32.ActiveCfg = Release|Win32
+		{6C6C2A8C-E868-4343-BD6E-6D164BF25134}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
