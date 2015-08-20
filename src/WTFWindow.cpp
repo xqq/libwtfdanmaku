@@ -1,17 +1,18 @@
-#include "SampleWindow.hpp"
+#include <Windows.h>
 #include <CommCtrl.h>
+#include "../include/WTFWindow.hpp"
 
 #pragma comment (lib, "Comctl32.lib")
 
 namespace WTFDanmaku {
 
-    SampleWindow::SampleWindow(HINSTANCE hInst, int nCmdShow) : m_hInstance(hInst), m_nCmdShow(nCmdShow) { }
+    WTFWindow::WTFWindow(HINSTANCE hInst, int nCmdShow) : m_hInstance(hInst), m_nCmdShow(nCmdShow) { }
 
-    SampleWindow::~SampleWindow() {
+    WTFWindow::~WTFWindow() {
 
     }
 
-    int SampleWindow::Initialize(DWORD dwExStyle) {
+    int WTFWindow::Initialize(DWORD dwExStyle, int width, int height, const wchar_t* title) {
         INITCOMMONCONTROLSEX iccex = { 0 };
         iccex.dwSize = sizeof(iccex);
         iccex.dwICC = ICC_WIN95_CLASSES;
@@ -19,8 +20,11 @@ namespace WTFDanmaku {
 
         RegisterWindowClass();
 
-        m_hWindow = CreateWindowEx(dwExStyle, m_WindowClassName, L"WTFDanmaku Test", WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, m_hInstance, this);
+        if (title == nullptr) {
+            title = L"WTFDanmaku SampleWindow";
+        }
+        m_hWindow = CreateWindowEx(dwExStyle, m_WindowClassName, title, WS_OVERLAPPEDWINDOW,
+            CW_USEDEFAULT, CW_USEDEFAULT, width, height, NULL, NULL, m_hInstance, this);
 
         if (!m_hWindow) {
             return FALSE;
@@ -32,20 +36,28 @@ namespace WTFDanmaku {
         return TRUE;
     }
 
-    ATOM SampleWindow::RegisterWindowClass() {
+    void WTFWindow::SetCustomWindowProc(WNDPROC proc) {
+        m_CustomWndProc = proc;
+    }
+
+    ATOM WTFWindow::RegisterWindowClass() {
         WNDCLASSEX wcex;
         memset(&wcex, 0, sizeof(wcex));
 
         wcex.cbSize = sizeof(wcex);
 
         wcex.style = CS_HREDRAW | CS_VREDRAW;
-        wcex.lpfnWndProc = &SampleWindow::WndProc;
+        if (m_CustomWndProc) {
+            wcex.lpfnWndProc = m_CustomWndProc;
+        } else {
+            wcex.lpfnWndProc = &WTFWindow::WndProc;
+        }
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = m_hInstance;
         wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-        wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+        wcex.hIcon = LoadIcon(m_hInstance, IDI_APPLICATION);
+        wcex.hIconSm = LoadIcon(m_hInstance, IDI_APPLICATION);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = NULL;
         wcex.lpszClassName = m_WindowClassName;
@@ -53,7 +65,7 @@ namespace WTFDanmaku {
         return RegisterClassEx(&wcex);
     }
 
-    void SampleWindow::SetHitTestOverEnabled(bool enabled) {
+    void WTFWindow::SetHitTestOverEnabled(bool enabled) {
         if (m_hWindow) {
             long currentLong = GetWindowLong(m_hWindow, GWL_EXSTYLE);
             if (enabled) {
@@ -65,7 +77,7 @@ namespace WTFDanmaku {
         }
     }
 
-    int SampleWindow::Run() {
+    int WTFWindow::Run() {
         MSG msg = { 0 };
 
         while (GetMessage(&msg, NULL, 0, 0)) {
@@ -76,15 +88,23 @@ namespace WTFDanmaku {
         return static_cast<int>(msg.wParam);
     }
 
-    LRESULT CALLBACK SampleWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-        SampleWindow* window = nullptr;
+    HWND WTFWindow::GetHwnd() {
+        return m_hWindow;
+    }
+
+    LRESULT WTFWindow::DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+        return WndProc(hWnd, message, wParam, lParam);
+    }
+
+    LRESULT CALLBACK WTFWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+        WTFWindow* window = nullptr;
 
         if (WM_NCCREATE == message) {
             LPCREATESTRUCT cs = reinterpret_cast<LPCREATESTRUCT>(lParam);
-            window = static_cast<SampleWindow*>(cs->lpCreateParams);
+            window = static_cast<WTFWindow*>(cs->lpCreateParams);
             SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
         } else {
-            window = reinterpret_cast<SampleWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+            window = reinterpret_cast<WTFWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
         }
 
         if (window == nullptr)
@@ -95,12 +115,6 @@ namespace WTFDanmaku {
                 window->m_hWindow = hWnd;
                 break;
             }
-            case WM_COMMAND:
-                break;
-            case WM_LBUTTONDOWN:
-                break;
-            case WM_LBUTTONUP:
-                break;
             case WM_DESTROY:
                 PostQuitMessage(0);
                 break;

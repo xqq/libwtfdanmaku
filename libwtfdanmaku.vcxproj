@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="include\WTFDanmaku.h" />
     <ClInclude Include="include\WTFEngine.hpp" />
+    <ClInclude Include="include\WTFWindow.hpp" />
     <ClInclude Include="include\WTF_API.h" />
     <ClInclude Include="src\BaseDanmaku.hpp" />
     <ClInclude Include="src\BilibiliParser.hpp" />
@@ -100,7 +101,6 @@
     <ClInclude Include="src\DanmakuFactory.hpp" />
     <ClInclude Include="src\Noncopyable.hpp" />
     <ClInclude Include="src\Rect.hpp" />
-    <ClInclude Include="src\SampleWindow.hpp" />
     <ClInclude Include="src\TopDanmaku.hpp" />
     <ClInclude Include="src\WinmmTimer.hpp" />
   </ItemGroup>
@@ -117,7 +117,7 @@
     <ClCompile Include="src\R2LDanmaku.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\DanmakusRetainer.cpp" />
-    <ClCompile Include="src\SampleWindow.cpp" />
+    <ClCompile Include="src\WTFWindow.cpp" />
     <ClCompile Include="src\TopDanmaku.cpp" />
     <ClCompile Include="src\WinmmTimer.cpp" />
     <ClCompile Include="src\dllmain.cpp" />

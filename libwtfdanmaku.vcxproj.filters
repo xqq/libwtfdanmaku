@@ -19,9 +19,6 @@
     <ClInclude Include="src\DanmakuFactory.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\SampleWindow.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\TopDanmaku.hpp">
       <Filter>src</Filter>
     </ClInclude>
@@ -79,15 +76,15 @@
     <ClInclude Include="include\WTF_API.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\WTFWindow.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DanmakuFactory.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SampleWindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TopDanmaku.cpp">
@@ -133,6 +130,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\WTFEngine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WTFWindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
