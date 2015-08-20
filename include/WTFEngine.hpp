@@ -8,7 +8,7 @@ namespace WTFDanmaku {
 
     class Controller;
 
-    WTF_API enum Type : int {
+    enum Type : int {
         Scrolling = 1,
         Bottom = 4,
         Top = 5,
