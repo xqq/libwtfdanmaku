@@ -1,6 +1,7 @@
 #include <cmath>
 #include <mutex>
 #include "Renderable.hpp"
+#include "DanmakuConfig.hpp"
 #include "DisplayerImpl.hpp"
 
 namespace WTFDanmaku {
@@ -242,7 +243,7 @@ namespace WTFDanmaku {
         return mDWriteFactory;
     }
 
-    void DisplayerImpl::DrawDanmakuItem(DanmakuRef item, time_t current) {
+    void DisplayerImpl::DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config) {
         if (!mHasBackend)
             return;
 
@@ -260,7 +261,7 @@ namespace WTFDanmaku {
             return;
 
         if (!renderable->HasBitmap()) {
-            renderable->BuildBitmap(mOuter);
+            renderable->BuildBitmap(mOuter, config);
         }
 
         auto bitmap = renderable->GetBitmap();

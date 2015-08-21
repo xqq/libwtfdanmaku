@@ -81,8 +81,8 @@ namespace WTFDanmaku {
         
         for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); ++iter) {
             if ((*iter)->GetStartTime() < current) {
-                if (!(*iter)->HasMeasured()) {
-                    (*iter)->Measure(displayer);
+                if (!(*iter)->HasMeasured(&mConfig)) {
+                    (*iter)->Measure(displayer, &mConfig);
                 }
                 if ((*iter)->IsAlive(current)) {
                     mActiveDanmakus.insert(*iter);
@@ -126,13 +126,13 @@ namespace WTFDanmaku {
         displayer->BeginDraw();
 
         for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter, ++count) {
-            if (!(*iter)->HasMeasured()) {
-                (*iter)->Measure(displayer);
+            if (!(*iter)->HasMeasured(&mConfig)) {
+                (*iter)->Measure(displayer, &mConfig);
             }
-            if (!(*iter)->HasLayout()) {
+            if (!(*iter)->HasLayout(&mConfig)) {
                 mRetainer.Add(*iter, displayer, current);
             }
-            displayer->DrawDanmakuItem(*iter, current);
+            displayer->DrawDanmakuItem(*iter, current, &mConfig);
         }
 
         HRESULT hr = displayer->EndDraw();
@@ -145,6 +145,10 @@ namespace WTFDanmaku {
 
     RenderingStatistics DanmakusManager::GetRenderingStatistics() {
         return mStatistics;
+    }
+
+    DanmakuConfig* DanmakusManager::GetConfig() {
+        return &mConfig;
     }
 
 }

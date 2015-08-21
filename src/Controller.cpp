@@ -149,6 +149,7 @@ namespace WTFDanmaku {
                     break;
                 case Cmd::kResize:
                     mDisplayer->Resize(cmd.arg1, cmd.arg2);
+                    mManager->GetConfig()->MeasureFlag++;
                     break;
                 case Cmd::kStop:
                     mStatus = State::kStopped;

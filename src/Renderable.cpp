@@ -1,20 +1,20 @@
 #include <cmath>
-#include "GlobalConfig.hpp"
 #include "BaseDanmaku.hpp"
 #include "Displayer.hpp"
 #include "Renderable.hpp"
+#include "DanmakuConfig.hpp"
 
 namespace WTFDanmaku {
 
-    bool Renderable::BuildTextLayout(Displayer* displayer) {
+    bool Renderable::BuildTextLayout(Displayer* displayer, DanmakuConfig* config) {
         ComPtr<IDWriteFactory> dwFactory = displayer->GetDWriteFactory();
         if (nullptr == dwFactory)
             return false;
 
         ComPtr<IDWriteTextFormat> textFormat = nullptr;
 
-        HRESULT hr = dwFactory->CreateTextFormat(sFontName, nullptr, sFontWeight, sFontStyle,
-            sFontStretch, mDanmaku->mTextSize * sFontScaleFactor, L"zh-cn", &textFormat);
+        HRESULT hr = dwFactory->CreateTextFormat(config->FontName.c_str(), nullptr, config->FontWeight, config->FontStyle,
+            config->FontStretch, mDanmaku->mTextSize * config->FontScaleFactor, L"zh-cn", &textFormat);
         if (FAILED(hr) || nullptr == textFormat)
             return false;
 
@@ -36,7 +36,7 @@ namespace WTFDanmaku {
         return true;
     }
     
-    bool Renderable::BuildBitmap(Displayer* displayer) {
+    bool Renderable::BuildBitmap(Displayer* displayer, DanmakuConfig* config) {
         if (!HasTextLayout())
             return false;
 

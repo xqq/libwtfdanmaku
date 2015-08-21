@@ -23,6 +23,12 @@ WTF_C_API void     __stdcall WTF_SeekTo(WTF_Instance* instance, int64_t millisec
 WTF_C_API void     __stdcall WTF_Resize(WTF_Instance* instance, uint32_t width, uint32_t height);
 WTF_C_API int64_t  __stdcall WTF_GetCurrentPosition(WTF_Instance* instance);
 WTF_C_API int      __stdcall WTF_IsRunning(WTF_Instance* instance);
+WTF_C_API float    __stdcall WTF_GetFontScaleFactor(WTF_Instance* instance);
+WTF_C_API void     __stdcall WTF_SetFontScaleFactor(WTF_Instance* instance, float factor);
+WTF_C_API void     __stdcall WTF_SetFontName(WTF_Instance* instance, const wchar_t* fontName);
+WTF_C_API void     __stdcall WTF_SetFontWeight(WTF_Instance* instance, int dwriteFontWeight);
+WTF_C_API void     __stdcall WTF_SetFontStyle(WTF_Instance* instance, int dwriteFontStyle);
+WTF_C_API void     __stdcall WTF_SetFontStretch(WTF_Instance* instance, int dwriteFontStretch);
 
 WTF_C_API typedef struct WTF_Window WTF_Window;
 

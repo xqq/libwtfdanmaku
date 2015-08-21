@@ -5,7 +5,6 @@
 #include <string>
 #include <memory>
 #include "Noncopyable.hpp"
-#include "GlobalConfig.hpp"
 #include "Rect.hpp"
 
 using std::shared_ptr;
@@ -25,6 +24,7 @@ namespace WTFDanmaku {
 
     class Displayer;
     class Renderable;
+    struct DanmakuConfig;
     
     class BaseDanmaku : public Noncopyable {
         friend class DanmakuFactory;
@@ -42,17 +42,15 @@ namespace WTFDanmaku {
             return mTextHeight;
         }
 
-        bool HasMeasured();
+        bool HasMeasured(DanmakuConfig* config);
 
-        inline bool HasLayout() {
-            return mHasLayout;
-        }
+        bool HasLayout(DanmakuConfig* config);
 
         inline bool HasRenderable() {
             return mRenderable != nullptr;
         }
 
-        weak_ptr<Renderable> BuildRenderable(Displayer* displayer);
+        weak_ptr<Renderable> BuildRenderable(Displayer* displayer, DanmakuConfig* config);
 
         inline weak_ptr<Renderable> GetRenderable() {
             return weak_ptr<Renderable>(mRenderable);
@@ -64,7 +62,7 @@ namespace WTFDanmaku {
 
         virtual void ReleaseResources();
 
-        virtual void Measure(Displayer* displayer);
+        virtual void Measure(Displayer* displayer, DanmakuConfig* config);
 
         virtual void Layout(Displayer* displayer, float x, float y) = 0;
 
@@ -95,6 +93,7 @@ namespace WTFDanmaku {
         }
     protected:
         time_t mStartTime = 0;
+        time_t mDuration = 0;
         Rect<float> mRect;
         float mTextWidth = -1.0f;
         float mTextHeight = -1.0f;
@@ -107,6 +106,7 @@ namespace WTFDanmaku {
         uint32_t mFilterParams = 0;
         time_t mTimestamp = 0;
         uint32_t mDanmakuId = 0;
+        int mMeasureFlag = 0;
         shared_ptr<Renderable> mRenderable;
     };
 

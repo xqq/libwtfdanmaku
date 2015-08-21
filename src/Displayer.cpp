@@ -57,8 +57,8 @@ namespace WTFDanmaku {
         return pImpl->GetDWriteFactory();
     }
 
-    void Displayer::DrawDanmakuItem(DanmakuRef item, time_t current) {
-        pImpl->DrawDanmakuItem(item, current);
+    void Displayer::DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config) {
+        pImpl->DrawDanmakuItem(item, current, config);
     }
 
     void Displayer::BeginDraw() {

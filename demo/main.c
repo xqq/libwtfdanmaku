@@ -32,6 +32,9 @@ void InitializeWTF(HWND hwnd) {
     if (!wtfInited) {
         wtf = WTF_CreateInstance();
         WTF_InitializeWithHwnd(wtf, (void*)hwnd);
+        WTF_SetFontName(wtf, L"SimHei");
+        WTF_SetFontWeight(wtf, 700);
+
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
         } else {
@@ -48,13 +51,13 @@ void ResizeWTF(uint32_t width, uint32_t height) {
     }
 }
 
-void RButtonWTF(HWND hwnd) {
+void RButtonWTF() {
     if (wtf) {
         WTF_Pause(wtf);
     }
 }
 
-void ReleaseWTF(HWND hwnd) {
+void ReleaseWTF() {
     if (wtf) {
         if (WTF_IsRunning(wtf)) {
             WTF_Stop(wtf);
@@ -75,10 +78,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
             InitializeWTF(hwnd);
             break;
         case WM_RBUTTONDOWN:
-            RButtonWTF(hwnd);
+            RButtonWTF();
             break;
         case WM_DESTROY:
-            ReleaseWTF(hwnd);
+            ReleaseWTF();
     }
     return WTFWindow_DefaultWindowProc(window, (void*)hwnd, message, (WPARAM)wParam, (LPARAM)lParam);
 }

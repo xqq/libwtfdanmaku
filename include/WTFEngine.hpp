@@ -34,6 +34,12 @@ namespace WTFDanmaku {
         void Resize(uint32_t width, uint32_t height);
         time_t GetCurrentPosition();
         bool IsRunning();
+        float GetFontScaleFactor();
+        void SetFontScaleFactor(float factor);
+        void SetFontName(const wchar_t* fontName);
+        void SetFontWeight(int dwriteFontWeight);
+        void SetFontStyle(int dwriteFontStyle);
+        void SetFontStretch(int dwriteFontStretch);
     private:
         WTFEngine(const WTFEngine&) = delete;
         WTFEngine& operator=(const WTFEngine&) = delete;

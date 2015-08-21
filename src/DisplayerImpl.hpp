@@ -8,7 +8,6 @@
 #include <dxgi1_3.h>
 #include <dcomp.h>
 #include <dwrite.h>
-#include <wincodec.h>
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
 #include "BaseDanmaku.hpp"
@@ -18,6 +17,7 @@ using Microsoft::WRL::ComPtr;
 namespace WTFDanmaku {
 
     class Displayer;
+    struct DanmakuConfig;
 
     class DisplayerImpl : public Noncopyable {
     public:
@@ -30,7 +30,7 @@ namespace WTFDanmaku {
         ComPtr<ID2D1Bitmap1> CreateBitmap(uint32_t width, uint32_t height);
         ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
         void ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget);
-        void DrawDanmakuItem(DanmakuRef item, time_t current);
+        void DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config);
         void BeginDraw();
         HRESULT EndDraw();
         ComPtr<IDWriteFactory> GetDWriteFactory();

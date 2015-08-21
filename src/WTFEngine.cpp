@@ -1,3 +1,4 @@
+#include <string>
 #include "Controller.hpp"
 #include "BaseDanmaku.hpp"
 #include "DanmakusManager.hpp"
@@ -75,6 +76,30 @@ namespace WTFDanmaku {
 
     bool WTFEngine::IsRunning() {
         return mController->IsRunning();
+    }
+
+    float WTFEngine::GetFontScaleFactor() {
+        return mController->GetManager()->GetConfig()->FontScaleFactor;
+    }
+
+    void WTFEngine::SetFontScaleFactor(float factor) {
+        mController->GetManager()->GetConfig()->FontScaleFactor = factor;
+    }
+
+    void WTFEngine::SetFontName(const wchar_t* fontName) {
+        mController->GetManager()->GetConfig()->FontName = std::wstring(fontName);
+    }
+
+    void WTFEngine::SetFontWeight(int dwriteFontWeight) {
+        mController->GetManager()->GetConfig()->FontWeight = static_cast<DWRITE_FONT_WEIGHT>(dwriteFontWeight);
+    }
+
+    void WTFEngine::SetFontStyle(int dwriteFontStyle) {
+        mController->GetManager()->GetConfig()->FontStyle = static_cast<DWRITE_FONT_STYLE>(dwriteFontStyle);
+    }
+
+    void WTFEngine::SetFontStretch(int dwriteFontStretch) {
+        mController->GetManager()->GetConfig()->FontStretch = static_cast<DWRITE_FONT_STRETCH>(dwriteFontStretch);
     }
 
 }

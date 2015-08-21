@@ -1,5 +1,6 @@
 #include "Displayer.hpp"
 #include "R2LDanmaku.hpp"
+#include "DanmakuConfig.hpp"
 #include "DanmakusRetainer.hpp"
 
 namespace WTFDanmaku {
@@ -12,9 +13,9 @@ namespace WTFDanmaku {
         return kScrolling;
     }
 
-    void R2LDanmaku::Measure(Displayer* displayer) {
-        this->BaseDanmaku::Measure(displayer);
-        mSpeed = (sLogicalScreenWidth + mTextWidth) / sDanmakuDuration;
+    void R2LDanmaku::Measure(Displayer* displayer, DanmakuConfig* config) {
+        this->BaseDanmaku::Measure(displayer, config);
+        mSpeed = (config->LogicalScreenWidth + mTextWidth) / config->DanmakuDuration;
         int screenWidth = displayer->GetWidth();
         mDuration = static_cast<time_t>((screenWidth + mTextWidth) / mSpeed);
     }

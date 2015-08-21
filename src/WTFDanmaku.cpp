@@ -1,6 +1,7 @@
 #include "Controller.hpp"
 #include "BaseDanmaku.hpp"
 #include "DanmakusManager.hpp"
+#include "DanmakuConfig.hpp"
 #include "DanmakuFactory.hpp"
 #include "BilibiliParser.hpp"
 #include "../include/WTFWindow.hpp"
@@ -108,6 +109,49 @@ WTF_C_API int      __stdcall WTF_IsRunning(WTF_Instance* instance) {
 
     return static_cast<int>(controller->IsRunning());
 }
+
+WTF_C_API float    __stdcall WTF_GetFontScaleFactor(WTF_Instance* instance) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    return config->FontScaleFactor;
+}
+
+WTF_C_API void     __stdcall WTF_SetFontScaleFactor(WTF_Instance* instance, float factor) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->FontScaleFactor = factor;
+}
+
+WTF_C_API void     __stdcall WTF_SetFontName(WTF_Instance* instance, const wchar_t* fontName) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->FontName = std::wstring(fontName);
+}
+
+WTF_C_API void     __stdcall WTF_SetFontWeight(WTF_Instance* instance, int dwriteFontWeight) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->FontWeight = static_cast<DWRITE_FONT_WEIGHT>(dwriteFontWeight);
+}
+
+WTF_C_API void     __stdcall WTF_SetFontStyle(WTF_Instance* instance, int dwriteFontStyle) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->FontStyle = static_cast<DWRITE_FONT_STYLE>(dwriteFontStyle);
+}
+
+WTF_C_API void     __stdcall WTF_SetFontStretch(WTF_Instance* instance, int dwriteFontStretch) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->FontStretch = static_cast<DWRITE_FONT_STRETCH>(dwriteFontStretch);
+}
+
 
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow) {

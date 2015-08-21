@@ -31,9 +31,6 @@
     <ClInclude Include="src\R2LDanmaku.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\GlobalConfig.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Displayer.hpp">
       <Filter>src</Filter>
     </ClInclude>
@@ -79,6 +76,9 @@
     <ClInclude Include="include\WTFWindow.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="src\DanmakuConfig.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -91,9 +91,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\R2LDanmaku.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GlobalConfig.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Displayer.cpp">

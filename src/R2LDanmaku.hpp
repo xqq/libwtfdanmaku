@@ -21,7 +21,7 @@ namespace WTFDanmaku {
 
         virtual DanmakuType GetType() override;
 
-        virtual void Measure(Displayer* displayer) override;
+        virtual void Measure(Displayer* displayer, DanmakuConfig* config) override;
 
         virtual void Layout(Displayer* displayer, float x, float y) override;
 
@@ -37,7 +37,6 @@ namespace WTFDanmaku {
     private:
         float y = 0.0f;
         float mSpeed = 0.0f;
-        time_t mDuration = 0;
     };
 
 }

@@ -1,10 +1,14 @@
 #ifndef _WTF_API_H
 #define _WTF_API_H
 
-#ifdef LIBWTFDANMAKU_EXPORTS
-    #define WTF_API __declspec(dllexport)
-#else
-    #define WTF_API __declspec(dllimport)
+#ifdef _MSC_VER
+    #ifdef LIBWTFDANMAKU_EXPORTS
+        #define WTF_API __declspec(dllexport)
+    #else
+        #define WTF_API __declspec(dllimport)
+    #endif
+#elif
+    #define WTF_API
 #endif
 
 #ifdef __cplusplus

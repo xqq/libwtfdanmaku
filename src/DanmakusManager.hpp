@@ -8,6 +8,7 @@
 #include "BaseDanmaku.hpp"
 #include "Noncopyable.hpp"
 #include "DanmakusRetainer.hpp"
+#include "DanmakuConfig.hpp"
 #include "Win32Mutex.hpp"
 #include "ITimer.hpp"
 
@@ -34,6 +35,7 @@ namespace WTFDanmaku {
         void SeekTo(time_t timepoint);
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
+        DanmakuConfig* GetConfig();
         RenderingStatistics DrawDanmakus(Displayer* displayer);
         RenderingStatistics GetRenderingStatistics();
     private:
@@ -53,6 +55,7 @@ namespace WTFDanmaku {
         TimeSortedDanmakus mAllDanmakus;
         TimeSortedDanmakus mActiveDanmakus;
         DanmakusRetainer mRetainer;
+        DanmakuConfig mConfig;
         RenderingStatistics mStatistics;
     };
 

@@ -1,5 +1,5 @@
 #include <dwrite.h>
-#include "GlobalConfig.hpp"
+#include "DanmakuConfig.hpp"
 #include "Renderable.hpp"
 #include "BaseDanmaku.hpp"
 
@@ -17,18 +17,26 @@ namespace WTFDanmaku {
         return kNull;
     }
 
-    bool BaseDanmaku::HasMeasured() {
-        return nullptr != mRenderable && mRenderable->HasTextLayout();
+    bool BaseDanmaku::HasMeasured(DanmakuConfig* config) {
+        return nullptr != mRenderable
+            && mRenderable->HasTextLayout()
+            && mMeasureFlag == config->MeasureFlag;
     }
 
-    void BaseDanmaku::Measure(Displayer* displayer) {
+    bool BaseDanmaku::HasLayout(DanmakuConfig* config) {
+        return mHasLayout;
+    }
+
+    void BaseDanmaku::Measure(Displayer* displayer, DanmakuConfig* config) {
         if (nullptr == mRenderable) {
             mRenderable = std::make_shared<Renderable>(this);
         }
 
         if (!mRenderable->HasTextLayout()) {
-            mRenderable->BuildTextLayout(displayer);
+            mRenderable->BuildTextLayout(displayer, config);
         }
+        mDuration = config->DanmakuDuration;
+        mMeasureFlag = config->MeasureFlag;
     }
     
     void BaseDanmaku::ReleaseResources() {
@@ -37,15 +45,15 @@ namespace WTFDanmaku {
 
     bool BaseDanmaku::IsAlive(time_t time) {
         time_t elapsed = time - this->mStartTime;
-        return elapsed > 0 && elapsed <= sDanmakuDuration;
+        return elapsed > 0 && elapsed <= mDuration;
     }
 
-    weak_ptr<Renderable> BaseDanmaku::BuildRenderable(Displayer* displayer) {
+    weak_ptr<Renderable> BaseDanmaku::BuildRenderable(Displayer* displayer, DanmakuConfig* config) {
         if (nullptr == mRenderable || !mRenderable->HasTextLayout())
-            this->Measure(displayer);
+            this->Measure(displayer, config);
 
         if (!mRenderable->HasBitmap()) {
-            mRenderable->BuildBitmap(displayer);
+            mRenderable->BuildBitmap(displayer, config);
         }
 
         return mRenderable;

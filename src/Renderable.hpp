@@ -13,6 +13,7 @@ namespace WTFDanmaku {
 
     class Displayer;
     class BaseDanmaku;
+    struct DanmakuConfig;
 
     class Renderable : public Noncopyable {
     public:
@@ -28,7 +29,7 @@ namespace WTFDanmaku {
             return mTextLayout;
         }
 
-        bool BuildTextLayout(Displayer* displayer);
+        bool BuildTextLayout(Displayer* displayer, DanmakuConfig* config);
 
         inline bool HasBitmap() {
             return mBitmap.Get() != nullptr;
@@ -38,7 +39,7 @@ namespace WTFDanmaku {
             return mBitmap;
         }
 
-        bool BuildBitmap(Displayer* displayer);
+        bool BuildBitmap(Displayer* displayer, DanmakuConfig* config);
 
         inline void Release() {
             mTextLayout.Reset();
