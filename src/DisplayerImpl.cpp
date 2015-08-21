@@ -172,6 +172,9 @@ namespace WTFDanmaku {
     }
     
     void DisplayerImpl::Resize(uint32_t width, uint32_t height) {
+        if (static_cast<int>(width) <= 0 || static_cast<int>(height) <= 0)
+            return;
+
         std::lock_guard<Win32Mutex> locker(mRenderMutex);
 
         mDeviceContext->SetTarget(nullptr);
