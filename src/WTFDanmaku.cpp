@@ -91,6 +91,12 @@ WTF_C_API void     __stdcall WTF_SeekTo(WTF_Instance* instance, int64_t millisec
     controller->SeekTo(milliseconds);
 }
 
+WTF_C_API void     __stdcall WTF_Resize(WTF_Instance* instance, uint32_t width, uint32_t height) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->Resize(width, height);
+}
+
 WTF_C_API int64_t  __stdcall WTF_GetCurrentPosition(WTF_Instance* instance) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 

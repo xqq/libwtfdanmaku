@@ -171,8 +171,33 @@ namespace WTFDanmaku {
         return true;
     }
     
-    void DisplayerImpl::Resize(int width, int height) {
-        // TODO
+    void DisplayerImpl::Resize(uint32_t width, uint32_t height) {
+        std::lock_guard<Win32Mutex> locker(mRenderMutex);
+
+        mDeviceContext->SetTarget(nullptr);
+        mSurfaceBitmap.Reset();
+        mDxgiSurface.Reset();
+
+        HRESULT hr = mSwapChain->ResizeBuffers(2, width, height, DXGI_FORMAT_B8G8R8A8_UNORM, 0);
+        if (FAILED(hr))
+            return;
+
+        hr = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&mDxgiSurface));
+        if (FAILED(hr))
+            return;
+
+        D2D1_BITMAP_PROPERTIES1 props = {};
+        props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
+        props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
+
+        hr = mDeviceContext->CreateBitmapFromDxgiSurface(mDxgiSurface.Get(), props, &mSurfaceBitmap);
+        if (FAILED(hr))
+            return;
+
+        mWidth = width;
+        mHeight = height;
+        mDeviceContext->SetTarget(mSurfaceBitmap.Get());
     }
 
     ComPtr<ID2D1Bitmap1> DisplayerImpl::CreateBitmap(uint32_t width, uint32_t height) {

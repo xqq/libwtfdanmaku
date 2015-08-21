@@ -65,6 +65,10 @@ namespace WTFDanmaku {
         mController->SeekTo(milliseconds);
     }
 
+    void WTFEngine::Resize(uint32_t width, uint32_t height) {
+        mController->Resize(width, height);
+    }
+
     time_t WTFEngine::GetCurrentPosition() {
         return mController->GetCurrentPosition();
     }

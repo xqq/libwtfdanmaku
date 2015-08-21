@@ -37,7 +37,7 @@ namespace WTFDanmaku {
         return pImpl->GetDpiY();
     }
 
-    void Displayer::Resize(int width, int height) {
+    void Displayer::Resize(uint32_t width, uint32_t height) {
         pImpl->Resize(width, height);
     }
 

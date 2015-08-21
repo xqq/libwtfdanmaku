@@ -31,6 +31,7 @@ namespace WTFDanmaku {
         void Resume();
         void Stop();
         void SeekTo(time_t milliseconds);
+        void Resize(uint32_t width, uint32_t height);
         time_t GetCurrentPosition();
         bool IsRunning();
     private:

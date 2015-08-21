@@ -104,6 +104,15 @@ namespace WTFDanmaku {
         }
     }
 
+    void Controller::Resize(uint32_t width, uint32_t height) {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
+            Command cmd(Cmd::kResize);
+            cmd.arg1 = width;
+            cmd.arg2 = height;
+            PushCommand(cmd);
+        }
+    }
+
     time_t Controller::GetCurrentPosition() {
         return mTimer->GetMilliseconds();
     }
@@ -137,6 +146,9 @@ namespace WTFDanmaku {
                         *(reinterpret_cast<int*>(&timepoint) + 1) = cmd.arg2;
                         mManager->SeekTo(timepoint);
                     }
+                    break;
+                case Cmd::kResize:
+                    mDisplayer->Resize(cmd.arg1, cmd.arg2);
                     break;
                 case Cmd::kStop:
                     mStatus = State::kStopped;

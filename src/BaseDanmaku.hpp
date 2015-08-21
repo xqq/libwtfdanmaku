@@ -107,7 +107,7 @@ namespace WTFDanmaku {
         uint32_t mFilterParams = 0;
         time_t mTimestamp = 0;
         uint32_t mDanmakuId = 0;
-        shared_ptr<Renderable> mRenderable = nullptr;
+        shared_ptr<Renderable> mRenderable;
     };
 
     typedef shared_ptr<BaseDanmaku> DanmakuRef;

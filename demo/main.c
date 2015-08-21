@@ -35,11 +35,17 @@ void InitializeWTF(HWND hwnd) {
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
         } else {
-            WTF_LoadBilibiliFile(wtf, "F:\\Downloads\\Downloads\\1055660.xml");
+            WTF_LoadBilibiliFile(wtf, "F:\\Downloads\\Downloads\\5cmps.xml");
         }
         wtfInited = true;
     }
     WTF_Start(wtf);
+}
+
+void ResizeWTF(uint32_t width, uint32_t height) {
+    if (wtf) {
+        WTF_Resize(wtf, width, height);
+    }
 }
 
 void RButtonWTF(HWND hwnd) {
@@ -60,6 +66,11 @@ void ReleaseWTF(HWND hwnd) {
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
+        case WM_SIZE:
+            if (wParam == SIZE_RESTORED || wParam == SIZE_MAXIMIZED) {
+                ResizeWTF(LOWORD(lParam), HIWORD(lParam));
+            }
+            break;
         case WM_LBUTTONDOWN:
             InitializeWTF(hwnd);
             break;

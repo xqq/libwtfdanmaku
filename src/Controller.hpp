@@ -33,7 +33,8 @@ namespace WTFDanmaku {
             kPause = kBase + 2,
             kResume = kBase + 3,
             kSeek = kBase + 4,
-            kStop = kBase + 5
+            kStop = kBase + 5,
+            kResize = kBase + 6
         };
 
         struct Command {
@@ -54,6 +55,7 @@ namespace WTFDanmaku {
         void Resume();
         void Stop();
         void SeekTo(time_t milliseconds);
+        void Resize(uint32_t width, uint32_t height);
         time_t GetCurrentPosition();
         bool IsRunning();
         State GetState();
