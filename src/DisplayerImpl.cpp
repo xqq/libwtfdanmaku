@@ -98,6 +98,8 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
+        mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
+
         hr = mD2DFactory->CreateDevice(mDxgiDevice.Get(), &mD2DDevice);
         if (FAILED(hr))
             return false;
@@ -111,6 +113,8 @@ namespace WTFDanmaku {
             return false;
 
         D2D1_BITMAP_PROPERTIES1 props = {};
+        props.dpiX = mDpiX;
+        props.dpiY = mDpiY;
         props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
@@ -120,8 +124,6 @@ namespace WTFDanmaku {
             return false;
 
         mDeviceContext->SetTarget(mSurfaceBitmap.Get());
-
-        mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
 
         hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
@@ -191,6 +193,8 @@ namespace WTFDanmaku {
             return;
 
         D2D1_BITMAP_PROPERTIES1 props = {};
+        props.dpiX = mDpiX;
+        props.dpiY = mDpiY;
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
@@ -213,6 +217,8 @@ namespace WTFDanmaku {
         size.height = height;
 
         D2D1_BITMAP_PROPERTIES1 props = {};
+        props.dpiX = mDpiX;
+        props.dpiY = mDpiY;
         props.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET;
         props.pixelFormat.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         props.pixelFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED;

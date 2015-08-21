@@ -13,8 +13,11 @@ namespace WTFDanmaku {
 
         ComPtr<IDWriteTextFormat> textFormat = nullptr;
 
+        float fontSize = mDanmaku->mTextSize * config->FontScaleFactor;
+        fontSize *= displayer->GetDpiY() / 96.0f;
+
         HRESULT hr = dwFactory->CreateTextFormat(config->FontName.c_str(), nullptr, config->FontWeight, config->FontStyle,
-            config->FontStretch, mDanmaku->mTextSize * config->FontScaleFactor, L"zh-cn", &textFormat);
+            config->FontStretch, fontSize, L"zh-cn", &textFormat);
         if (FAILED(hr) || nullptr == textFormat)
             return false;
 
