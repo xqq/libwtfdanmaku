@@ -5,6 +5,10 @@
 
 namespace WTFDanmaku {
 
+    time_t WinmmTimer::GetGlobalCurrent() {
+        return timeGetTime();
+    }
+
     WinmmTimer::WinmmTimer() {
         timeBeginPeriod(1);
     }

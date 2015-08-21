@@ -10,6 +10,7 @@ namespace WTFDanmaku {
         static inline TimerRef Create() {
             return std::make_shared<WinmmTimer>();
         }
+        static time_t GetGlobalCurrent();
     public:
         explicit WinmmTimer();
         virtual ~WinmmTimer() override;

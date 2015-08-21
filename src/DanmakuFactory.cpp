@@ -1,3 +1,4 @@
+#include "WinmmTimer.hpp"
 #include "R2LDanmaku.hpp"
 #include "TopDanmaku.hpp"
 #include "BottomDanmaku.hpp"
@@ -21,6 +22,10 @@ namespace WTFDanmaku {
             case kNull:
             default:
                 return nullptr;
+        }
+
+        if (timestamp == 0) {
+            timestamp = WinmmTimer::GetGlobalCurrent();
         }
 
         danmaku->mStartTime = time;

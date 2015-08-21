@@ -1,10 +1,8 @@
 #ifndef _WTF_DANMAKU_CONFIG_HPP
 #define _WTF_DANMAKU_CONFIG_HPP
 
-#include <cstdint>
 #include <string>
 #include <dwrite.h>
-#include "Noncopyable.hpp"
 
 namespace WTFDanmaku {
 
