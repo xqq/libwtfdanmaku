@@ -77,6 +77,9 @@ namespace WTFDanmaku {
 
     void DanmakusManager::AddLiveDanmaku(DanmakuRef danmaku) {
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+        if (danmaku->GetStartTime() == 0) {
+            danmaku->SetStartTime(mTimer->GetMilliseconds() + 50);
+        }
         mActiveDanmakus.insert(danmaku);
     }
 
@@ -112,8 +115,9 @@ namespace WTFDanmaku {
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
 
         time_t current = mTimer->GetMilliseconds();
+
         for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore */) {
-            if (!(*iter)->IsAlive(current)) {
+            if ((*iter)->GetStartTime() < current && !(*iter)->IsAlive(current)) {
                 (*iter)->ReleaseResources();
                 iter = mActiveDanmakus.erase(iter);
             } else {
@@ -142,20 +146,23 @@ namespace WTFDanmaku {
             FetchNewDanmakus(displayer);
         }
 
-        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
-                
         int count = 0;
 
-        displayer->BeginDraw();
+        /* synchronized */
+        {
+            std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
 
-        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter, ++count) {
-            if (!(*iter)->HasMeasured(&mConfig)) {
-                (*iter)->Measure(displayer, &mConfig);
+            displayer->BeginDraw();
+
+            for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); ++iter, ++count) {
+                if (!(*iter)->HasMeasured(&mConfig)) {
+                    (*iter)->Measure(displayer, &mConfig);
+                }
+                if (!(*iter)->HasLayout(&mConfig)) {
+                    mRetainer.Add(*iter, displayer, current);
+                }
+                displayer->DrawDanmakuItem(*iter, current, &mConfig);
             }
-            if (!(*iter)->HasLayout(&mConfig)) {
-                mRetainer.Add(*iter, displayer, current);
-            }
-            displayer->DrawDanmakuItem(*iter, current, &mConfig);
         }
 
         HRESULT hr = displayer->EndDraw();

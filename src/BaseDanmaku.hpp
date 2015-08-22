@@ -80,6 +80,10 @@ namespace WTFDanmaku {
             return mStartTime;
         }
 
+        inline void SetStartTime(time_t time) {
+            mStartTime = time;
+        }
+
         inline Rect<float> GetRect() {
             return mRect;
         }
