@@ -86,7 +86,7 @@ namespace WTFDanmaku {
 
         time_t current = mTimer->GetMilliseconds();
         
-        for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); ++iter) {
+        for (auto iter = mNextFetchIter; iter != mAllDanmakus.end(); /* ignore */) {
             if ((*iter)->GetStartTime() < current) {
                 if (!(*iter)->HasMeasured(&mConfig)) {
                     (*iter)->Measure(displayer, &mConfig);
@@ -98,6 +98,11 @@ namespace WTFDanmaku {
                 mNextFetchIter = iter;
                 break;
             }
+
+            if (++iter == mAllDanmakus.end()) {
+                mNextFetchIter = mAllDanmakus.end();
+                break;
+            }
         }
         
         mLastFetchTime = current;
@@ -107,7 +112,7 @@ namespace WTFDanmaku {
         std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
 
         time_t current = mTimer->GetMilliseconds();
-        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore*/) {
+        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore */) {
             if (!(*iter)->IsAlive(current)) {
                 (*iter)->ReleaseResources();
                 iter = mActiveDanmakus.erase(iter);
