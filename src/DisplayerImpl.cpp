@@ -11,7 +11,9 @@ namespace WTFDanmaku {
     }
 
     DisplayerImpl::~DisplayerImpl() {
-
+        if (mHasBackend) {
+            TeardownBackend();
+        }
     }
 
     void DisplayerImpl::SetTarget(HWND windowHandle) {
@@ -171,6 +173,8 @@ namespace WTFDanmaku {
         mDxgiDevice.Reset();
         mDxgiFactory.Reset();
         mD3DDevice.Reset();
+
+        mHasBackend = false;
         return true;
     }
     

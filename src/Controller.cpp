@@ -185,6 +185,7 @@ namespace WTFDanmaku {
         }
 
         mTimer->Stop();
+        mManager->ReleaseActiveResources();
         mDisplayer->TeardownBackend();
     }
 

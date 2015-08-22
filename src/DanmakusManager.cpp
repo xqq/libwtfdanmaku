@@ -33,6 +33,13 @@ namespace WTFDanmaku {
         mNextFetchIter = mAllDanmakus.begin();
     }
 
+    DanmakusManager::~DanmakusManager() {
+        ReleaseActiveResources();
+        mRetainer.Release();
+        mActiveDanmakus.clear();
+        mAllDanmakus.clear();
+    }
+
     void DanmakusManager::SetDanmakuList(unique_ptr<std::vector<DanmakuRef>> danmakuArray) {
         std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
         if (!mAllDanmakus.empty()) {
@@ -107,6 +114,17 @@ namespace WTFDanmaku {
             } else {
                 ++iter;
             }
+        }
+    }
+
+    void DanmakusManager::ReleaseActiveResources() {
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+
+        mRetainer.Clear();
+
+        for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore*/) {
+            (*iter)->ReleaseResources();
+            iter = mActiveDanmakus.erase(iter);
         }
     }
 
