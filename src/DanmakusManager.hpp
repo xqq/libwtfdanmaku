@@ -45,7 +45,7 @@ namespace WTFDanmaku {
         void RemoveTimeoutDanmakus();
     private:
         struct TimeComparator {
-            bool operator() (DanmakuRef a, DanmakuRef b);
+            bool operator() (const DanmakuRef& a, const DanmakuRef& b);
         };
         typedef std::set<DanmakuRef, TimeComparator> TimeSortedDanmakus;
     private:

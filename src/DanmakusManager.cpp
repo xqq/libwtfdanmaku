@@ -5,7 +5,7 @@
 
 namespace WTFDanmaku { 
 
-    bool DanmakusManager::TimeComparator::operator() (DanmakuRef a, DanmakuRef b) {
+    bool DanmakusManager::TimeComparator::operator() (const DanmakuRef& a, const DanmakuRef& b) {
         int64_t diff = 0;
 
         diff = a->GetStartTime() - b->GetStartTime();
