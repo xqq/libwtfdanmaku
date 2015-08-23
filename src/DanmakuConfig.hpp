@@ -6,6 +6,11 @@
 
 namespace WTFDanmaku {
 
+    enum DanmakuStyle : int {
+        kOutline = 1,
+        kProjection = 2
+    };
+
     struct DanmakuConfig {
         bool TopVisible = true;
         bool R2LVisible = true;
@@ -18,6 +23,9 @@ namespace WTFDanmaku {
         int MeasureFlag = 0;
 
         float FontScaleFactor = 1.0f;
+        float CompositionOpacity = 1.0f;
+
+        DanmakuStyle DanmakuStyle = kOutline;
 
         std::wstring FontName = L"SimHei";
         DWRITE_FONT_WEIGHT FontWeight = DWRITE_FONT_WEIGHT_BOLD;

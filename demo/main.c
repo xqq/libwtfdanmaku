@@ -35,11 +35,12 @@ void InitializeWTF(HWND hwnd) {
         WTF_SetFontName(wtf, L"SimHei");
         WTF_SetFontWeight(wtf, 700);
         WTF_SetFontScaleFactor(wtf, 1.0f);
+        WTF_SetCompositionOpacity(wtf, 0.9f);
 
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
         } else {
-            WTF_LoadBilibiliFile(wtf, "F:\\Downloads\\Downloads\\1055660.xml");
+            WTF_LoadBilibiliFile(wtf, "F:\\Downloads\\Downloads\\5cmps.xml");
         }
         wtfInited = true;
     }

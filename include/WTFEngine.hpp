@@ -17,6 +17,11 @@ namespace WTFDanmaku {
         Advanced = 8
     };
 
+    enum Style : int {
+        Outline = 1,
+        Projection = 2
+    };
+
     class WTF_API WTFEngine {
     public:
         explicit WTFEngine();
@@ -40,6 +45,8 @@ namespace WTFDanmaku {
         void SetFontWeight(int dwriteFontWeight);
         void SetFontStyle(int dwriteFontStyle);
         void SetFontStretch(int dwriteFontStretch);
+        void SetDanmakuStyle(Style style);
+        void SetCompositionOpacity(float opacity);
     private:
         WTFEngine(const WTFEngine&) = delete;
         WTFEngine& operator=(const WTFEngine&) = delete;

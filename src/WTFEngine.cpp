@@ -102,4 +102,13 @@ namespace WTFDanmaku {
         mController->GetManager()->GetConfig()->FontStretch = static_cast<DWRITE_FONT_STRETCH>(dwriteFontStretch);
     }
 
+    void WTFEngine::SetDanmakuStyle(Style style) {
+        mController->GetManager()->GetConfig()->DanmakuStyle = static_cast<DanmakuStyle>(style);
+    }
+
+    void WTFEngine::SetCompositionOpacity(float opacity) {
+        float value = opacity > 1.0f ? 1.0f : (opacity < 0.0f ? 0.0f : opacity);
+        mController->GetManager()->GetConfig()->CompositionOpacity = value;
+    }
+
 }

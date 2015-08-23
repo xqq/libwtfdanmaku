@@ -73,9 +73,18 @@ namespace WTFDanmaku {
         ComPtr<ID2D1SolidColorBrush> outlineBrush;
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 1.0f), &outlineBrush);
 
-        ComPtr<OutlineTextRenderer> textRenderer(new OutlineTextRenderer(d2dFactory, renderTarget, outlineBrush, strokeWidth, brush));
-
-        mTextLayout->Draw(renderTarget.Get(), textRenderer.Get(), 0.0f, 0.0f);
+        switch (config->DanmakuStyle) {
+            case kOutline: {
+                ComPtr<OutlineTextRenderer> textRenderer(new OutlineTextRenderer(d2dFactory, renderTarget, outlineBrush, strokeWidth, brush));
+                mTextLayout->Draw(renderTarget.Get(), textRenderer.Get(), 0.0f, 0.0f);
+                break;
+            }
+            case kProjection: {
+                renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 1.0f), mTextLayout.Get(), outlineBrush.Get());
+                renderTarget->DrawTextLayout(D2D1::Point2F(0.0f, 0.0f), mTextLayout.Get(), brush.Get());
+                break;
+            }
+        }
 
         HRESULT hr = renderTarget->EndDraw();
 

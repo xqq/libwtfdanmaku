@@ -289,7 +289,7 @@ namespace WTFDanmaku {
             rect.left + size.width, rect.top + size.height
         );
 
-        mDeviceContext->DrawBitmap(bitmap.Get(), dest);
+        mDeviceContext->DrawBitmap(bitmap.Get(), dest, config->CompositionOpacity);
     }
 
     void DisplayerImpl::BeginDraw() {

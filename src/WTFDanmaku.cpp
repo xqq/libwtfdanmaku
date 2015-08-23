@@ -152,6 +152,20 @@ WTF_C_API void     __stdcall WTF_SetFontStretch(WTF_Instance* instance, int dwri
     config->FontStretch = static_cast<DWRITE_FONT_STRETCH>(dwriteFontStretch);
 }
 
+WTF_C_API void     __stdcall WTF_SetDanmakuStyle(WTF_Instance* instance, int style) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->DanmakuStyle = static_cast<DanmakuStyle>(style);
+}
+
+WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, float opacity) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    float value = opacity > 1.0f ? 1.0f : (opacity < 0.0f ? 0.0f : opacity);
+    config->CompositionOpacity = value;
+}
 
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow) {
