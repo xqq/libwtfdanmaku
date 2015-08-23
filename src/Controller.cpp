@@ -162,7 +162,7 @@ namespace WTFDanmaku {
         mStatus = State::kRunning;
         bool succeed = mDisplayer->SetupBackend();
         if (!succeed) {
-            OutputDebugStringW(L"mDisplayer->SetupBackend() failed");
+            printf_s("%s", "mDisplayer->SetupBackend() failed!\n");
             DebugBreak();
         }
         mTimer->Start();
@@ -181,6 +181,7 @@ namespace WTFDanmaku {
             statistics = mManager->DrawDanmakus(mDisplayer.get());
             if (FAILED(statistics.lastHr))
                 DebugBreak();
+
             // wait for vblank?
         }
 

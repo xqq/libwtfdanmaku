@@ -63,7 +63,7 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        hr = CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, __uuidof(mDxgiFactory), (void**)mDxgiFactory.GetAddressOf());
+        hr = CreateDXGIFactory2(NULL, __uuidof(mDxgiFactory), (void**)mDxgiFactory.GetAddressOf());
         if (FAILED(hr))
             return false;
 
