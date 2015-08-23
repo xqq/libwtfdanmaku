@@ -2,7 +2,7 @@ libwtfdanmaku
 =============
 High-performance danmaku engine for Windows, based on Direct2D and DirectComposition API.
 
-Still under developing and support Windows 8+ for now.
+Still under developing and only support Windows 8 or later now.
 
 ### Features
 - Hardware accelerated by Direct2D, DirectWrite, Direct3D 10.1 and DXGI 1.3
