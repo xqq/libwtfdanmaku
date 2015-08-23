@@ -79,6 +79,9 @@
     <ClInclude Include="src\DanmakuConfig.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\OutlineTextRenderer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -130,6 +133,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\WTFWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OutlineTextRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

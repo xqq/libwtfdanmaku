@@ -249,6 +249,10 @@ namespace WTFDanmaku {
         mLendMutex.unlock();
     }
 
+    ComPtr<ID2D1Factory1> DisplayerImpl::GetD2DFactory() {
+        return mD2DFactory;
+    }
+
     ComPtr<IDWriteFactory> DisplayerImpl::GetDWriteFactory() {
         return mDWriteFactory;
     }

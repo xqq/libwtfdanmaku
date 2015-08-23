@@ -3,6 +3,7 @@
 #include "Displayer.hpp"
 #include "Renderable.hpp"
 #include "DanmakuConfig.hpp"
+#include "OutlineTextRenderer.hpp"
 
 namespace WTFDanmaku {
 
@@ -43,6 +44,10 @@ namespace WTFDanmaku {
         if (!HasTextLayout())
             return false;
 
+        ComPtr<ID2D1Factory1> d2dFactory = displayer->GetD2DFactory();
+        if (nullptr == d2dFactory)
+            return false;
+
         ComPtr<ID2D1Bitmap1> bmp = displayer->CreateBitmap(
             static_cast<uint32_t>(mDanmaku->mTextWidth),
             static_cast<uint32_t>(mDanmaku->mTextHeight)
@@ -50,7 +55,10 @@ namespace WTFDanmaku {
         if (bmp == nullptr)
             return false;
 
-        auto renderTarget = displayer->AcquireRenderTarget(bmp);
+        float strokeWidth = 1.5f * config->FontScaleFactor;
+        strokeWidth *= displayer->GetDpiY() / 96.0f;
+
+        ComPtr<ID2D1RenderTarget> renderTarget = displayer->AcquireRenderTarget(bmp);
         if (renderTarget == nullptr)
             return false;
 
@@ -59,17 +67,15 @@ namespace WTFDanmaku {
         renderTarget->Clear();
         renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 
-        ComPtr<ID2D1SolidColorBrush> bottomBrush;
-        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 1.0f), &bottomBrush);
-
-        renderTarget->DrawTextLayout(D2D1::Point2F(0.0f, 1.0f), mTextLayout.Get(), bottomBrush.Get());
-        renderTarget->DrawTextLayout(D2D1::Point2F(2.0f, 1.0f), mTextLayout.Get(), bottomBrush.Get());
-        renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 0.0f), mTextLayout.Get(), bottomBrush.Get());
-        renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 2.0f), mTextLayout.Get(), bottomBrush.Get());
-
         ComPtr<ID2D1SolidColorBrush> brush;
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
-        renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 1.0f), mTextLayout.Get(), brush.Get());
+
+        ComPtr<ID2D1SolidColorBrush> outlineBrush;
+        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 1.0f), &outlineBrush);
+
+        ComPtr<OutlineTextRenderer> textRenderer(new OutlineTextRenderer(d2dFactory, renderTarget, outlineBrush, strokeWidth, brush));
+
+        mTextLayout->Draw(renderTarget.Get(), textRenderer.Get(), 0.0f, 0.0f);
 
         HRESULT hr = renderTarget->EndDraw();
 

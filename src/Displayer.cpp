@@ -53,6 +53,10 @@ namespace WTFDanmaku {
         pImpl->ReleaseRenderTarget(renderTarget);
     }
 
+    ComPtr<ID2D1Factory1> Displayer::GetD2DFactory() {
+        return pImpl->GetD2DFactory();
+    }
+
     ComPtr<IDWriteFactory> Displayer::GetDWriteFactory() {
         return pImpl->GetDWriteFactory();
     }

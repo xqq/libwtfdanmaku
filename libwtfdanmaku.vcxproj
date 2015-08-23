@@ -86,6 +86,7 @@
     <ClInclude Include="include\WTF_API.h" />
     <ClInclude Include="src\BaseDanmaku.hpp" />
     <ClInclude Include="src\BilibiliParser.hpp" />
+    <ClInclude Include="src\OutlineTextRenderer.hpp" />
     <ClInclude Include="src\BottomDanmaku.hpp" />
     <ClInclude Include="src\DanmakusManager.hpp" />
     <ClInclude Include="src\Displayer.hpp" />
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BilibiliParser.cpp" />
+    <ClCompile Include="src\OutlineTextRenderer.cpp" />
     <ClCompile Include="src\BottomDanmaku.cpp" />
     <ClCompile Include="src\DisplayerImpl.cpp" />
     <ClCompile Include="src\BaseDanmaku.cpp" />
