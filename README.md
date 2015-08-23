@@ -12,6 +12,7 @@ Still under developing and support Windows 8+ for now.
 ### TODO
 - ~~Renderable's bitmap invalid issue~~
 - ~~Multiple instance~~
+- Optimize danmaku style effect
 - Rendering Statistics
 - ~~Hi-DPI support~~, and pre-Monitor DPI Aware
 - Further performance optimization
@@ -34,4 +35,13 @@ Don't forget to checkout submodule (git submodule init, git submodule update, ..
 
 Launch WTFDanmaku.sln for demo and libwtfdanmaku library.
 
-libwtfdanmaku is both working for static library, or shared library (DLL). Modify vcxproj file on your own.
+libwtfdanmaku is permitted to work under shared library (DLL) according to the license.
+
+### Screenshot
+
+![5cmps](https://raw.githubusercontent.com/xqq/xqq.github.io/master/img/wtf_screenshot_1.jpg)
+
+### License
+Copyright (C) 2015 xqq <xqq@0ginr.com>
+
+Licensed under LGPL v2.1
