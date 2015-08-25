@@ -4,6 +4,10 @@
 #include <Windows.h>
 #include "WTFDanmaku.h"
 
+#ifndef WS_EX_NOREDIRECTIONBITMAP
+    #define WS_EX_NOREDIRECTIONBITMAP 0x00200000L
+#endif
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 bool hasArgFile = false;
