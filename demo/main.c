@@ -66,6 +66,7 @@ void ReleaseWTF() {
         }
         WTF_ReleaseInstance(wtf);
         wtf = NULL;
+        wtfInited = false;
     }
 }
 

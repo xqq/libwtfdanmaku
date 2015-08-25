@@ -19,6 +19,8 @@ namespace WTFDanmaku {
         typedef std::map<int, DanmakuRef, std::less<int>> Danmakus;
         typedef std::map<int, DanmakuRef, std::greater<int>> DecDanmakus;
     public:
+        IDanmakusRetainer() = default;
+        virtual ~IDanmakusRetainer() = default;
         virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) = 0;
         virtual void Clear() = 0;
         virtual void Release() = 0;

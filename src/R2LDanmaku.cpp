@@ -52,6 +52,8 @@ namespace WTFDanmaku {
 
     class R2LDanmaku::R2LRetainer : public IDanmakusRetainer {
     public:
+        virtual ~R2LRetainer() override = default;
+
         virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();

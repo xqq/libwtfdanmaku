@@ -39,6 +39,8 @@ namespace WTFDanmaku {
 
     class TopDanmaku::TopRetainer : public IDanmakusRetainer {
     public:
+        virtual ~TopRetainer() override = default;
+
         virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();

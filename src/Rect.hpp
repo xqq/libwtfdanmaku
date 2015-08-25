@@ -3,7 +3,7 @@
 
 namespace WTFDanmaku {
 
-    template <typename T>
+    template <typename T = int>
     struct Rect {
     public:
         Rect() = default;
