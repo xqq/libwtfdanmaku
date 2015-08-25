@@ -139,9 +139,4 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="src\export.def">
-      <Filter>src</Filter>
-    </None>
-  </ItemGroup>
 </Project>

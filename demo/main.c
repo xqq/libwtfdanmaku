@@ -1,7 +1,7 @@
-#include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <Windows.h>
 #include "WTFDanmaku.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);

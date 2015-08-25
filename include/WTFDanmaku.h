@@ -1,8 +1,8 @@
 #ifndef _WTF_DANMAKU_C_WRAPPER_H
 #define _WTF_DANMAKU_C_WRAPPER_H
 
-#include <minwindef.h>
 #include <stdint.h>
+#include <minwindef.h>
 #include "WTF_API.h"
 
 WTF_C_API typedef struct WTF_Instance {
