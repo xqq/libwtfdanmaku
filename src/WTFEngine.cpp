@@ -84,6 +84,7 @@ namespace WTFDanmaku {
 
     void WTFEngine::SetFontScaleFactor(float factor) {
         mController->GetManager()->GetConfig()->FontScaleFactor = factor;
+        mController->ReLayout();
     }
 
     void WTFEngine::SetFontName(const wchar_t* fontName) {

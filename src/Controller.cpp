@@ -113,6 +113,12 @@ namespace WTFDanmaku {
         }
     }
 
+    void Controller::ReLayout() {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
+            PushCommand(Cmd::kReLayout);
+        }
+    }
+
     time_t Controller::GetCurrentPosition() {
         return mTimer->GetMilliseconds();
     }
@@ -150,6 +156,9 @@ namespace WTFDanmaku {
                 case Cmd::kResize:
                     mDisplayer->Resize(cmd.arg1, cmd.arg2);
                     mManager->GetConfig()->MeasureFlag++;
+                    break;
+                case Cmd::kReLayout:
+                    mManager->ReLayout();
                     break;
                 case Cmd::kStop:
                     mStatus = State::kStopped;

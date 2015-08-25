@@ -37,6 +37,7 @@ namespace WTFDanmaku {
         void AddDanmaku(DanmakuRef danmaku);
         void AddLiveDanmaku(DanmakuRef danmaku);
         void ReleaseActiveResources();
+        void ReLayout();
         DanmakuConfig* GetConfig();
         RenderingStatistics DrawDanmakus(Displayer* displayer);
         RenderingStatistics GetRenderingStatistics();
@@ -50,6 +51,7 @@ namespace WTFDanmaku {
         typedef std::set<DanmakuRef, TimeComparator> TimeSortedDanmakus;
     private:
         TimerRef mTimer;
+        bool mForceFetch = false;
         time_t mLastFetchTime = 0;
         TimeSortedDanmakus::iterator mNextFetchIter;
         Win32Mutex mAllDanmakusMutex;

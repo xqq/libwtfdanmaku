@@ -24,7 +24,7 @@ namespace WTFDanmaku {
     }
 
     bool BaseDanmaku::HasLayout(DanmakuConfig* config) {
-        return mHasLayout;
+        return mLayoutFlag == config->LayoutFlag;
     }
 
     void BaseDanmaku::Measure(Displayer* displayer, DanmakuConfig* config) {

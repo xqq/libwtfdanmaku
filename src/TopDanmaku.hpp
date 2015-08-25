@@ -21,7 +21,7 @@ namespace WTFDanmaku {
 
         virtual DanmakuType GetType() override;
 
-        virtual void Layout(Displayer* displayer, float x, float y) override;
+        virtual void Layout(Displayer* displayer, DanmakuConfig* config, float x, float y) override;
 
         virtual float GetSpeed() override;
 

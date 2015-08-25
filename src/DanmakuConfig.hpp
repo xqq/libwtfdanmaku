@@ -21,6 +21,7 @@ namespace WTFDanmaku {
         int LogicalScreenHeight = 438;
 
         int MeasureFlag = 0;
+        int LayoutFlag = 0;
 
         float FontScaleFactor = 1.0f;
         float CompositionOpacity = 1.0f;

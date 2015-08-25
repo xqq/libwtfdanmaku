@@ -66,6 +66,7 @@ namespace WTFDanmaku {
             mActiveDanmakus.clear();
             if (diff < 0) {    // seek back, reset cached iterator
                 mNextFetchIter = mAllDanmakus.begin();
+                mForceFetch = true;
             }
         }
     }
@@ -137,13 +138,21 @@ namespace WTFDanmaku {
         }
     }
 
+    void DanmakusManager::ReLayout() {
+        std::lock_guard<Win32Mutex> locker(mActiveDanmakusMutex);
+
+        mConfig.LayoutFlag++;
+        mRetainer.Clear();
+    }
+
     RenderingStatistics DanmakusManager::DrawDanmakus(Displayer* displayer) {
         mTimer->Update();
         time_t current = mTimer->GetMilliseconds();
         
-        if (current - mLastFetchTime >= 100) {
+        if (mForceFetch || current - mLastFetchTime >= 100) {
             RemoveTimeoutDanmakus();
             FetchNewDanmakus(displayer);
+            mForceFetch = false;
         }
 
         int count = 0;
@@ -159,7 +168,7 @@ namespace WTFDanmaku {
                     (*iter)->Measure(displayer, &mConfig);
                 }
                 if (!(*iter)->HasLayout(&mConfig)) {
-                    mRetainer.Add(*iter, displayer, current);
+                    mRetainer.Add(*iter, displayer, &mConfig, current);
                 }
                 displayer->DrawDanmakuItem(*iter, current, &mConfig);
             }

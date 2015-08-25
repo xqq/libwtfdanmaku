@@ -122,6 +122,7 @@ WTF_C_API void     __stdcall WTF_SetFontScaleFactor(WTF_Instance* instance, floa
     DanmakuConfig* config = controller->GetManager()->GetConfig();
 
     config->FontScaleFactor = factor;
+    controller->ReLayout();
 }
 
 WTF_C_API void     __stdcall WTF_SetFontName(WTF_Instance* instance, const wchar_t* fontName) {

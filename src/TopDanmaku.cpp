@@ -1,5 +1,6 @@
 #include "Displayer.hpp"
 #include "TopDanmaku.hpp"
+#include "DanmakuConfig.hpp"
 #include "DanmakusRetainer.hpp"
 
 namespace WTFDanmaku {
@@ -12,10 +13,10 @@ namespace WTFDanmaku {
         return kTop;
     }
 
-    void TopDanmaku::Layout(Displayer* displayer, float x, float y) {
+    void TopDanmaku::Layout(Displayer* displayer, DanmakuConfig* config, float x, float y) {
         this->y = y;
         mRect.top = y;
-        mHasLayout = true;
+        mLayoutFlag = config->LayoutFlag;
     }
 
     float TopDanmaku::GetSpeed() {
@@ -41,7 +42,7 @@ namespace WTFDanmaku {
     public:
         virtual ~TopRetainer() override = default;
 
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, DanmakuConfig* config, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();
             }
@@ -75,7 +76,7 @@ namespace WTFDanmaku {
                 }
             }
 
-            danmaku->Layout(displayer, 0.0f, top);
+            danmaku->Layout(displayer, config, 0.0f, top);
             int topint = static_cast<int>(top);
             auto iter = mDanmakus->find(topint);
             if (iter != mDanmakus->end()) {

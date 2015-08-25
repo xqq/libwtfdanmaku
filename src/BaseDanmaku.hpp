@@ -64,7 +64,7 @@ namespace WTFDanmaku {
 
         virtual void Measure(Displayer* displayer, DanmakuConfig* config);
 
-        virtual void Layout(Displayer* displayer, float x, float y) = 0;
+        virtual void Layout(Displayer* displayer, DanmakuConfig* config, float x, float y) = 0;
 
         virtual DanmakuType GetType() = 0;
 
@@ -101,7 +101,7 @@ namespace WTFDanmaku {
         Rect<float> mRect;
         float mTextWidth = -1.0f;
         float mTextHeight = -1.0f;
-        bool mHasLayout = false;
+        int mLayoutFlag = -1;
     private:
         std::wstring mComment;
         float mTextSize = 0.0f;

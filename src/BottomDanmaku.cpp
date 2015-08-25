@@ -16,7 +16,7 @@ namespace WTFDanmaku {
     public:
         virtual ~BottomRetainer() override = default;
 
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, DanmakuConfig* config, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<DecDanmakus>();
             }
@@ -51,7 +51,7 @@ namespace WTFDanmaku {
                 }
             }
             float top = bottom - danmaku->GetHeight();
-            danmaku->Layout(displayer, 0.0f, top);
+            danmaku->Layout(displayer, config, 0.0f, top);
 
             int bottomInt = static_cast<int>(bottom);
             auto iter = mDanmakus->find(bottomInt);

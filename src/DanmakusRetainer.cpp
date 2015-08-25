@@ -10,25 +10,25 @@
 
 namespace WTFDanmaku {
 
-    void DanmakusRetainer::Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) {
+    void DanmakusRetainer::Add(DanmakuRef danmaku, Displayer* displayer, DanmakuConfig* config, time_t currentMillis) {
         switch (danmaku->GetType()) {
             case DanmakuType::kScrolling:
                 if (mR2LRetainer == nullptr) {
                     mR2LRetainer = R2LDanmaku::CreateRetainer();
                 }
-                mR2LRetainer->Add(danmaku, displayer, currentMillis);
+                mR2LRetainer->Add(danmaku, displayer, config, currentMillis);
                 break;
             case DanmakuType::kTop:
                 if (mTopRetainer == nullptr) {
                     mTopRetainer = TopDanmaku::CreateRetainer();
                 }
-                mTopRetainer->Add(danmaku, displayer, currentMillis);
+                mTopRetainer->Add(danmaku, displayer, config, currentMillis);
                 break;
             case DanmakuType::kBottom:
                 if (mBottomRetainer == nullptr) {
                     mBottomRetainer = BottomDanmaku::CreateRetainer();
                 }
-                mBottomRetainer->Add(danmaku, displayer, currentMillis);
+                mBottomRetainer->Add(danmaku, displayer, config, currentMillis);
                 break;
             default:
                 break;

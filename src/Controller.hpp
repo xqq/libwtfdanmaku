@@ -19,14 +19,14 @@ namespace WTFDanmaku {
 
     class Controller : public Noncopyable {
     public:
-        enum State : int {
+        enum class State : int {
             kIdle = 0,
             kRunning = 1,
             kPaused = 2,
             kStopped = 3
         };
     private:
-        enum Cmd : int {
+        enum class Cmd : int {
             kNull = 0,
             kBase = 0x12450,
             kStart = kBase + 1,
@@ -34,7 +34,8 @@ namespace WTFDanmaku {
             kResume = kBase + 3,
             kSeek = kBase + 4,
             kStop = kBase + 5,
-            kResize = kBase + 6
+            kResize = kBase + 6,
+            kReLayout = kBase + 7
         };
 
         struct Command {
@@ -56,6 +57,7 @@ namespace WTFDanmaku {
         void Stop();
         void SeekTo(time_t milliseconds);
         void Resize(uint32_t width, uint32_t height);
+        void ReLayout();
         time_t GetCurrentPosition();
         bool IsRunning();
         State GetState();

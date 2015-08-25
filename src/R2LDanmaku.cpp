@@ -20,10 +20,10 @@ namespace WTFDanmaku {
         mDuration = static_cast<time_t>((screenWidth + mTextWidth) / mSpeed);
     }
 
-    void R2LDanmaku::Layout(Displayer* displayer, float x, float y) {
+    void R2LDanmaku::Layout(Displayer* displayer, DanmakuConfig* config, float x, float y) {
         this->y = y;
         mRect.top = y;
-        mHasLayout = true;
+        mLayoutFlag = config->LayoutFlag;
     }
 
     bool R2LDanmaku::IsAlive(time_t time) {
@@ -54,7 +54,7 @@ namespace WTFDanmaku {
     public:
         virtual ~R2LRetainer() override = default;
 
-        virtual void Add(DanmakuRef danmaku, Displayer* displayer, time_t currentMillis) override {
+        virtual void Add(DanmakuRef danmaku, Displayer* displayer, DanmakuConfig* config, time_t currentMillis) override {
             if (nullptr == mDanmakus) {
                 mDanmakus = std::make_unique<Danmakus>();
             }
@@ -104,12 +104,12 @@ namespace WTFDanmaku {
 
                 top = itemRect.bottom + 1.0f;
                 if (top + danmaku->GetHeight() > displayer->GetHeight()) {
-                    danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), -danmaku->GetHeight() - 1);
+                    danmaku->Layout(displayer, config, static_cast<float>(displayer->GetWidth()), -danmaku->GetHeight() - 1);
                     return;
                 }
             }
 
-            danmaku->Layout(displayer, static_cast<float>(displayer->GetWidth()), top);
+            danmaku->Layout(displayer, config, static_cast<float>(displayer->GetWidth()), top);
             int topint = static_cast<int>(top);
             auto iter = mDanmakus->find(topint);
             if (iter != mDanmakus->end()) {

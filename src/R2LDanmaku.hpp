@@ -23,7 +23,7 @@ namespace WTFDanmaku {
 
         virtual void Measure(Displayer* displayer, DanmakuConfig* config) override;
 
-        virtual void Layout(Displayer* displayer, float x, float y) override;
+        virtual void Layout(Displayer* displayer, DanmakuConfig* config, float x, float y) override;
 
         virtual bool IsAlive(time_t time) override;
 
