@@ -12,7 +12,7 @@ Still under developing and only support Windows 8 or later now.
 ### TODO
 - ~~Renderable's bitmap invalid issue~~
 - ~~Multiple instance~~
-- x64 compatible
+- ~~x64 compatible~~
 - Optimize danmaku style effect
 - Rendering Statistics
 - ~~Hi-DPI support~~, and pre-Monitor DPI Aware

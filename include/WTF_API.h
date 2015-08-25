@@ -7,7 +7,7 @@
     #else
         #define WTF_API __declspec(dllimport)
     #endif
-#elif
+#else
     #define WTF_API
 #endif
 
