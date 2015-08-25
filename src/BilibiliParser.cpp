@@ -25,7 +25,7 @@ namespace WTFDanmaku {
         if (mDanmakus.get() == nullptr)
             return false;
 
-        int bufferSize = strlen(data) + 1;
+        size_t bufferSize = strlen(data) + 1;
         char* buf = new char[bufferSize];
         std::unique_ptr<char[]> buffer(buf);
         memset(buf, 0, bufferSize);

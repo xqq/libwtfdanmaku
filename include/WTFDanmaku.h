@@ -1,6 +1,7 @@
 #ifndef _WTF_DANMAKU_C_WRAPPER_H
 #define _WTF_DANMAKU_C_WRAPPER_H
 
+#include <minwindef.h>
 #include <stdint.h>
 #include "WTF_API.h"
 
@@ -49,7 +50,7 @@ WTF_C_API void        __stdcall WTFWindow_Release(WTF_Window* window);
 WTF_C_API void        __stdcall WTFWindow_Initialize(WTF_Window* window, uint32_t dwExStyle, int width, int height, const wchar_t* title);
 WTF_C_API void*       __stdcall WTFWindow_GetHwnd(WTF_Window* window);
 WTF_C_API void        __stdcall WTFWindow_SetCustomWndProc(WTF_Window* window, void* proc);
-WTF_C_API int         __stdcall WTFWindow_DefaultWindowProc(WTF_Window* window, void* hwnd, uint32_t message, uint32_t wParam, uint32_t lParam);
+WTF_C_API LRESULT     __stdcall WTFWindow_DefaultWindowProc(WTF_Window* window, void* hwnd, uint32_t message, WPARAM wParam, LPARAM lParam);
 WTF_C_API void        __stdcall WTFWindow_SetHitTestOverEnabled(WTF_Window* window, int enabled);
 WTF_C_API int         __stdcall WTFWindow_RunMessageLoop(WTF_Window* window);
 

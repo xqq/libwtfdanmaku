@@ -197,7 +197,7 @@ WTF_C_API void       __stdcall WTFWindow_SetCustomWndProc(WTF_Window* window, vo
     wtfwindow->SetCustomWindowProc(reinterpret_cast<WNDPROC>(proc));
 }
 
-WTF_C_API int        __stdcall WTFWindow_DefaultWindowProc(WTF_Window* window, void* hwnd, uint32_t message, uint32_t wParam, uint32_t lParam) {
+WTF_C_API LRESULT     __stdcall WTFWindow_DefaultWindowProc(WTF_Window* window, void* hwnd, uint32_t message, WPARAM wParam, LPARAM lParam) {
     WTFWindow* wtfwindow = reinterpret_cast<WTFWindow*>(window);
 
     return wtfwindow->DefaultWindowProc(static_cast<HWND>(hwnd), message, wParam, lParam);
