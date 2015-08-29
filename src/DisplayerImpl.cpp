@@ -20,30 +20,6 @@ namespace WTFDanmaku {
         mHwnd = windowHandle;
     }
 
-    HRESULT DisplayerImpl::CreateD3D10Device(IDXGIAdapter* adapter, D3D10_DRIVER_TYPE driverType, UINT flags, ID3D10Device1** ppDevice) {
-        HRESULT hr = S_OK;
-
-        static const D3D10_FEATURE_LEVEL1 levelAttempts[] = {
-            D3D10_FEATURE_LEVEL_10_1,
-            D3D10_FEATURE_LEVEL_10_0,
-            D3D10_FEATURE_LEVEL_9_3,
-            D3D10_FEATURE_LEVEL_9_2,
-            D3D10_FEATURE_LEVEL_9_1
-        };
-
-        for (int i = 0; i < sizeof(levelAttempts) / sizeof(levelAttempts[0]); i++) {
-            ID3D10Device1* device = nullptr;
-            hr = D3D10CreateDevice1(adapter, driverType, NULL, flags, levelAttempts[i], D3D10_1_SDK_VERSION, &device);
-            if (SUCCEEDED(hr)) {
-                *ppDevice = device;
-                device = nullptr;
-                break;
-            }
-        }
-
-        return hr;
-    }
-
     bool DisplayerImpl::SetupBackend() {
         if (mHasBackend)
             return false;
@@ -51,22 +27,110 @@ namespace WTFDanmaku {
         if (mHwnd == NULL)
             return false;
 
-        HRESULT hr = CreateD3D10Device(nullptr, D3D10_DRIVER_TYPE_HARDWARE, D3D10_CREATE_DEVICE_BGRA_SUPPORT, &mD3DDevice);
-        if (FAILED(hr)) {    // fallback to software D3D10 backend
-            hr = CreateD3D10Device(nullptr, D3D10_DRIVER_TYPE_WARP, D3D10_CREATE_DEVICE_BGRA_SUPPORT, &mD3DDevice);
+        HRESULT hr = CreateDeviceIndependentResources();
+        if (FAILED(hr))
+            return false;
+
+        hr = CreateDeviceResources();
+        if (FAILED(hr))
+            return false;
+
+        hr = CreateTargetDependentResources();
+        if (FAILED(hr))
+            return false;
+
+        hr = CreateDCompResources();
+        if (FAILED(hr))
+            return false;
+
+        mHasBackend = true;
+        return true;
+    }
+
+    HRESULT DisplayerImpl::CreateDeviceIndependentResources() {
+        HRESULT hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&mDWriteFactory);
+        if (FAILED(hr))
+            return hr;
+
+        D2D1_FACTORY_OPTIONS options;
+        memset(&options, 0, sizeof(options));
+
+#ifdef _DEBUG
+        options.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+#endif
+
+        hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, options, mD2DFactory.GetAddressOf());
+        if (FAILED(hr))
+            return hr;
+
+        mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
+        return hr;
+    }
+
+    HRESULT DisplayerImpl::CreateD3D11Device(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType, UINT flags,
+                                             ID3D11Device** ppDevice, ID3D11DeviceContext** ppDevCtx, D3D_FEATURE_LEVEL* resultLevel) {
+        HRESULT hr = S_OK;
+
+        static const D3D_FEATURE_LEVEL featureLevels[] = {
+            D3D_FEATURE_LEVEL_11_1,
+            D3D_FEATURE_LEVEL_11_0,
+            D3D_FEATURE_LEVEL_10_1,
+            D3D_FEATURE_LEVEL_10_0,
+            D3D_FEATURE_LEVEL_9_3,
+            D3D_FEATURE_LEVEL_9_2,
+            D3D_FEATURE_LEVEL_9_1
+        };
+
+        uint32_t arraySize = sizeof(featureLevels) / sizeof(featureLevels[0]);
+
+        D3D_FEATURE_LEVEL result;
+        ID3D11Device* device = nullptr;
+        ID3D11DeviceContext* devctx = nullptr;
+
+        hr = D3D11CreateDevice(adapter, driverType, 0, flags, featureLevels, arraySize, D3D11_SDK_VERSION, &device, &result, &devctx);
+        if (FAILED(hr))
+            return hr;
+
+        if (resultLevel) {
+            *resultLevel = result;
+        }
+        *ppDevice = device;
+        *ppDevCtx = devctx;
+
+        return hr;
+    }
+
+    HRESULT DisplayerImpl::CreateDeviceResources() {
+        UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+        HRESULT hr = CreateD3D11Device(nullptr, D3D_DRIVER_TYPE_HARDWARE, creationFlags, &mD3DDevice, &mD3DDeviceContext, &mCurrentFeatureLevel);
+        if (FAILED(hr)) {    // fallback to software wrap device
+            hr = CreateD3D11Device(nullptr, D3D_DRIVER_TYPE_WARP, creationFlags, &mD3DDevice, &mD3DDeviceContext, &mCurrentFeatureLevel);
         }
 
         if (FAILED(hr))
-            return false;
+            return hr;
 
         hr = mD3DDevice.As(&mDxgiDevice);
         if (FAILED(hr))
-            return false;
+            return hr;
 
-        hr = CreateDXGIFactory2(NULL, __uuidof(mDxgiFactory), (void**)mDxgiFactory.GetAddressOf());
+        hr = mD2DFactory->CreateDevice(mDxgiDevice.Get(), &mD2DDevice);
         if (FAILED(hr))
-            return false;
+            return hr;
 
+        hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &mDeviceContext);
+        if (FAILED(hr))
+            return hr;
+
+        hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &mLendContext);
+        if (FAILED(hr))
+            return hr;
+
+        return hr;
+    }
+
+    HRESULT DisplayerImpl::CreateTargetDependentResources() {
         RECT rect = { 0 };
         GetClientRect(mHwnd, &rect);
 
@@ -74,45 +138,43 @@ namespace WTFDanmaku {
         mHeight = rect.bottom - rect.top;
 
         DXGI_SWAP_CHAIN_DESC1 description = { 0 };
+
         description.Width = mWidth;
         description.Height = mHeight;
         description.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        description.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        description.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-        description.BufferCount = 2;
+        description.Stereo = false;
         description.SampleDesc.Count = 1;
+        description.SampleDesc.Quality = 0;
+        description.BufferCount = 2;
+        description.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        description.Scaling = DXGI_SCALING_STRETCH;
         description.AlphaMode = DXGI_ALPHA_MODE_PREMULTIPLIED;
+        description.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+
+        HRESULT hr = mD3DDevice.As(&mDxgiDevice);
+        if (FAILED(hr))
+            return hr;
+
+        ComPtr<IDXGIAdapter> dxgiAdapter;
+        hr = mDxgiDevice->GetAdapter(&dxgiAdapter);
+        if (FAILED(hr))
+            return hr;
+
+        hr = dxgiAdapter->GetParent(IID_PPV_ARGS(&mDxgiFactory));
+        if (FAILED(hr))
+            return hr;
 
         hr = mDxgiFactory->CreateSwapChainForComposition(mDxgiDevice.Get(), &description, nullptr, &mSwapChain);
         if (FAILED(hr))
-            return false;
+            return hr;
+
+        hr = mDxgiDevice->SetMaximumFrameLatency(1);
+        if (FAILED(hr))
+            return hr;
 
         hr = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&mDxgiSurface));
         if (FAILED(hr))
-            return false;
-
-        hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&mDWriteFactory);
-        if (FAILED(hr))
-            return false;
-
-        const D2D1_FACTORY_OPTIONS options = { D2D1_DEBUG_LEVEL_INFORMATION };
-        hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, options, mD2DFactory.GetAddressOf());
-        if (FAILED(hr))
-            return false;
-
-        mD2DFactory->GetDesktopDpi(&mDpiX, &mDpiY);
-
-        hr = mD2DFactory->CreateDevice(mDxgiDevice.Get(), &mD2DDevice);
-        if (FAILED(hr))
-            return false;
-
-        hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &mDeviceContext);
-        if (FAILED(hr))
-            return false;
-
-        hr = mD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &mLendContext);
-        if (FAILED(hr))
-            return false;
+            return hr;
 
         D2D1_BITMAP_PROPERTIES1 props = {};
         props.dpiX = mDpiX;
@@ -123,21 +185,25 @@ namespace WTFDanmaku {
 
         hr = mDeviceContext->CreateBitmapFromDxgiSurface(mDxgiSurface.Get(), props, &mSurfaceBitmap);
         if (FAILED(hr))
-            return false;
+            return hr;
 
         mDeviceContext->SetTarget(mSurfaceBitmap.Get());
 
-        hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
+        return hr;
+    }
+
+    HRESULT DisplayerImpl::CreateDCompResources() {
+        HRESULT hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
-            return false;
+            return hr;
 
         hr = mDCompDevice->CreateTargetForHwnd(mHwnd, true, &mDCompTarget);
         if (FAILED(hr))
-            return false;
+            return hr;
 
         hr = mDCompDevice->CreateVisual(&mDCompVisual);
         if (FAILED(hr))
-            return false;
+            return hr;
 
         mDCompVisual->SetBitmapInterpolationMode(DCOMPOSITION_BITMAP_INTERPOLATION_MODE_LINEAR);
         mDCompVisual->SetCompositeMode(DCOMPOSITION_COMPOSITE_MODE_SOURCE_OVER);
@@ -147,10 +213,9 @@ namespace WTFDanmaku {
 
         hr = mDCompDevice->Commit();
         if (FAILED(hr))
-            return false;
+            return hr;
 
-        mHasBackend = true;
-        return true;
+        return hr;
     }
 
     bool DisplayerImpl::TeardownBackend() {
@@ -172,6 +237,7 @@ namespace WTFDanmaku {
         mSwapChain.Reset();
         mDxgiDevice.Reset();
         mDxgiFactory.Reset();
+        mD3DDeviceContext.Reset();
         mD3DDevice.Reset();
 
         mHasBackend = false;
@@ -301,7 +367,7 @@ namespace WTFDanmaku {
 
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mDeviceContext->EndDraw();
-        mD3DDevice->Flush();
+        mD3DDeviceContext->Flush();
         mSwapChain->Present(1, 0);
         mInRendering = false;
         mRenderMutex.unlock();

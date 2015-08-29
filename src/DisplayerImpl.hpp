@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <wrl.h>
 #include <d2d1_1.h>
-#include <d3d10_1.h>
+#include <d3d11.h>
 #include <dxgi1_3.h>
 #include <dcomp.h>
 #include <dwrite.h>
@@ -52,7 +52,12 @@ namespace WTFDanmaku {
             return mDpiY;
         }
     private:
-        static HRESULT CreateD3D10Device(IDXGIAdapter* adapter, D3D10_DRIVER_TYPE driverType, UINT flags, ID3D10Device1** ppDevice);
+        static HRESULT CreateD3D11Device(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType, UINT flags,
+                                         ID3D11Device** ppDevice, ID3D11DeviceContext** ppDevCtx, D3D_FEATURE_LEVEL* resultLevel);
+        HRESULT CreateDeviceIndependentResources();
+        HRESULT CreateDeviceResources();
+        HRESULT CreateTargetDependentResources();
+        HRESULT CreateDCompResources();
     private:
         HWND mHwnd = 0;
         int mWidth = 0;
@@ -64,9 +69,11 @@ namespace WTFDanmaku {
         Win32Mutex mRenderMutex;
         Win32Mutex mLendMutex;
         bool mInRendering = false;
-        ComPtr<ID3D10Device1> mD3DDevice;
+        D3D_FEATURE_LEVEL mCurrentFeatureLevel;
+        ComPtr<ID3D11Device> mD3DDevice;
+        ComPtr<ID3D11DeviceContext> mD3DDeviceContext;
         ComPtr<IDXGIFactory2> mDxgiFactory;
-        ComPtr<IDXGIDevice> mDxgiDevice;
+        ComPtr<IDXGIDevice1> mDxgiDevice;
         ComPtr<IDXGISurface> mDxgiSurface;
         ComPtr<ID2D1Bitmap1> mSurfaceBitmap;
         ComPtr<IDXGISwapChain1> mSwapChain;
