@@ -22,6 +22,7 @@ namespace WTFDanmaku {
 
         int MeasureFlag = 0;
         int LayoutFlag = 0;
+        int BitmapValidFlag = 0;
 
         float FontScaleFactor = 1.0f;
         float CompositionOpacity = 1.0f;

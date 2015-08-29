@@ -39,7 +39,12 @@ namespace WTFDanmaku {
 
         return true;
     }
-    
+
+    bool Renderable::HasBitmap(DanmakuConfig* config) {
+        return mBitmap.Get() != nullptr
+            && mBitmapValidFlag == config->BitmapValidFlag;
+    }
+
     bool Renderable::BuildBitmap(Displayer* displayer, DanmakuConfig* config) {
         if (!HasTextLayout())
             return false;
@@ -94,6 +99,7 @@ namespace WTFDanmaku {
             return false;
 
         mBitmap = bmp;
+        mBitmapValidFlag = config->BitmapValidFlag;
         return true;
     }
 

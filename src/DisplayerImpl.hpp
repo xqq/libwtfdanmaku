@@ -58,6 +58,7 @@ namespace WTFDanmaku {
         HRESULT CreateDeviceResources();
         HRESULT CreateTargetDependentResources();
         HRESULT CreateDCompResources();
+        HRESULT HandleDeviceLost();
     private:
         HWND mHwnd = 0;
         int mWidth = 0;
@@ -69,6 +70,7 @@ namespace WTFDanmaku {
         Win32Mutex mRenderMutex;
         Win32Mutex mLendMutex;
         bool mInRendering = false;
+        bool mNeedRecreateBitmap = false;
         D3D_FEATURE_LEVEL mCurrentFeatureLevel;
         ComPtr<ID3D11Device> mD3DDevice;
         ComPtr<ID3D11DeviceContext> mD3DDeviceContext;

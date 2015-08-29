@@ -52,7 +52,7 @@ namespace WTFDanmaku {
         if (nullptr == mRenderable || !mRenderable->HasTextLayout())
             this->Measure(displayer, config);
 
-        if (!mRenderable->HasBitmap()) {
+        if (!mRenderable->HasBitmap(config)) {
             mRenderable->BuildBitmap(displayer, config);
         }
 

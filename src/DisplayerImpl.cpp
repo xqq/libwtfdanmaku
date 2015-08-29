@@ -218,6 +218,24 @@ namespace WTFDanmaku {
         return hr;
     }
 
+    HRESULT DisplayerImpl::HandleDeviceLost() {
+        HRESULT hr = CreateDeviceResources();
+        if (FAILED(hr))
+            return hr;
+
+        hr = CreateTargetDependentResources();
+        if (FAILED(hr))
+            return hr;
+
+        hr = CreateDCompResources();
+        if (FAILED(hr))
+            return hr;
+
+        mNeedRecreateBitmap = true;
+
+        return hr;
+    }
+
     bool DisplayerImpl::TeardownBackend() {
         if (mInRendering) {
             return false;
@@ -330,6 +348,11 @@ namespace WTFDanmaku {
         if (!mInRendering)
             return;
 
+        if (mNeedRecreateBitmap) {
+            config->BitmapValidFlag++;
+            mNeedRecreateBitmap = false;
+        }
+
         if (item.get() == nullptr)
             return;
 
@@ -340,7 +363,7 @@ namespace WTFDanmaku {
         if (renderable == nullptr)
             return;
 
-        if (!renderable->HasBitmap()) {
+        if (!renderable->HasBitmap(config)) {
             renderable->BuildBitmap(mOuter, config);
         }
 
@@ -368,7 +391,10 @@ namespace WTFDanmaku {
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mDeviceContext->EndDraw();
         mD3DDeviceContext->Flush();
-        mSwapChain->Present(1, 0);
+        hr = mSwapChain->Present(1, 0);
+        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+            hr = HandleDeviceLost();
+
         mInRendering = false;
         mRenderMutex.unlock();
         return hr;

@@ -31,9 +31,7 @@ namespace WTFDanmaku {
 
         bool BuildTextLayout(Displayer* displayer, DanmakuConfig* config);
 
-        inline bool HasBitmap() {
-            return mBitmap.Get() != nullptr;
-        }
+        bool HasBitmap(DanmakuConfig* config);
 
         inline ComPtr<ID2D1Bitmap1> GetBitmap() {
             return mBitmap;
@@ -49,6 +47,7 @@ namespace WTFDanmaku {
         BaseDanmaku* mDanmaku = nullptr;
         ComPtr<IDWriteTextLayout> mTextLayout = nullptr;
         ComPtr<ID2D1Bitmap1> mBitmap = nullptr;
+        int mBitmapValidFlag = -1;
     };
 
 }
