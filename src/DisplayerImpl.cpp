@@ -372,13 +372,16 @@ namespace WTFDanmaku {
         if (bitmap == nullptr)
             return;
 
+        float left = std::roundf(rect.left);
+        float top = std::roundf(rect.top);
+
         D2D1_SIZE_U size = bitmap->GetPixelSize();
         D2D1_RECT_F dest = D2D1::RectF(
-            rect.left, rect.top,
-            rect.left + size.width, rect.top + size.height
+            left, top,
+            left + size.width, top + size.height
         );
 
-        mDeviceContext->DrawBitmap(bitmap.Get(), dest, config->CompositionOpacity);
+        mDeviceContext->DrawBitmap(bitmap.Get(), dest, config->CompositionOpacity, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
     }
 
     void DisplayerImpl::BeginDraw() {
