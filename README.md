@@ -5,7 +5,7 @@ High-performance danmaku engine for Windows, based on Direct2D and DirectComposi
 Still under developing and only support Windows 8 or later now.
 
 ### Features
-- Hardware accelerated by Direct2D, DirectWrite, Direct3D 11.0 and DXGI 1.3
+- Hardware accelerated by Direct2D, DirectWrite, Direct3D 11.0 and DXGI 1.2
 - Few cpu usage (<= 5%) with smooth animation
 - Accurate danmaku layout
 

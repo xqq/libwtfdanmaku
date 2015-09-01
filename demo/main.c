@@ -24,9 +24,9 @@ int main(int argc, char** argv) {
         }
     }
     window = WTFWindow_Create(GetModuleHandle(NULL), SW_SHOWNORMAL);
-    WTFWindow_SetHitTestOverEnabled(window, 1);
     WTFWindow_SetCustomWndProc(window, WndProc);
     WTFWindow_Initialize(window, WS_EX_NOREDIRECTIONBITMAP, 1280, 720, L"WTFDanmaku Demo");
+    WTFWindow_SetHitTestOverEnabled(window, 0);
     int ret = WTFWindow_RunMessageLoop(window);
     WTFWindow_Release(window);
     return ret;
