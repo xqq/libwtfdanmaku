@@ -63,8 +63,8 @@ namespace WTFDanmaku {
 
         if (diff != 0) {
             mTimer->AddOffset(diff);
-            mActiveDanmakus.clear();
             if (diff < 0) {    // seek back, reset cached iterator
+                mActiveDanmakus.clear();
                 mNextFetchIter = mAllDanmakus.begin();
                 mForceFetch = true;
             }
