@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <mmsystem.h>
 #include "WinmmTimer.hpp"
 
 #pragma comment (lib, "winmm.lib")

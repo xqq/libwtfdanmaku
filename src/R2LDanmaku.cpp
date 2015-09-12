@@ -84,7 +84,9 @@ namespace WTFDanmaku {
                 bool suitable = false;
                 float speedDiff = danmaku->GetSpeed() - item->GetSpeed();
 
-                if (speedDiff <= 0) {
+                if (danmaku->GetLeftAtTime(displayer, currentMillis) <= itemRect.right + 30) {
+                    suitable = false;
+                } else if (speedDiff <= 0) {
                     if (itemRect.right <= displayer->GetWidth() - 30) {
                         suitable = true;
                     }
