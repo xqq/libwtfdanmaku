@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <string>
 #include <memory>
+#include "base/RefBase.hpp"
+#include "base/RefPtr.hpp"
 #include "Noncopyable.hpp"
 #include "Rect.hpp"
 
@@ -26,7 +28,7 @@ namespace WTFDanmaku {
     class Renderable;
     struct DanmakuConfig;
     
-    class BaseDanmaku : public Noncopyable {
+    class BaseDanmaku : public xl::RefBase {
         friend class DanmakuFactory;
         friend class Renderable;
     public:
@@ -114,7 +116,7 @@ namespace WTFDanmaku {
         shared_ptr<Renderable> mRenderable;
     };
 
-    typedef shared_ptr<BaseDanmaku> DanmakuRef;
+    typedef xl::RefPtr<BaseDanmaku> DanmakuRef;
 
 }
 

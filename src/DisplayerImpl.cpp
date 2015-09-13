@@ -353,7 +353,7 @@ namespace WTFDanmaku {
             mNeedRecreateBitmap = false;
         }
 
-        if (item.get() == nullptr)
+        if (item.Get() == nullptr)
             return;
 
         auto rect = item->GetRectAtTime(mOuter, current);

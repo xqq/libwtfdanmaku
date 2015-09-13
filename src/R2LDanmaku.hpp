@@ -11,7 +11,7 @@ namespace WTFDanmaku {
     class R2LDanmaku : public BaseDanmaku {
     public:
         static inline DanmakuRef Create() {
-            return std::make_shared<R2LDanmaku>();
+            return xl::RefPtr<R2LDanmaku>(new R2LDanmaku);
         }
         static std::unique_ptr<IDanmakusRetainer> CreateRetainer();
     public:

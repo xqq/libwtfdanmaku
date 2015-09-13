@@ -8,6 +8,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{6f645e0e-b34e-4077-9cb2-60793500fe14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\base">
+      <UniqueIdentifier>{3945542b-fe74-4caa-b5c1-efb72f8657e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Noncopyable.hpp">
@@ -81,6 +84,30 @@
     </ClInclude>
     <ClInclude Include="src\OutlineTextRenderer.hpp">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\Atomic.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\Atomic_GCC.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\Atomic_Win32.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\Noncopyable.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\RefBase.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\RefCounted.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\RefPtr.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\SmartRef.hpp">
+      <Filter>src\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

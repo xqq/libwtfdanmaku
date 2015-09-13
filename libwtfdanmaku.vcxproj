@@ -156,6 +156,14 @@
     <ClInclude Include="include\WTFWindow.hpp" />
     <ClInclude Include="include\WTF_API.h" />
     <ClInclude Include="src\BaseDanmaku.hpp" />
+    <ClInclude Include="src\base\Atomic.hpp" />
+    <ClInclude Include="src\base\Atomic_GCC.hpp" />
+    <ClInclude Include="src\base\Atomic_Win32.hpp" />
+    <ClInclude Include="src\base\Noncopyable.hpp" />
+    <ClInclude Include="src\base\RefBase.hpp" />
+    <ClInclude Include="src\base\RefCounted.hpp" />
+    <ClInclude Include="src\base\RefPtr.hpp" />
+    <ClInclude Include="src\base\SmartRef.hpp" />
     <ClInclude Include="src\BilibiliParser.hpp" />
     <ClInclude Include="src\OutlineTextRenderer.hpp" />
     <ClInclude Include="src\BottomDanmaku.hpp" />

@@ -71,7 +71,7 @@ namespace WTFDanmaku {
                 DanmakuRef item = iter->second;
                 Rect<float> itemRect = item->GetRect();
 
-                if (item.get() == danmaku.get()) {
+                if (item.Get() == danmaku.Get()) {
                     return;
                 }
 

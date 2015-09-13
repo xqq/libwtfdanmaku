@@ -8,7 +8,7 @@ namespace WTFDanmaku {
     class BottomDanmaku : public TopDanmaku {
     public:
         static inline DanmakuRef Create() {
-            return std::make_shared<BottomDanmaku>();
+            return xl::RefPtr<BottomDanmaku>(new BottomDanmaku);
         }
         static std::unique_ptr<IDanmakusRetainer> CreateRetainer();
     public:
