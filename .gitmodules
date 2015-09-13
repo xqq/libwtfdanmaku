@@ -1,6 +1,9 @@
 [submodule "3rdparty/rapidxml"]
 	path = 3rdparty/rapidxml
 	url = https://github.com/xqq/rapidxml.git
+[submodule "3rdparty/rapidjson"]
+	path = 3rdparty/rapidjson
+	url = https://github.com/miloyip/rapidjson.git
 [submodule "src/base"]
 	path = src/base
 	url = https://github.com/xqq/SmartRef.git
