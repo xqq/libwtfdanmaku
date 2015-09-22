@@ -24,6 +24,14 @@ namespace WTFDanmaku {
         mController->Initialize(hwnd);
     }
 
+    void WTFEngine::InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight) {
+        mController->Initialize(NULL, initialWidth, initialHeight);
+    }
+
+    int WTFEngine::QuerySwapChain(const void* pGuid, void** ppObject) {
+        return mController->QuerySwapChain(pGuid, ppObject);
+    }
+
     void WTFEngine::LoadBilibiliFile(const char* filePath) {
         ParserRef parser = BilibiliParser::Create();
         parser->ParseFileSource(filePath);

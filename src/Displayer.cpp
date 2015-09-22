@@ -9,8 +9,8 @@ namespace WTFDanmaku {
         pImpl.reset();
     }
 
-    void Displayer::SetTarget(void* windowHandle) {
-        pImpl->SetTarget(static_cast<HWND>(windowHandle));
+    void Displayer::SetTarget(void* windowHandle, uint32_t initialWidth, uint32_t initialHeight) {
+        pImpl->SetTarget(static_cast<HWND>(windowHandle), initialWidth, initialHeight);
     }
 
     bool Displayer::SetupBackend() {
@@ -19,6 +19,10 @@ namespace WTFDanmaku {
 
     bool Displayer::TeardownBackend() {
         return pImpl->TeardownBackend();
+    }
+
+    int Displayer::QuerySwapChain(const void* pGuid, void** ppObject) {
+        return pImpl->QuerySwapChain(reinterpret_cast<const IID*>(pGuid), ppObject);
     }
 
     int Displayer::GetWidth() {

@@ -49,7 +49,8 @@ namespace WTFDanmaku {
     public:
         explicit Controller();
         ~Controller();
-        void Initialize(void* hwnd);
+        void Initialize(void* hwnd, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
+        int QuerySwapChain(const void* pGuid, void** ppObject);
         DanmakusManager* GetManager();
         void Start();
         void Pause();

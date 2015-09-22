@@ -20,9 +20,10 @@ namespace WTFDanmaku {
     public:
         explicit Displayer();
         ~Displayer();
-        void SetTarget(void* windowHandle);
+        void SetTarget(void* windowHandle, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
         bool SetupBackend();
         bool TeardownBackend();
+        int QuerySwapChain(const void* pGuid, void** ppObject);
         int GetWidth();
         int GetHeight();
         float GetDpiX();

@@ -32,6 +32,18 @@ WTF_C_API void     __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void
     controller->Initialize(hwnd);
 }
 
+WTF_C_API void     __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->Initialize(NULL, initialWidth, initialHeight);
+}
+
+WTF_C_API int      __stdcall WTF_QuerySwapChain(WTF_Instance* instance, const void* pGuid, void** ppObject) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    return controller->QuerySwapChain(pGuid, ppObject);
+}
+
 WTF_C_API void     __stdcall WTF_LoadBilibiliFile(WTF_Instance* instance, const char* filePath) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 

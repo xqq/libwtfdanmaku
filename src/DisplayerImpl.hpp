@@ -23,9 +23,10 @@ namespace WTFDanmaku {
     public:
         explicit DisplayerImpl(Displayer* outer);
         ~DisplayerImpl();
-        void SetTarget(HWND windowHandle);
+        void SetTarget(HWND windowHandle, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
         bool SetupBackend();
         bool TeardownBackend();
+        HRESULT QuerySwapChain(const IID* pGuid, void** ppvObject);
         void Resize(uint32_t width, uint32_t height);
         ComPtr<ID2D1Bitmap1> CreateBitmap(uint32_t width, uint32_t height);
         ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);

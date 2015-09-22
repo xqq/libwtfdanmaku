@@ -16,15 +16,17 @@ namespace WTFDanmaku {
         }
     }
 
-    void DisplayerImpl::SetTarget(HWND windowHandle) {
+    void DisplayerImpl::SetTarget(HWND windowHandle, uint32_t initialWidth, uint32_t initialHeight) {
         mHwnd = windowHandle;
+        mWidth = initialWidth;
+        mHeight = initialHeight;
     }
 
     bool DisplayerImpl::SetupBackend() {
         if (mHasBackend)
             return false;
 
-        if (mHwnd == NULL)
+        if (mHwnd == NULL && (mWidth == 0 || mHeight == 0))
             return false;
 
         HRESULT hr = CreateDeviceIndependentResources();
@@ -39,12 +41,31 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return false;
 
-        hr = CreateDCompResources();
-        if (FAILED(hr))
-            return false;
+        if (mHwnd) {
+            hr = CreateDCompResources();
+            if (FAILED(hr))
+                return false;
+        }
 
         mHasBackend = true;
         return true;
+    }
+
+    HRESULT DisplayerImpl::QuerySwapChain(const IID* pGuid, void** ppvObject) {
+        if (pGuid == nullptr || ppvObject == nullptr || mSwapChain == nullptr)
+            return E_FAIL;
+
+        if (__uuidof(IDXGISwapChain) == *pGuid) {
+            *ppvObject = static_cast<IDXGISwapChain*>(mSwapChain.Get());
+        } else if (__uuidof(IDXGISwapChain1) == *pGuid) {
+            *ppvObject = mSwapChain.Get();
+        } else {
+            *ppvObject = nullptr;
+            return E_FAIL;
+        }
+
+        mSwapChain.Get()->AddRef();
+        return S_OK;
     }
 
     HRESULT DisplayerImpl::CreateDeviceIndependentResources() {
@@ -131,11 +152,13 @@ namespace WTFDanmaku {
     }
 
     HRESULT DisplayerImpl::CreateTargetDependentResources() {
-        RECT rect = { 0 };
-        GetClientRect(mHwnd, &rect);
+        if (mHwnd) {
+            RECT rect = { 0 };
+            GetClientRect(mHwnd, &rect);
 
-        mWidth = rect.right - rect.left;
-        mHeight = rect.bottom - rect.top;
+            mWidth = rect.right - rect.left;
+            mHeight = rect.bottom - rect.top;
+        }
 
         DXGI_SWAP_CHAIN_DESC1 description = { 0 };
 
@@ -227,9 +250,11 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return hr;
 
-        hr = CreateDCompResources();
-        if (FAILED(hr))
-            return hr;
+        if (mHwnd) {
+            hr = CreateDCompResources();
+            if (FAILED(hr))
+                return hr;
+        }
 
         mNeedRecreateBitmap = true;
 

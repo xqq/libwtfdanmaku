@@ -14,14 +14,21 @@ namespace WTFDanmaku {
         Stop();
     }
 
-    void Controller::Initialize(void* hwnd) {
+    void Controller::Initialize(void* hwnd, uint32_t initialWidth, uint32_t initialHeight) {
         mHwnd = hwnd;
         mTimer = WinmmTimer::Create();
         mManager = std::make_unique<DanmakusManager>();
         mManager->SetTimer(mTimer);
 
         mDisplayer = std::make_unique<Displayer>();
-        mDisplayer->SetTarget(mHwnd);
+        mDisplayer->SetTarget(mHwnd, initialWidth, initialHeight);
+    }
+
+    int Controller::QuerySwapChain(const void* pGuid, void** ppObject) {
+        if (mDisplayer == nullptr)
+            return -1;
+
+        return mDisplayer->QuerySwapChain(pGuid, ppObject);
     }
 
     bool Controller::HasCommands() {
