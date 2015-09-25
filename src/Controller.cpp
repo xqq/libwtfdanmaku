@@ -12,9 +12,13 @@ namespace WTFDanmaku {
 
     Controller::~Controller() {
         Stop();
+        Terminate();
     }
 
-    void Controller::Initialize(void* hwnd, uint32_t initialWidth, uint32_t initialHeight) {
+    int Controller::Initialize(void* hwnd, uint32_t initialWidth, uint32_t initialHeight) {
+        if (hwnd == NULL && (initialWidth == 0 || initialHeight == 0))
+            return -1;
+
         mHwnd = hwnd;
         mTimer = WinmmTimer::Create();
         mManager = std::make_unique<DanmakusManager>();
@@ -22,6 +26,21 @@ namespace WTFDanmaku {
 
         mDisplayer = std::make_unique<Displayer>();
         mDisplayer->SetTarget(mHwnd, initialWidth, initialHeight);
+
+        bool succeed = mDisplayer->SetupBackend();
+        if (!succeed) {
+            mHasBackend = false;
+            return -1;
+        }
+        mHasBackend = true;
+        return 0;
+    }
+
+    void Controller::Terminate() {
+        if (mHasBackend) {
+            mDisplayer->TeardownBackend();
+            mHasBackend = false;
+        }
     }
 
     int Controller::QuerySwapChain(const void* pGuid, void** ppObject) {
@@ -175,12 +194,9 @@ namespace WTFDanmaku {
     }
 
     void Controller::Working() {
+        if (!mHasBackend) DebugBreak();
+
         mStatus = State::kRunning;
-        bool succeed = mDisplayer->SetupBackend();
-        if (!succeed) {
-            printf_s("%s", "mDisplayer->SetupBackend() failed!\n");
-            DebugBreak();
-        }
         mTimer->Start();
 
         RenderingStatistics statistics;
@@ -195,15 +211,16 @@ namespace WTFDanmaku {
             }
 
             statistics = mManager->DrawDanmakus(mDisplayer.get());
-            if (FAILED(statistics.lastHr))
-                DebugBreak();
-
-            // wait for vblank?
+            if (FAILED(statistics.lastHr)) {
+                std::wstring message(L"Received HRESULT Error from DrawDanmakus, hr = ");
+                message.append(std::to_wstring(statistics.lastHr));
+                message.append(L"\n");
+                OutputDebugStringW(message.c_str());
+            }
         }
 
         mTimer->Stop();
         mManager->ReleaseActiveResources();
-        mDisplayer->TeardownBackend();
     }
 
 }

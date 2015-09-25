@@ -49,7 +49,8 @@ namespace WTFDanmaku {
     public:
         explicit Controller();
         ~Controller();
-        void Initialize(void* hwnd, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
+        int Initialize(void* hwnd, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
+        void Terminate();
         int QuerySwapChain(const void* pGuid, void** ppObject);
         DanmakusManager* GetManager();
         void Start();
@@ -74,6 +75,7 @@ namespace WTFDanmaku {
         std::mutex mConditionMutex;
         std::condition_variable mCondition;
         void* mHwnd = nullptr;
+        bool mHasBackend = false;
         TimerRef mTimer;
         Win32Mutex mCommandQueueMutex;
         std::queue<Command> mCommandQueue;

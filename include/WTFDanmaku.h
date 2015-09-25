@@ -21,8 +21,9 @@ WTF_C_API typedef struct WTF_Instance {
 
 WTF_C_API WTF_Instance* __stdcall WTF_CreateInstance();
 WTF_C_API void     __stdcall WTF_ReleaseInstance(WTF_Instance* instance);
-WTF_C_API void     __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd);
-WTF_C_API void     __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight);
+WTF_C_API int      __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd);
+WTF_C_API int      __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight);
+WTF_C_API void     __stdcall WTF_Terminate(WTF_Instance* instance);
 WTF_C_API int      __stdcall WTF_QuerySwapChain(WTF_Instance* instance, const void* pGuid, void** ppObject);
 WTF_C_API void     __stdcall WTF_LoadBilibiliFile(WTF_Instance* instance, const char* filePath);
 WTF_C_API void     __stdcall WTF_LoadBilibiliXml(WTF_Instance* instance, const char* str);

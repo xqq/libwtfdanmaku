@@ -20,12 +20,16 @@ namespace WTFDanmaku {
         delete mController;
     }
 
-    void WTFEngine::Initialize(void* hwnd) {
-        mController->Initialize(hwnd);
+    int WTFEngine::Initialize(void* hwnd) {
+        return mController->Initialize(hwnd);
     }
 
-    void WTFEngine::InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight) {
-        mController->Initialize(NULL, initialWidth, initialHeight);
+    int WTFEngine::InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight) {
+        return mController->Initialize(NULL, initialWidth, initialHeight);
+    }
+
+    void WTFEngine::Terminate() {
+        mController->Terminate();
     }
 
     int WTFEngine::QuerySwapChain(const void* pGuid, void** ppObject) {

@@ -26,8 +26,9 @@ namespace WTFDanmaku {
     public:
         explicit WTFEngine();
         ~WTFEngine();
-        void Initialize(void* hwnd);
-        void InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight);
+        int Initialize(void* hwnd);
+        int InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight);
+        void Terminate();
         int QuerySwapChain(const void* pGuid, void** ppObject);
         void LoadBilibiliFile(const char* filePath);
         void LoadBilibiliXml(const char* str);

@@ -26,16 +26,22 @@ WTF_C_API void     __stdcall WTF_ReleaseInstance(WTF_Instance* instance) {
     delete instance;
 }
 
-WTF_C_API void     __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd) {
+WTF_C_API int      __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    controller->Initialize(hwnd);
+    return controller->Initialize(hwnd);
 }
 
-WTF_C_API void     __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight) {
+WTF_C_API int      __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    controller->Initialize(NULL, initialWidth, initialHeight);
+    return controller->Initialize(NULL, initialWidth, initialHeight);
+}
+
+WTF_C_API void     __stdcall WTF_Terminate(WTF_Instance* instance) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->Terminate();
 }
 
 WTF_C_API int      __stdcall WTF_QuerySwapChain(WTF_Instance* instance, const void* pGuid, void** ppObject) {
