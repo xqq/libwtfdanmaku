@@ -25,7 +25,7 @@ Still under developing and only support Windows 8 or later now.
 - Interoperate with Media Player
 - Optimize Renderable building (maybe concurrent)
 - Windows Phone / UWP compatible
-- Windows 7 compatible (maybe LayeredWindow?)
+- ~~Windows 7 compatible (maybe LayeredWindow?)~~
 - ~~Move to Direct3D 11~~
 - Extensible architecture
 

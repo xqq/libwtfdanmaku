@@ -4,6 +4,10 @@
 #include "DanmakuConfig.hpp"
 #include "DisplayerImpl.hpp"
 
+#ifndef _WTF_WIN7
+#pragma comment (lib, "dcomp.lib")
+#endif
+
 namespace WTFDanmaku {
 
     DisplayerImpl::DisplayerImpl(Displayer* outer) : mOuter(outer) {
@@ -25,6 +29,11 @@ namespace WTFDanmaku {
     bool DisplayerImpl::SetupBackend() {
         if (mHasBackend)
             return false;
+
+#ifdef _WTF_WIN7
+        if (mHwnd == NULL)
+            return false;
+#endif
 
         if (mHwnd == NULL && (mWidth == 0 || mHeight == 0))
             return false;
@@ -125,7 +134,7 @@ namespace WTFDanmaku {
         UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
         HRESULT hr = CreateD3D11Device(nullptr, D3D_DRIVER_TYPE_HARDWARE, creationFlags, &mD3DDevice, &mD3DDeviceContext, &mCurrentFeatureLevel);
-        if (FAILED(hr)) {    // fallback to software wrap device
+        if (FAILED(hr)) {    // fallback to software WARP device
             hr = CreateD3D11Device(nullptr, D3D_DRIVER_TYPE_WARP, creationFlags, &mD3DDevice, &mD3DDeviceContext, &mCurrentFeatureLevel);
         }
 
@@ -165,14 +174,19 @@ namespace WTFDanmaku {
         description.Width = mWidth;
         description.Height = mHeight;
         description.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        description.Stereo = false;
+        description.Stereo = FALSE;
         description.SampleDesc.Count = 1;
         description.SampleDesc.Quality = 0;
         description.BufferCount = 2;
         description.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         description.Scaling = DXGI_SCALING_STRETCH;
+#ifdef _WTF_WIN7
+        description.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+        description.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+#else
         description.AlphaMode = DXGI_ALPHA_MODE_PREMULTIPLIED;
         description.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+#endif
 
         HRESULT hr = mD3DDevice.As(&mDxgiDevice);
         if (FAILED(hr))
@@ -187,7 +201,11 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return hr;
 
+#ifdef _WTF_WIN7
+        hr = mDxgiFactory->CreateSwapChainForHwnd(mD3DDevice.Get(), mHwnd, &description, nullptr, nullptr, &mSwapChain);
+#else
         hr = mDxgiFactory->CreateSwapChainForComposition(mDxgiDevice.Get(), &description, nullptr, &mSwapChain);
+#endif
         if (FAILED(hr))
             return hr;
 
@@ -216,7 +234,9 @@ namespace WTFDanmaku {
     }
 
     HRESULT DisplayerImpl::CreateDCompResources() {
-        HRESULT hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
+        HRESULT hr = S_OK;
+#ifndef _WTF_WIN7
+        hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
             return hr;
 
@@ -237,7 +257,7 @@ namespace WTFDanmaku {
         hr = mDCompDevice->Commit();
         if (FAILED(hr))
             return hr;
-
+#endif
         return hr;
     }
 
@@ -265,9 +285,11 @@ namespace WTFDanmaku {
         if (mInRendering) {
             return false;
         }
+#ifndef _WTF_WIN7
         mDCompTarget.Reset();
         mDCompVisual.Reset();
         mDCompDevice.Reset();
+#endif
         mLendContext.Reset();
         if (mDeviceContext != nullptr)
             mDeviceContext->SetTarget(nullptr);
