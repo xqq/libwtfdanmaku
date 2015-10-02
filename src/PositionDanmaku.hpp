@@ -36,6 +36,7 @@ namespace WTFDanmaku {
         int mRotateY = 0;
         time_t mOffsetTime = 0;
         time_t mDelayAfterStop = 0;
+        bool mDpiScaled = false;
         bool mHasMovement = false;
         bool mHasCustomFont = false;
         std::wstring mCustomFontName;

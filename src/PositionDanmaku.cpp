@@ -1,4 +1,5 @@
 #include <d2d1_1.h>
+#include "Displayer.hpp"
 #include "DanmakuConfig.hpp"
 #include "PositionDanmaku.hpp"
 
@@ -21,6 +22,18 @@ namespace WTFDanmaku {
     }
 
     Rect<float> PositionDanmaku::GetRectAtTime(Displayer* displayer, time_t time) {
+        if (!mDpiScaled) {
+            float scaleX = displayer->GetDpiX() / 96.0f;
+            float scaleY = displayer->GetDpiY() / 96.0f;
+            mSrcPoint.x *= scaleX;
+            mSrcPoint.y *= scaleY;
+            mDestPoint.x *= scaleX;
+            mDestPoint.y *= scaleY;
+            mDeltaX = (mDestPoint.x - mSrcPoint.x) / mMoveDuration;
+            mDeltaY = (mDestPoint.y - mSrcPoint.y) / mMoveDuration;
+            mDpiScaled = true;
+        }
+
         if (!mHasMovement) {
             if (mRect.left == 0 && mRect.right == 0) {
                 mRect.left = mSrcPoint.x;
@@ -74,9 +87,7 @@ namespace WTFDanmaku {
         }
 
         if (mHasMovement) {
-            time_t realDuration = mDuration - mOffsetTime - mDelayAfterStop;
-            mDeltaX = (mDestPoint.x - mSrcPoint.x) / realDuration;
-            mDeltaY = (mDestPoint.y - mSrcPoint.y) / realDuration;
+            mMoveDuration = mDuration - mOffsetTime - mDelayAfterStop;
         }
 
     }
