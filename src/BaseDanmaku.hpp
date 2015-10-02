@@ -12,6 +12,9 @@
 using std::shared_ptr;
 using std::weak_ptr;
 
+struct D2D_MATRIX_3X2_F;
+typedef D2D_MATRIX_3X2_F D2D1_MATRIX_3X2_F;
+
 namespace WTFDanmaku {
 
     enum DanmakuType : int {
@@ -52,6 +55,10 @@ namespace WTFDanmaku {
             return mRenderable != nullptr;
         }
 
+        inline bool HasTransform() {
+            return mHasTransform;
+        }
+
         weak_ptr<Renderable> BuildRenderable(Displayer* displayer, DanmakuConfig* config);
 
         inline weak_ptr<Renderable> GetRenderable() {
@@ -78,6 +85,8 @@ namespace WTFDanmaku {
 
         virtual Rect<float> GetRectAtTime(Displayer* displayer, time_t time) = 0;
 
+        virtual D2D1_MATRIX_3X2_F GetTransform();
+
         inline time_t GetStartTime() {
             return mStartTime;
         }
@@ -98,14 +107,15 @@ namespace WTFDanmaku {
             return mDanmakuId;
         }
     protected:
+        std::wstring mComment;
         time_t mStartTime = 0;
         time_t mDuration = 0;
         Rect<float> mRect;
         float mTextWidth = -1.0f;
         float mTextHeight = -1.0f;
         int mLayoutFlag = -1;
+        bool mHasTransform = false;
     private:
-        std::wstring mComment;
         float mTextSize = 0.0f;
         uint32_t mTextColor = 0;
         uint32_t mTextShadowColor = 0;

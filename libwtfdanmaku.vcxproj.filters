@@ -109,6 +109,12 @@
     <ClInclude Include="src\base\SmartRef.hpp">
       <Filter>src\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\PositionDanmaku.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Point.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -163,6 +169,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\OutlineTextRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PositionDanmaku.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

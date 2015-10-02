@@ -2,6 +2,7 @@
 #include <mutex>
 #include "Renderable.hpp"
 #include "DanmakuConfig.hpp"
+#include "PositionDanmaku.hpp"
 #include "DisplayerImpl.hpp"
 
 namespace WTFDanmaku {
@@ -381,7 +382,22 @@ namespace WTFDanmaku {
             left + size.width, top + size.height
         );
 
-        mDeviceContext->DrawBitmap(bitmap.Get(), dest, config->CompositionOpacity, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+        D2D1_MATRIX_3X2_F backupMatrix;
+
+        if (item->HasTransform()) {
+            mDeviceContext->GetTransform(&backupMatrix);
+            mDeviceContext->SetTransform(item->GetTransform());
+        }
+
+        float opacity = config->CompositionOpacity;
+        if (item->GetType() == DanmakuType::kPosition)
+            opacity *= static_cast<PositionDanmaku*>(item.Get())->GetOpacityAtTime(current);
+
+        mDeviceContext->DrawBitmap(bitmap.Get(), dest, opacity, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+
+        if (item->HasTransform()) {
+            mDeviceContext->SetTransform(backupMatrix);
+        }
     }
 
     void DisplayerImpl::BeginDraw() {

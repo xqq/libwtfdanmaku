@@ -173,6 +173,8 @@
     <ClInclude Include="src\DanmakuConfig.hpp" />
     <ClInclude Include="src\ITimer.hpp" />
     <ClInclude Include="src\IParser.hpp" />
+    <ClInclude Include="src\Point.hpp" />
+    <ClInclude Include="src\PositionDanmaku.hpp" />
     <ClInclude Include="src\R2LDanmaku.hpp" />
     <ClInclude Include="src\Renderable.hpp" />
     <ClInclude Include="src\DanmakusRetainer.hpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="src\DanmakusManager.cpp" />
     <ClCompile Include="src\Displayer.cpp" />
     <ClCompile Include="src\Controller.cpp" />
+    <ClCompile Include="src\PositionDanmaku.cpp" />
     <ClCompile Include="src\R2LDanmaku.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\DanmakusRetainer.cpp" />

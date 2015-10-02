@@ -30,6 +30,9 @@ namespace WTFDanmaku {
                 }
                 mBottomRetainer->Add(danmaku, displayer, config, currentMillis);
                 break;
+            case DanmakuType::kPosition:
+                danmaku->Layout(displayer, config, 0, 0);
+                break;
             default:
                 break;
         }

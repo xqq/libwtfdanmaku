@@ -2,6 +2,7 @@
 #include "R2LDanmaku.hpp"
 #include "TopDanmaku.hpp"
 #include "BottomDanmaku.hpp"
+#include "PositionDanmaku.hpp"
 #include "DanmakuFactory.hpp"
 
 namespace WTFDanmaku {
@@ -19,6 +20,9 @@ namespace WTFDanmaku {
             case kBottom:
                 danmaku = BottomDanmaku::Create();
                 break;
+            case kPosition:
+                danmaku = PositionDanmaku::Create();
+                break;
             case kNull:
             default:
                 return nullptr;
@@ -31,7 +35,8 @@ namespace WTFDanmaku {
         danmaku->mStartTime = time;
         danmaku->mTimestamp = timestamp;
         danmaku->mDanmakuId = danmakuId;
-        danmaku->mComment = comment;
+        if (type != DanmakuType::kPosition && type != DanmakuType::kAdvanced)
+            danmaku->mComment = comment;
         ReplaceStringInplace(danmaku->mComment, L"/n", L"\r\n");
         danmaku->mTextSize = static_cast<float>(fontSize);
         danmaku->mTextColor = fontColor | 0xFF000000;

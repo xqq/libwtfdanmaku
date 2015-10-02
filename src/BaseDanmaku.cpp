@@ -1,3 +1,4 @@
+#include <d2d1_1.h>
 #include <dwrite.h>
 #include "DanmakuConfig.hpp"
 #include "Renderable.hpp"
@@ -41,6 +42,10 @@ namespace WTFDanmaku {
     
     void BaseDanmaku::ReleaseResources() {
         this->ReleaseRenderable();
+    }
+
+    D2D1_MATRIX_3X2_F BaseDanmaku::GetTransform() {
+        return D2D1::Matrix3x2F::Identity();
     }
 
     bool BaseDanmaku::IsAlive(time_t time) {

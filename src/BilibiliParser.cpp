@@ -1,10 +1,13 @@
 #include <Windows.h>
 #include "../3rdparty/rapidxml/rapidxml.hpp"
 #include "../3rdparty/rapidxml/rapidxml_utils.hpp"
+#include "../3rdparty/rapidjson/include/rapidjson/document.h"
 #include "DanmakuFactory.hpp"
+#include "PositionDanmaku.hpp"
 #include "BilibiliParser.hpp"
 
 using namespace rapidxml;
+using namespace rapidjson;
 
 namespace WTFDanmaku {
 
@@ -55,10 +58,63 @@ namespace WTFDanmaku {
 
                 DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(type, time, comment, textSize, textColor, timestamp, danmakuId);
                 if (danmaku != nullptr) {
+                    if (type == DanmakuType::kPosition) {
+                        bool succ = ParsePositionDanmaku(danmaku, node->value());
+                        if (!succ) continue;
+                    }
                     mDanmakus->push_back(danmaku);
                 }
             }
         }
+        return true;
+    }
+
+    bool BilibiliParser::ParsePositionDanmaku(DanmakuRef dstDanmaku, const char* params) {
+        if (dstDanmaku->GetType() != DanmakuType::kPosition)
+            return false;
+
+        PositionDanmaku* danmaku = static_cast<PositionDanmaku*>(dstDanmaku.Get());
+
+        Document d;
+        d.Parse(params);
+        if (!d.IsArray())
+            return false;
+        if (d.Size() < 5)
+            return false;
+
+        danmaku->mSrcPoint = Point<float>(strtof(d[0].GetString(), nullptr), strtof(d[1].GetString(), nullptr));
+        std::vector<std::string> alphas;
+        alphas.reserve(2);
+        SplitString(d[2].GetString(), '-', alphas);
+        danmaku->mSrcAlpha = std::stof(alphas[0]);
+        danmaku->mDestAlpha = std::stof(alphas[1]);
+        danmaku->mDuration = static_cast<time_t>(strtof(d[3].GetString(), nullptr) * 1000);
+        danmaku->mComment = UTF8ToWideString(d[4].GetString());
+        DanmakuFactory::ReplaceStringInplace(danmaku->mComment, L"/n", L"\r\n");
+
+        if (d.Size() > 5) {  // maybe 7 params
+            danmaku->mRotateZ = std::atoi(d[5].GetString());
+            danmaku->mRotateY = std::atoi(d[6].GetString());
+        }
+
+        if (d.Size() > 7) {  // maybe 9 params
+            danmaku->mHasMovement = true;
+            danmaku->mDestPoint = Point<float>(strtof(d[7].GetString(), nullptr), strtof(d[8].GetString(), nullptr));
+        }
+
+        if (d.Size() > 9) {  // maybe 11 params
+            danmaku->mDelayAfterStop = strtoll(d[9].GetString(), nullptr, 10);
+            danmaku->mOffsetTime = strtoll(d[10].GetString(), nullptr, 10);
+        }
+
+        if (d.Size() > 11) {  // maybe 13 params
+            danmaku->mHasCustomFont = strcmp(d[11].GetString(), "true") == 0;
+            if (danmaku->mHasCustomFont) {
+                danmaku->mCustomFontName = UTF8ToWideString(d[12].GetString());
+            }
+        }
+
+        danmaku->Calculate();
         return true;
     }
 
