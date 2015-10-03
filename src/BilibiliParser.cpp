@@ -54,7 +54,10 @@ namespace WTFDanmaku {
                 int textColor = std::stoi(attributes[3]) | 0xFF000000;
                 time_t timestamp = std::stoull(attributes[4]);
                 int danmakuId = std::stoi(attributes[7]);
-                std::wstring comment = UTF8ToWideString(node->value());
+                std::wstring comment;
+                if (type != DanmakuType::kPosition) {
+                    comment = UTF8ToWideString(node->value());
+                }
 
                 DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(type, time, comment, textSize, textColor, timestamp, danmakuId);
                 if (danmaku != nullptr) {
@@ -70,7 +73,7 @@ namespace WTFDanmaku {
     }
 
     bool BilibiliParser::ParsePositionDanmaku(DanmakuRef dstDanmaku, const char* params) {
-        if (dstDanmaku->GetType() != DanmakuType::kPosition)
+        if (dstDanmaku->GetType() != DanmakuType::kPosition || *params != '[')
             return false;
 
         PositionDanmaku* danmaku = static_cast<PositionDanmaku*>(dstDanmaku.Get());
