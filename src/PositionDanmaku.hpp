@@ -20,7 +20,7 @@ namespace WTFDanmaku {
         virtual float GetSpeed() override;
         virtual float GetLeftAtTime(Displayer* displayer, time_t time) override;
         virtual Rect<float> GetRectAtTime(Displayer* displayer, time_t time) override;
-        virtual D2D1_MATRIX_3X2_F GetTransform() override;
+        virtual D2D1_MATRIX_4X4_F GetPerspectiveTransformAtTime(Displayer* displayer, time_t time) override;
         float GetOpacityAtTime(time_t time);
     private:
         void Calculate();
@@ -36,12 +36,12 @@ namespace WTFDanmaku {
         int mRotateY = 0;
         time_t mOffsetTime = 0;
         time_t mDelayAfterStop = 0;
+        time_t mMoveDuration = 0;
         bool mDpiScaled = false;
         bool mHasMovement = false;
         bool mHasCustomFont = false;
         std::wstring mCustomFontName;
-        time_t mMoveDuration = 0;
-        D2D1_MATRIX_3X2_F mMatrix;
+        D2D1_MATRIX_4X4_F mMatrix;
     private:
         friend class BilibiliParser;
     };

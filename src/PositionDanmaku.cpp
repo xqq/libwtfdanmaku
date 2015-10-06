@@ -29,12 +29,14 @@ namespace WTFDanmaku {
             mSrcPoint.y *= scaleY;
             mDestPoint.x *= scaleX;
             mDestPoint.y *= scaleY;
-            mDeltaX = (mDestPoint.x - mSrcPoint.x) / mMoveDuration;
-            mDeltaY = (mDestPoint.y - mSrcPoint.y) / mMoveDuration;
+            if (mHasMovement) {
+                mDeltaX = (mDestPoint.x - mSrcPoint.x) / mMoveDuration;
+                mDeltaY = (mDestPoint.y - mSrcPoint.y) / mMoveDuration;
+            }
             mDpiScaled = true;
         }
 
-        if (!mHasMovement) {
+        if (!mHasMovement) {    // no mDestPoint?
             if (mRect.left == 0 && mRect.right == 0) {
                 mRect.left = mSrcPoint.x;
                 mRect.right = mRect.left + mTextWidth;
@@ -48,7 +50,7 @@ namespace WTFDanmaku {
 
         if (timediff <= mOffsetTime) {
             timediff = 0;
-        } else if (timediff >= mDuration - mDelayAfterStop) {
+        } else if (timediff >= mOffsetTime + mMoveDuration) {
             mRect.left = mDestPoint.x;
             mRect.right = mRect.left + mTextWidth;
             mRect.top = mDestPoint.y;
@@ -73,7 +75,19 @@ namespace WTFDanmaku {
         return mSrcAlpha + mAlphaDelta * diff;
     }
 
-    D2D1_MATRIX_3X2_F PositionDanmaku::GetTransform() {
+    D2D1_MATRIX_4X4_F PositionDanmaku::GetPerspectiveTransformAtTime(Displayer* displayer, time_t time) {
+        if (!mHasTransform) {
+            return mMatrix;
+        }
+
+        Rect<float> rect = GetRectAtTime(displayer, time);
+
+        mMatrix = D2D1::Matrix4x4F::Translation(-rect.left, -rect.top, 0) *
+                  D2D1::Matrix4x4F::RotationY(-(float)mRotateY) *
+                  D2D1::Matrix4x4F::RotationZ((float)mRotateZ) *
+                  D2D1::Matrix4x4F::Translation(rect.left, rect.top, 0) *
+                  D2D1::Matrix4x4F::PerspectiveProjection(500.0f);
+
         return mMatrix;
     }
 
@@ -83,7 +97,9 @@ namespace WTFDanmaku {
 
         if (mRotateZ != 0 || mRotateY != 0) {
             mHasTransform = true;
-            mMatrix = D2D1::Matrix3x2F::Identity();
+        } else {
+            mHasTransform = false;
+            mMatrix = D2D1::Matrix4x4F::PerspectiveProjection(0);
         }
 
         if (mHasMovement) {

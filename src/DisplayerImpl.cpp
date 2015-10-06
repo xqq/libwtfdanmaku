@@ -382,22 +382,18 @@ namespace WTFDanmaku {
             left + size.width, top + size.height
         );
 
-        D2D1_MATRIX_3X2_F backupMatrix;
-
-        if (item->HasTransform()) {
-            mDeviceContext->GetTransform(&backupMatrix);
-            mDeviceContext->SetTransform(item->GetTransform());
-        }
-
         float opacity = config->CompositionOpacity;
         if (item->GetType() == DanmakuType::kPosition)
             opacity *= static_cast<PositionDanmaku*>(item.Get())->GetOpacityAtTime(current);
 
-        mDeviceContext->DrawBitmap(bitmap.Get(), dest, opacity, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
-
+        D2D1_INTERPOLATION_MODE interpolationMode = D2D1_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
+        D2D1_MATRIX_4X4_F perspectiveMatrix(D2D1::Matrix4x4F::PerspectiveProjection(0));
         if (item->HasTransform()) {
-            mDeviceContext->SetTransform(backupMatrix);
+            interpolationMode = D2D1_INTERPOLATION_MODE_LINEAR;
+            perspectiveMatrix = item->GetPerspectiveTransformAtTime(mOuter, current);
         }
+
+        mDeviceContext->DrawBitmap(bitmap.Get(), dest, opacity, interpolationMode, nullptr, &perspectiveMatrix);
     }
 
     void DisplayerImpl::BeginDraw() {

@@ -44,8 +44,8 @@ namespace WTFDanmaku {
         this->ReleaseRenderable();
     }
 
-    D2D1_MATRIX_3X2_F BaseDanmaku::GetTransform() {
-        return D2D1::Matrix3x2F::Identity();
+    D2D1_MATRIX_4X4_F BaseDanmaku::GetPerspectiveTransformAtTime(Displayer* displayer, time_t time) {
+        return D2D1::Matrix4x4F::PerspectiveProjection(0);
     }
 
     bool BaseDanmaku::IsAlive(time_t time) {

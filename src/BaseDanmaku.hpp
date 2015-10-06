@@ -12,8 +12,8 @@
 using std::shared_ptr;
 using std::weak_ptr;
 
-struct D2D_MATRIX_3X2_F;
-typedef D2D_MATRIX_3X2_F D2D1_MATRIX_3X2_F;
+struct D2D_MATRIX_4X4_F;
+typedef D2D_MATRIX_4X4_F D2D1_MATRIX_4X4_F;
 
 namespace WTFDanmaku {
 
@@ -85,7 +85,7 @@ namespace WTFDanmaku {
 
         virtual Rect<float> GetRectAtTime(Displayer* displayer, time_t time) = 0;
 
-        virtual D2D1_MATRIX_3X2_F GetTransform();
+        virtual D2D1_MATRIX_4X4_F GetPerspectiveTransformAtTime(Displayer* displayer, time_t time);
 
         inline time_t GetStartTime() {
             return mStartTime;
