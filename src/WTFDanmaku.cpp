@@ -186,6 +186,7 @@ WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, f
     config->CompositionOpacity = value;
 }
 
+#ifndef _WTF_BUILD_UWP
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow) {
     WTFWindow* wtfwindow = new WTFWindow(static_cast<HINSTANCE>(hInstance), nCmdShow);
@@ -234,3 +235,5 @@ WTF_C_API int        __stdcall WTFWindow_RunMessageLoop(WTF_Window* window) {
 
     return wtfwindow->Run();
 }
+
+#endif // !_WTF_BUILD_UWP

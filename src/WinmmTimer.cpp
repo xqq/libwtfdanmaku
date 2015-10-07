@@ -2,6 +2,8 @@
 #include <mmsystem.h>
 #include "WinmmTimer.hpp"
 
+#ifndef _WTF_BUILD_UWP
+
 #pragma comment (lib, "winmm.lib")
 
 namespace WTFDanmaku {
@@ -49,3 +51,5 @@ namespace WTFDanmaku {
     }
 
 }
+
+#endif // _WTF_BUILD_UWP

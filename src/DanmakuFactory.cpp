@@ -1,4 +1,5 @@
 #include "WinmmTimer.hpp"
+#include "PerformanceTimer.hpp"
 #include "R2LDanmaku.hpp"
 #include "TopDanmaku.hpp"
 #include "BottomDanmaku.hpp"
@@ -25,7 +26,11 @@ namespace WTFDanmaku {
         }
 
         if (timestamp == 0) {
+#ifdef _WTF_BUILD_UWP
+            timestamp = PerformanceTimer::GetGlobalCurrent();
+#else
             timestamp = WinmmTimer::GetGlobalCurrent();
+#endif
         }
 
         danmaku->mStartTime = time;

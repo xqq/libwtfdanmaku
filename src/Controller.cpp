@@ -2,6 +2,7 @@
 #include "Displayer.hpp"
 #include "DanmakusManager.hpp"
 #include "WinmmTimer.hpp"
+#include "PerformanceTimer.hpp"
 #include "Controller.hpp"
 
 namespace WTFDanmaku {
@@ -20,7 +21,11 @@ namespace WTFDanmaku {
             return -1;
 
         mHwnd = hwnd;
+#ifdef _WTF_BUILD_UWP
+        mTimer = PerformanceTimer::Create();
+#else
         mTimer = WinmmTimer::Create();
+#endif
         mManager = std::make_unique<DanmakusManager>();
         mManager->SetTimer(mTimer);
 
@@ -194,7 +199,9 @@ namespace WTFDanmaku {
     }
 
     void Controller::Working() {
+#ifndef _WTF_BUILD_UWP
         if (!mHasBackend) DebugBreak();
+#endif
 
         mStatus = State::kRunning;
         mTimer->Start();

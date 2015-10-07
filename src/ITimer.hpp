@@ -11,7 +11,7 @@ namespace WTFDanmaku {
 
     class ITimer : public Noncopyable {
     public:
-        explicit ITimer() = default;
+        ITimer() = default;
         virtual ~ITimer() = default;
         virtual void Start() = 0;
         virtual void Pause() = 0;

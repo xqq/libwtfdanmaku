@@ -46,6 +46,8 @@ WTF_C_API void     __stdcall WTF_SetFontStretch(WTF_Instance* instance, int dwri
 WTF_C_API void     __stdcall WTF_SetDanmakuStyle(WTF_Instance* instance, int style);
 WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, float opacity);
 
+#ifndef _WTF_BUILD_UWP
+
 WTF_C_API typedef struct WTF_Window WTF_Window;
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow);
@@ -56,6 +58,8 @@ WTF_C_API void        __stdcall WTFWindow_SetCustomWndProc(WTF_Window* window, v
 WTF_C_API LRESULT     __stdcall WTFWindow_DefaultWindowProc(WTF_Window* window, void* hwnd, uint32_t message, WPARAM wParam, LPARAM lParam);
 WTF_C_API void        __stdcall WTFWindow_SetHitTestOverEnabled(WTF_Window* window, int enabled);
 WTF_C_API int         __stdcall WTFWindow_RunMessageLoop(WTF_Window* window);
+
+#endif // !_WTF_BUILD_UWP
 
 
 #endif // _WTF_DANMAKU_C_WRAPPER_H

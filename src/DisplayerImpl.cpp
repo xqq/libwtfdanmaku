@@ -4,7 +4,7 @@
 #include "DanmakuConfig.hpp"
 #include "DisplayerImpl.hpp"
 
-#ifndef _WTF_WIN7
+#if !defined(_WTF_BUILD_WIN7) && !defined(_WTF_BUILD_UWP)
 #pragma comment (lib, "dcomp.lib")
 #endif
 
@@ -30,7 +30,7 @@ namespace WTFDanmaku {
         if (mHasBackend)
             return false;
 
-#ifdef _WTF_WIN7
+#ifdef _WTF_BUILD_WIN7
         if (mHwnd == NULL)
             return false;
 #endif
@@ -161,6 +161,7 @@ namespace WTFDanmaku {
     }
 
     HRESULT DisplayerImpl::CreateTargetDependentResources() {
+#ifndef _WTF_BUILD_UWP
         if (mHwnd) {
             RECT rect = { 0 };
             GetClientRect(mHwnd, &rect);
@@ -168,6 +169,7 @@ namespace WTFDanmaku {
             mWidth = rect.right - rect.left;
             mHeight = rect.bottom - rect.top;
         }
+#endif
 
         DXGI_SWAP_CHAIN_DESC1 description = { 0 };
 
@@ -180,7 +182,7 @@ namespace WTFDanmaku {
         description.BufferCount = 2;
         description.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         description.Scaling = DXGI_SCALING_STRETCH;
-#ifdef _WTF_WIN7
+#ifdef _WTF_BUILD_WIN7
         description.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
         description.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
 #else
@@ -201,7 +203,7 @@ namespace WTFDanmaku {
         if (FAILED(hr))
             return hr;
 
-#ifdef _WTF_WIN7
+#ifdef _WTF_BUILD_WIN7
         hr = mDxgiFactory->CreateSwapChainForHwnd(mD3DDevice.Get(), mHwnd, &description, nullptr, nullptr, &mSwapChain);
 #else
         hr = mDxgiFactory->CreateSwapChainForComposition(mDxgiDevice.Get(), &description, nullptr, &mSwapChain);
@@ -235,7 +237,7 @@ namespace WTFDanmaku {
 
     HRESULT DisplayerImpl::CreateDCompResources() {
         HRESULT hr = S_OK;
-#ifndef _WTF_WIN7
+#if !defined(_WTF_BUILD_WIN7) && !defined(_WTF_BUILD_UWP)
         hr = DCompositionCreateDevice(mDxgiDevice.Get(), IID_PPV_ARGS(&mDCompDevice));
         if (FAILED(hr))
             return hr;
@@ -285,7 +287,7 @@ namespace WTFDanmaku {
         if (mInRendering) {
             return false;
         }
-#ifndef _WTF_WIN7
+#if !defined(_WTF_BUILD_WIN7) && !defined(_WTF_BUILD_UWP)
         mDCompTarget.Reset();
         mDCompVisual.Reset();
         mDCompDevice.Reset();
