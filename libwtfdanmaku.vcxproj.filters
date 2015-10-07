@@ -109,6 +109,9 @@
     <ClInclude Include="src\base\SmartRef.hpp">
       <Filter>src\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\PerformanceTimer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -163,6 +166,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\OutlineTextRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PerformanceTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
