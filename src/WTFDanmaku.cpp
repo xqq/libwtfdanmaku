@@ -194,6 +194,15 @@ WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, f
     config->CompositionOpacity = value;
 }
 
+WTF_C_API void     __stdcall WTF_SetDanmakuTypeVisibility(WTF_Instance* instance, int params) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->R2LVisible = (params & WTF_DANMAKU_TYPE_SCROLLING_VISIBLE);
+    config->TopVisible = (params & WTF_DANMAKU_TYPE_TOP_VISIBLE);
+    config->BottomVisible = (params & WTF_DANMAKU_TYPE_BOTTOM_VISIBLE);
+}
+
 #ifndef _WTF_BUILD_UWP
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow) {

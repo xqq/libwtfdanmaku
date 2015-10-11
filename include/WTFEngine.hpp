@@ -17,6 +17,15 @@ namespace WTFDanmaku {
         Advanced = 8
     };
 
+    enum TypeVisible : int {
+        ScrollingVisible = 1,
+        BottomVisible = 2,
+        TopVisible = 4,
+        ReserveVisible = 8,
+        PositionVisible = 16,
+        AdvancedVisible = 32
+    };
+
     enum Style : int {
         Outline = 1,
         Projection = 2
@@ -51,6 +60,7 @@ namespace WTFDanmaku {
         void SetFontStretch(int dwriteFontStretch);
         void SetDanmakuStyle(Style style);
         void SetCompositionOpacity(float opacity);
+        void SetDanmakuTypeVisibility(int params);
     private:
         WTFEngine(const WTFEngine&) = delete;
         WTFEngine& operator=(const WTFEngine&) = delete;

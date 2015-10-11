@@ -12,8 +12,9 @@ namespace WTFDanmaku {
     };
 
     struct DanmakuConfig {
-        bool TopVisible = true;
         bool R2LVisible = true;
+        bool TopVisible = true;
+        bool BottomVisible = true;
 
         int DanmakuDuration = 3800;
 

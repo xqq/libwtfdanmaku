@@ -44,6 +44,7 @@ namespace WTFDanmaku {
     private:
         void FetchNewDanmakus(Displayer* displayer);
         void RemoveTimeoutDanmakus();
+        bool IsVisibleDanmakuType(DanmakuRef danmaku, DanmakuConfig* config);
     private:
         struct TimeComparator {
             bool operator() (const DanmakuRef& a, const DanmakuRef& b);

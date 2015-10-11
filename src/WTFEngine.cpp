@@ -130,4 +130,12 @@ namespace WTFDanmaku {
         mController->GetManager()->GetConfig()->CompositionOpacity = value;
     }
 
+    void WTFEngine::SetDanmakuTypeVisibility(int params) {
+        DanmakuConfig* config = mController->GetManager()->GetConfig();
+
+        config->R2LVisible = (params & ScrollingVisible);
+        config->TopVisible = (params & TopVisible);
+        config->BottomVisible = (params & BottomVisible);
+    }
+
 }

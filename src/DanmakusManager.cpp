@@ -145,6 +145,20 @@ namespace WTFDanmaku {
         mRetainer.Clear();
     }
 
+    bool DanmakusManager::IsVisibleDanmakuType(DanmakuRef danmaku, DanmakuConfig* config) {
+        bool visible = true;
+
+        if (danmaku->GetType() == DanmakuType::kScrolling) {
+            visible = config->R2LVisible;
+        } else if (danmaku->GetType() == DanmakuType::kTop) {
+            visible = config->TopVisible;
+        } else if (danmaku->GetType() == DanmakuType::kBottom) {
+            visible = config->BottomVisible;
+        }
+
+        return visible;
+    }
+
     RenderingStatistics DanmakusManager::DrawDanmakus(Displayer* displayer) {
         mTimer->Update();
         time_t current = mTimer->GetMilliseconds();
@@ -170,7 +184,9 @@ namespace WTFDanmaku {
                 if (!(*iter)->HasLayout(&mConfig)) {
                     mRetainer.Add(*iter, displayer, &mConfig, current);
                 }
-                displayer->DrawDanmakuItem(*iter, current, &mConfig);
+                if (IsVisibleDanmakuType(*iter, &mConfig)) {
+                    displayer->DrawDanmakuItem(*iter, current, &mConfig);
+                }
             }
         }
 

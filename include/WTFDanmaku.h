@@ -19,6 +19,13 @@ WTF_C_API typedef struct WTF_Instance {
 #define WTF_DANMAKU_STYLE_OUTLINE    1
 #define WTF_DANMAKU_STYLE_PROJECTION 2
 
+#define WTF_DANMAKU_TYPE_SCROLLING_VISIBLE (1)
+#define WTF_DANMAKU_TYPE_BOTTOM_VISIBLE    (2)
+#define WTF_DANMAKU_TYPE_TOP_VISIBLE       (4)
+#define WTF_DANMAKU_TYPE_RESERVE_VISIBLE   (8)
+#define WTF_DANMAKU_TYPE_POSITION_VISIBLE  (16)
+#define WTF_DANMAKU_TYPE_ADVANCED_VISIBLE  (32)
+
 WTF_C_API WTF_Instance* __stdcall WTF_CreateInstance();
 WTF_C_API void     __stdcall WTF_ReleaseInstance(WTF_Instance* instance);
 WTF_C_API int      __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd);
@@ -46,6 +53,7 @@ WTF_C_API void     __stdcall WTF_SetFontStyle(WTF_Instance* instance, int dwrite
 WTF_C_API void     __stdcall WTF_SetFontStretch(WTF_Instance* instance, int dwriteFontStretch);
 WTF_C_API void     __stdcall WTF_SetDanmakuStyle(WTF_Instance* instance, int style);
 WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, float opacity);
+WTF_C_API void     __stdcall WTF_SetDanmakuTypeVisibility(WTF_Instance* instance, int params);
 
 #ifndef _WTF_BUILD_UWP
 
