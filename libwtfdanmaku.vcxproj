@@ -178,6 +178,7 @@
     <ClInclude Include="src\Renderable.hpp" />
     <ClInclude Include="src\DanmakusRetainer.hpp" />
     <ClInclude Include="src\Controller.hpp" />
+    <ClInclude Include="src\StringUtils.hpp" />
     <ClInclude Include="src\Win32Mutex.hpp" />
     <ClInclude Include="src\DanmakuFactory.hpp" />
     <ClInclude Include="src\Noncopyable.hpp" />
@@ -199,6 +200,7 @@
     <ClCompile Include="src\R2LDanmaku.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\DanmakusRetainer.cpp" />
+    <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\WTFWindow.cpp" />
     <ClCompile Include="src\TopDanmaku.cpp" />
     <ClCompile Include="src\WinmmTimer.cpp" />

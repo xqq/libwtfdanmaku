@@ -1,8 +1,9 @@
+#include "BilibiliParser.hpp"
 #include <Windows.h>
 #include "../3rdparty/rapidxml/rapidxml.hpp"
 #include "../3rdparty/rapidxml/rapidxml_utils.hpp"
 #include "DanmakuFactory.hpp"
-#include "BilibiliParser.hpp"
+#include "StringUtils.hpp"
 
 using namespace rapidxml;
 
@@ -64,24 +65,6 @@ namespace WTFDanmaku {
 
     std::unique_ptr<std::vector<DanmakuRef>> BilibiliParser::GetDanmakus() {
         return std::move(mDanmakus);
-    }
-
-    void BilibiliParser::SplitString(const char* input, char delimiter, std::vector<std::string>& output) {
-        while (auto next = strchr(input, delimiter)) {
-            output.push_back(std::string(input, next));
-            input = next + 1;
-        }
-        output.push_back(std::string(input));
-    }
-
-    std::wstring BilibiliParser::UTF8ToWideString(const char* input) {
-        int length = MultiByteToWideChar(CP_UTF8, 0, input, -1, nullptr, 0);
-        std::wstring result;
-        if (length > 0) {
-            result.resize(length);
-            MultiByteToWideChar(CP_UTF8, 0, input, -1, const_cast<LPWSTR>(result.c_str()), length);
-        }
-        return result;
     }
 
 }

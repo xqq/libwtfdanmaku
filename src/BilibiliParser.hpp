@@ -18,8 +18,6 @@ namespace WTFDanmaku {
         virtual std::unique_ptr<std::vector<DanmakuRef>> GetDanmakus() override;
     private:
         bool ParseXml(const char* data);
-        static void SplitString(const char* input, char delimiter, std::vector<std::string>& output);
-        static std::wstring UTF8ToWideString(const char* input);
     private:
         std::unique_ptr<std::vector<DanmakuRef>> mDanmakus;
     };

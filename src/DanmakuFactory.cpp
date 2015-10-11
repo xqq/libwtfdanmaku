@@ -1,9 +1,10 @@
+#include "DanmakuFactory.hpp"
 #include "WinmmTimer.hpp"
 #include "PerformanceTimer.hpp"
 #include "R2LDanmaku.hpp"
 #include "TopDanmaku.hpp"
 #include "BottomDanmaku.hpp"
-#include "DanmakuFactory.hpp"
+#include "StringUtils.hpp"
 
 namespace WTFDanmaku {
 
@@ -43,17 +44,6 @@ namespace WTFDanmaku {
         danmaku->mTextShadowColor = (danmaku->mTextColor <= 0xFF000000) ? 0xFFFFFFFF : 0xFF000000;
 
         return danmaku;
-    }
-
-    void DanmakuFactory::ReplaceStringInplace(std::wstring& str, const wchar_t* search, const wchar_t* replace) {
-        size_t searchLength = wcslen(search);
-        size_t replaceLength = wcslen(replace);
-
-        size_t pos = 0;
-        while ((pos = str.find(search, pos)) != std::wstring::npos) {
-            str.replace(pos, searchLength, replace);
-            pos += replaceLength;
-        }
     }
 
 }

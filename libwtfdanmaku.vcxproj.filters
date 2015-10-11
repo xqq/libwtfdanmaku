@@ -112,6 +112,9 @@
     <ClInclude Include="src\PerformanceTimer.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\StringUtils.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDanmaku.cpp">
@@ -169,6 +172,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PerformanceTimer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
