@@ -58,6 +58,14 @@ WTF_C_API void     __stdcall WTF_LoadBilibiliFile(WTF_Instance* instance, const 
     controller->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
 }
 
+WTF_C_API void     __stdcall WTF_LoadBilibiliFileW(WTF_Instance* instance, const wchar_t* filePath) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    ParserRef parser = BilibiliParser::Create();
+    parser->ParseFileSource(filePath);
+    controller->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
+}
+
 WTF_C_API void     __stdcall WTF_LoadBilibiliXml(WTF_Instance* instance, const char* str) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 

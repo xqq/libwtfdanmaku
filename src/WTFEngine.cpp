@@ -42,6 +42,12 @@ namespace WTFDanmaku {
         mController->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
     }
 
+    void WTFEngine::LoadBilibiliFile(const wchar_t* filePath) {
+        ParserRef parser = BilibiliParser::Create();
+        parser->ParseFileSource(filePath);
+        mController->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
+    }
+
     void WTFEngine::LoadBilibiliXml(const char* str) {
         ParserRef parser = BilibiliParser::Create();
         parser->ParseStringSource(str);

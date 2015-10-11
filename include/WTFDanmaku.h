@@ -26,6 +26,7 @@ WTF_C_API int      __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uin
 WTF_C_API void     __stdcall WTF_Terminate(WTF_Instance* instance);
 WTF_C_API int      __stdcall WTF_QuerySwapChain(WTF_Instance* instance, const void* pGuid, void** ppObject);
 WTF_C_API void     __stdcall WTF_LoadBilibiliFile(WTF_Instance* instance, const char* filePath);
+WTF_C_API void     __stdcall WTF_LoadBilibiliFileW(WTF_Instance* instance, const wchar_t* filePath);
 WTF_C_API void     __stdcall WTF_LoadBilibiliXml(WTF_Instance* instance, const char* str);
 WTF_C_API void     __stdcall WTF_AddDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId);
 WTF_C_API void     __stdcall WTF_AddLiveDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId);

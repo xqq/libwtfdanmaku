@@ -15,9 +15,10 @@ namespace WTFDanmaku {
         virtual ~BilibiliParser() = default;
         virtual bool ParseStringSource(const char* str) override;
         virtual bool ParseFileSource(const char* filePath) override;
+        virtual bool ParseFileSource(const wchar_t* filePath) override;
         virtual std::unique_ptr<std::vector<DanmakuRef>> GetDanmakus() override;
     private:
-        bool ParseXml(const char* data);
+        bool ParseXml(const char* data, bool inplace = false);
     private:
         std::unique_ptr<std::vector<DanmakuRef>> mDanmakus;
     };

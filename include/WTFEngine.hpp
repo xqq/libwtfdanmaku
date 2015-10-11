@@ -31,6 +31,7 @@ namespace WTFDanmaku {
         void Terminate();
         int QuerySwapChain(const void* pGuid, void** ppObject);
         void LoadBilibiliFile(const char* filePath);
+        void LoadBilibiliFile(const wchar_t* filePath);
         void LoadBilibiliXml(const char* str);
         void AddDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp = 0, int danmakuId = 0);
         void AddLiveDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp = 0, int danmakuId = 0);

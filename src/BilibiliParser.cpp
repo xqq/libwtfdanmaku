@@ -1,5 +1,6 @@
 #include "BilibiliParser.hpp"
 #include <Windows.h>
+#include <fstream>
 #include "../3rdparty/rapidxml/rapidxml.hpp"
 #include "../3rdparty/rapidxml/rapidxml_utils.hpp"
 #include "DanmakuFactory.hpp"
@@ -22,18 +23,45 @@ namespace WTFDanmaku {
         return ParseXml(xmlFile.data());
     }
 
-    bool BilibiliParser::ParseXml(const char* data) {
+    bool BilibiliParser::ParseFileSource(const wchar_t* filePath) {
+        std::ifstream file;
+        file.open(filePath, std::ios::in || std::ios::binary || std::ios::ate);
+        if (file.fail())
+            return false;
+
+        file.seekg(0, std::ios::end);
+        size_t length = static_cast<size_t>(file.tellg());
+
+        std::string buffer;
+        buffer.reserve(length + 1);
+        buffer.resize(length);
+
+        file.seekg(0, std::ios::beg);
+        file.read(&buffer[0], length);
+        file.close();
+
+        return ParseXml(buffer.c_str(), true);
+    }
+
+    bool BilibiliParser::ParseXml(const char* data, bool inplace) {
         if (mDanmakus.get() == nullptr)
             return false;
 
-        size_t bufferSize = strlen(data) + 1;
-        char* buf = new char[bufferSize];
-        std::unique_ptr<char[]> buffer(buf);
-        memset(buf, 0, bufferSize);
-        strcpy_s(buf, bufferSize, data);
+        char* buffer = nullptr;
+        std::unique_ptr<char[]> raii_buffer;
+
+        if (inplace) {
+            buffer = const_cast<char*>(data);
+        } else {
+            size_t buffer_size = strlen(data) + 1;
+            buffer = new char[buffer_size];
+            raii_buffer = std::move(std::unique_ptr<char[]>(buffer));
+            memset(buffer, 0, buffer_size);
+            strcpy_s(buffer, buffer_size, data);
+        }
 
         xml_document<> doc;
-        doc.parse<0>(buf);
+        doc.parse<0>(buffer);
 
         xml_node<char>* root = doc.first_node("i");
         if (root == nullptr)
