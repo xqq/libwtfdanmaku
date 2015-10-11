@@ -39,6 +39,20 @@ Launch WTFDanmaku.sln for demo and libwtfdanmaku library.
 
 libwtfdanmaku is permitted to work under shared library (DLL) according to the license.
 
+### Build for Win7 or Windows Store
+First, enter the patches directory:
+```bash
+cd patches
+```
+To build for Windows 7 (with Platform Update):
+```bash
+git am 0002-vcxproj-Build-for-Windows7.patch
+```
+or build for Windows 8.1 store app:
+```bash
+git am 0003-vcxproj-Build-for-Windows8.1-store-app.patch
+```
+
 ### Screenshot
 
 ![5cmps](https://raw.githubusercontent.com/xqq/xqq.github.io/master/img/wtf_screenshot_1.jpg)
