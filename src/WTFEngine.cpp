@@ -133,9 +133,9 @@ namespace WTFDanmaku {
     void WTFEngine::SetDanmakuTypeVisibility(int params) {
         DanmakuConfig* config = mController->GetManager()->GetConfig();
 
-        config->R2LVisible = (params & ScrollingVisible);
-        config->TopVisible = (params & TopVisible);
-        config->BottomVisible = (params & BottomVisible);
+        config->R2LVisible = (params & ScrollingVisible) ? true : false;
+        config->TopVisible = (params & TopVisible) ? true : false;
+        config->BottomVisible = (params & BottomVisible) ? true : false;
     }
 
 }

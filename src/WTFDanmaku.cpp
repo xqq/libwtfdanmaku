@@ -198,9 +198,9 @@ WTF_C_API void     __stdcall WTF_SetDanmakuTypeVisibility(WTF_Instance* instance
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
     DanmakuConfig* config = controller->GetManager()->GetConfig();
 
-    config->R2LVisible = (params & WTF_DANMAKU_TYPE_SCROLLING_VISIBLE);
-    config->TopVisible = (params & WTF_DANMAKU_TYPE_TOP_VISIBLE);
-    config->BottomVisible = (params & WTF_DANMAKU_TYPE_BOTTOM_VISIBLE);
+    config->R2LVisible = (params & WTF_DANMAKU_TYPE_SCROLLING_VISIBLE) ? true : false;
+    config->TopVisible = (params & WTF_DANMAKU_TYPE_TOP_VISIBLE) ? true : false;
+    config->BottomVisible = (params & WTF_DANMAKU_TYPE_BOTTOM_VISIBLE) ? true : false;
 }
 
 #ifndef _WTF_BUILD_UWP

@@ -40,6 +40,9 @@ void InitializeWTF(HWND hwnd) {
         WTF_SetFontWeight(wtf, 700);
         WTF_SetFontScaleFactor(wtf, 1.0f);
         WTF_SetCompositionOpacity(wtf, 0.9f);
+        WTF_SetDanmakuTypeVisibility(wtf, WTF_DANMAKU_TYPE_SCROLLING_VISIBLE |
+                                          WTF_DANMAKU_TYPE_TOP_VISIBLE | 
+                                          WTF_DANMAKU_TYPE_BOTTOM_VISIBLE);
 
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
