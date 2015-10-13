@@ -18,8 +18,8 @@ namespace WTFDanmaku {
 
         int DanmakuDuration = 3800;
 
-        int LogicalScreenWidth = 682;
-        int LogicalScreenHeight = 438;
+        int LogicalScreenWidth = 539;
+        int LogicalScreenHeight = 385;
 
         int MeasureFlag = 0;
         int LayoutFlag = 0;
