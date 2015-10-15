@@ -36,6 +36,7 @@ namespace WTFDanmaku {
         void DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config);
         void BeginDraw();
         HRESULT EndDraw();
+        HRESULT Present();
         ComPtr<ID2D1Factory1> GetD2DFactory();
         ComPtr<IDWriteFactory> GetDWriteFactory();
     public:

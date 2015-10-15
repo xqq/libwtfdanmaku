@@ -191,6 +191,10 @@ namespace WTFDanmaku {
         }
 
         HRESULT hr = displayer->EndDraw();
+        if (SUCCEEDED(hr)) {
+            hr = displayer->Present();
+        }
+
         mStatistics.lastHr = hr;
         mStatistics.lastFrameDanmakuCount = count;
         mStatistics.lastFrameTime = current;

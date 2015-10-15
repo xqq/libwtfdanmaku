@@ -443,13 +443,16 @@ namespace WTFDanmaku {
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mDeviceContext->EndDraw();
         mD3DDeviceContext->Flush();
-        hr = mSwapChain->Present(1, 0);
-        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
-            hr = HandleDeviceLost();
 
         mInRendering = false;
         mRenderMutex.unlock();
         return hr;
     }
 
+    HRESULT DisplayerImpl::Present() {
+        HRESULT hr = mSwapChain->Present(1, 0);
+        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+            hr = HandleDeviceLost();
+        return hr;
+    }
 }

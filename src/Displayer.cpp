@@ -77,4 +77,8 @@ namespace WTFDanmaku {
         return pImpl->EndDraw();
     }
 
+    HRESULT Displayer::Present() {
+        return pImpl->Present();
+    }
+
 }
