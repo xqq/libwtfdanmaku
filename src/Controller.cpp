@@ -210,10 +210,7 @@ namespace WTFDanmaku {
 
         while (mStatus == State::kRunning || mStatus == State::kPaused) {
             HandleCommand();
-            if (mStatus == State::kPaused) {
-                std::this_thread::yield();
-                continue;
-            } else if (mStatus == State::kStopped) {
+            if (mStatus == State::kStopped) {
                 break;
             }
 
