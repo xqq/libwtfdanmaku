@@ -30,8 +30,8 @@ namespace WTFDanmaku {
         float GetDpiY();
         void Resize(uint32_t width, uint32_t height);
         ComPtr<ID2D1Bitmap1> CreateBitmap(uint32_t width, uint32_t height);
-        ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
-        void ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget);
+        ComPtr<ID2D1DeviceContext> AcquireDeviceContext(ComPtr<ID2D1Bitmap1> bitmap);
+        void ReleaseDeviceContext(ComPtr<ID2D1DeviceContext> deviceContext);
         void DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config);
         void BeginDraw();
         HRESULT EndDraw();

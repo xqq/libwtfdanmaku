@@ -49,12 +49,12 @@ namespace WTFDanmaku {
         return pImpl->CreateBitmap(width, height);
     }
 
-    ComPtr<ID2D1RenderTarget> Displayer::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
-        return pImpl->AcquireRenderTarget(bitmap);
+    ComPtr<ID2D1DeviceContext> Displayer::AcquireDeviceContext(ComPtr<ID2D1Bitmap1> bitmap) {
+        return pImpl->AcquireDeviceContext(bitmap);
     }
 
-    void Displayer::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
-        pImpl->ReleaseRenderTarget(renderTarget);
+    void Displayer::ReleaseDeviceContext(ComPtr<ID2D1DeviceContext> deviceContext) {
+        pImpl->ReleaseDeviceContext(deviceContext);
     }
 
     ComPtr<ID2D1Factory1> Displayer::GetD2DFactory() {

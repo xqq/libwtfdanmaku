@@ -370,14 +370,14 @@ namespace WTFDanmaku {
         return bitmap;
     }
 
-    ComPtr<ID2D1RenderTarget> DisplayerImpl::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
+    ComPtr<ID2D1DeviceContext> DisplayerImpl::AcquireDeviceContext(ComPtr<ID2D1Bitmap1> bitmap) {
         mLendMutex.lock();
         mLendContext->SetTarget(bitmap.Get());
 
         return mLendContext;
     }
 
-    void DisplayerImpl::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
+    void DisplayerImpl::ReleaseDeviceContext(ComPtr<ID2D1DeviceContext> deviceContext) {
         mLendContext->SetTarget(nullptr);
         mLendMutex.unlock();
     }
