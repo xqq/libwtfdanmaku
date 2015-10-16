@@ -94,6 +94,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_DESTROY:
             ReleaseWTF();
+            break;
         case WM_DPICHANGED: {
             uint32_t dpi = LOWORD(wParam);
             if (wtf != NULL && WTF_IsRunning(wtf)) {
