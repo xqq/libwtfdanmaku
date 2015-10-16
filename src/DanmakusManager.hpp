@@ -44,6 +44,7 @@ namespace WTFDanmaku {
     private:
         void FetchNewDanmakus(Displayer* displayer);
         void RemoveTimeoutDanmakus();
+        void PrebuildRenderableTask(Displayer* displayer, time_t thisFrameTime, time_t remainTime);
         bool IsVisibleDanmakuType(DanmakuRef danmaku, DanmakuConfig* config);
     private:
         struct TimeComparator {
@@ -53,8 +54,10 @@ namespace WTFDanmaku {
     private:
         TimerRef mTimer;
         bool mForceFetch = false;
+        bool mInPrebuildProgress = false;
         time_t mLastFetchTime = 0;
         TimeSortedDanmakus::iterator mNextFetchIter;
+        TimeSortedDanmakus::iterator mNextPrebuildIter;
         Win32Mutex mAllDanmakusMutex;
         Win32Mutex mActiveDanmakusMutex;
         TimeSortedDanmakus mAllDanmakus;

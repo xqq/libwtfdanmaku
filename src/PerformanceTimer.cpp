@@ -27,11 +27,12 @@ namespace WTFDanmaku {
         QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&mBeginCounter));
     }
 
-    void PerformanceTimer::Update() {
+    ITimer* PerformanceTimer::Update() {
         LARGE_INTEGER current;
         QueryPerformanceCounter(&current);
         int64_t milliseconds = (current.QuadPart - mBeginCounter.QuadPart) * 1000 / mFrequency.QuadPart;
         mCurrent = milliseconds + mTimeBase;
+        return this;
     }
 
     void PerformanceTimer::Stop() {

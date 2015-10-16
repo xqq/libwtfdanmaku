@@ -33,8 +33,9 @@ namespace WTFDanmaku {
         mBeginTime = timeGetTime();
     }
 
-    void WinmmTimer::Update() {
+    ITimer* WinmmTimer::Update() {
         mCurrent = timeGetTime() - mBeginTime + mTimeBase;
+        return this;
     }
 
     void WinmmTimer::Stop() {

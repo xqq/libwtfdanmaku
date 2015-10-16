@@ -442,7 +442,6 @@ namespace WTFDanmaku {
 
     HRESULT DisplayerImpl::EndDraw() {
         HRESULT hr = mDeviceContext->EndDraw();
-        mD3DDeviceContext->Flush();
 
         mInRendering = false;
         mRenderMutex.unlock();

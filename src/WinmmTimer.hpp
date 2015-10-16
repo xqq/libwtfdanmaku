@@ -19,7 +19,7 @@ namespace WTFDanmaku {
         virtual void Start() override;
         virtual void Pause() override;
         virtual void Resume() override;
-        virtual void Update() override;
+        virtual ITimer* Update() override;
         virtual void Stop() override;
         virtual void AddOffset(int64_t offset) override;
         virtual time_t GetMilliseconds() override;

@@ -2,6 +2,7 @@
 #include "Displayer.hpp"
 #include "DanmakusRetainer.hpp"
 #include "DanmakusManager.hpp"
+#include "Renderable.hpp"
 
 namespace WTFDanmaku { 
 
@@ -31,6 +32,7 @@ namespace WTFDanmaku {
 
     DanmakusManager::DanmakusManager() {
         mNextFetchIter = mAllDanmakus.begin();
+        mNextPrebuildIter = mAllDanmakus.begin();
     }
 
     DanmakusManager::~DanmakusManager() {
@@ -49,6 +51,7 @@ namespace WTFDanmaku {
             mAllDanmakus.insert(*iter);
         }
         mNextFetchIter = mAllDanmakus.begin();
+        mNextPrebuildIter = mAllDanmakus.begin();
     }
 
     void DanmakusManager::SetTimer(TimerRef timer) {
@@ -66,6 +69,7 @@ namespace WTFDanmaku {
             if (diff < 0) {    // seek back, reset cached iterator
                 mActiveDanmakus.clear();
                 mNextFetchIter = mAllDanmakus.begin();
+                mNextPrebuildIter = mAllDanmakus.begin();
                 mForceFetch = true;
             }
         }
@@ -145,6 +149,96 @@ namespace WTFDanmaku {
         mRetainer.Clear();
     }
 
+    void DanmakusManager::PrebuildRenderableTask(Displayer* displayer, time_t thisFrameTime, time_t remainTime) {
+        int64_t timepoint = thisFrameTime % 10000;  // clamp time to [0ms, 9999ms], that is 0s ~ 10s
+        time_t frameTimeBase = thisFrameTime - timepoint;
+        if (mInPrebuildProgress == false) {
+            if ((thisFrameTime >= 0 && thisFrameTime < 2000) || (timepoint >= 7000 && timepoint < 9000)) {
+                mInPrebuildProgress = true;
+            } else {
+                return;
+            }
+        }
+
+        std::lock_guard<Win32Mutex> locker(mAllDanmakusMutex);
+
+        const int kCurrentSection = 0;
+        const int kNextSection = 1;
+        int section = 0;
+
+        if (timepoint < 7000) {    // Task: Build cache for current time section
+            section = kCurrentSection;
+            time_t itemStartTime = (*mNextPrebuildIter)->GetStartTime();
+            if (itemStartTime >= frameTimeBase + 10000) {    // Is it in next section?
+                mInPrebuildProgress = false;    // Current task has been completed. Just go back.
+                return;
+            }
+        } else if (timepoint >= 7000 && timepoint < 9999) {    // Task: Build cache for next 10-seconds time section
+            section = kNextSection;
+            time_t itemStartTime = (*mNextPrebuildIter)->GetStartTime();
+            if (itemStartTime >= frameTimeBase + 10000 + 10000) {
+                mInPrebuildProgress = false;
+                return;
+            }
+        }
+
+        time_t beginTime = mTimer->GetMilliseconds();
+
+        for (auto iter = mNextPrebuildIter; iter != mAllDanmakus.end(); /* ignore */) {
+            time_t itemStartTime = (*iter)->GetStartTime();
+
+            if (itemStartTime >= thisFrameTime) {
+                if (section == kCurrentSection) {
+                    if (itemStartTime >= frameTimeBase + 10000) {
+                        mNextPrebuildIter = iter;
+                        mInPrebuildProgress = false;
+                        break;
+                    }
+                } else if (section == kNextSection) {
+                    if (itemStartTime >= frameTimeBase + 10000 + 10000) {
+                        mNextPrebuildIter = iter;
+                        mInPrebuildProgress = false;
+                        break;
+                    }
+                }
+
+                if (!(*iter)->HasMeasured(&mConfig))
+                    (*iter)->Measure(displayer, &mConfig);
+                auto renderable = (*iter)->GetRenderable().lock();
+                if (!renderable->HasBitmap(&mConfig)) {
+                    renderable->BuildBitmap(displayer, &mConfig);
+                } else {
+                    ++iter; continue;
+                }
+            } else if (itemStartTime < thisFrameTime) {    // seeked iterator?
+                if (!(*iter)->HasMeasured(&mConfig)) {
+                    (*iter)->Measure(displayer, &mConfig);
+                }
+                if ((*iter)->IsAlive(thisFrameTime)) {
+                    auto renderable = (*iter)->GetRenderable().lock();
+                    if (!renderable->HasBitmap(&mConfig)) {
+                        renderable->BuildBitmap(displayer, &mConfig);
+                    } else {
+                        ++iter; continue;
+                    }
+                } else {
+                    ++iter; continue;    // fast-forward to thisFrameTime
+                }
+            }
+
+            time_t now = mTimer->Update()->GetMilliseconds();
+            if (now - beginTime >= remainTime - 1) {
+                mNextPrebuildIter = ++iter;    // remain time excceed, save iterator and exit.
+                break;
+            }
+
+            if (++iter == mAllDanmakus.end()) {
+                mNextPrebuildIter = mAllDanmakus.end();
+                break;
+            }
+        }
+    }
+
     bool DanmakusManager::IsVisibleDanmakuType(DanmakuRef danmaku, DanmakuConfig* config) {
         bool visible = true;
 
@@ -170,6 +264,7 @@ namespace WTFDanmaku {
         }
 
         int count = 0;
+        HRESULT hr = S_OK;
 
         /* synchronized */
         {
@@ -188,12 +283,18 @@ namespace WTFDanmaku {
                     displayer->DrawDanmakuItem(*iter, current, &mConfig);
                 }
             }
+
+            hr = displayer->EndDraw();
+
+            time_t now = mTimer->Update()->GetMilliseconds();
+            int64_t elapsed = now - current;
+            if (elapsed < 14) {
+                time_t remain = 14 - elapsed;
+                PrebuildRenderableTask(displayer, current, remain);
+            }
         }
 
-        HRESULT hr = displayer->EndDraw();
-        if (SUCCEEDED(hr)) {
-            hr = displayer->Present();
-        }
+        hr = displayer->Present();
 
         mStatistics.lastHr = hr;
         mStatistics.lastFrameDanmakuCount = count;
