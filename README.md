@@ -16,7 +16,7 @@ This project is still under developing.
 - ~~x64 compatible~~
 - Optimize danmaku style effect
 - Rendering Statistics
-- ~~Hi-DPI support~~, and pre-Monitor DPI Aware
+- ~~Hi-DPI support, and Pre-monitor DPI Aware~~
 - Further performance optimization
 - ~~Resize support (need rebuild device-dependent resources)~~
 - ~~BottomDanmaku~~, L2RDanmaku, Mode7 support, etc.
@@ -24,7 +24,7 @@ This project is still under developing.
 - User-friendly ~~C & C++ API~~
 - C++/CLI wrapper for .NET
 - Interoperate with Media Player
-- Optimize Renderable building (maybe concurrent)
+- ~~Optimize Renderable building~~
 - Windows Phone / ~~UWP compatible~~
 - ~~Windows 7 compatible (maybe LayeredWindow?)~~
 - ~~Move to Direct3D 11~~
