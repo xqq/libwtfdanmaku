@@ -32,9 +32,8 @@ namespace WTFDanmaku {
             mRenderable = std::make_shared<Renderable>(this);
         }
 
-        if (!mRenderable->HasTextLayout()) {
-            mRenderable->BuildTextLayout(displayer, config);
-        }
+        mRenderable->BuildTextLayout(displayer, config);
+
         mDuration = config->DanmakuDuration;
         mMeasureFlag = config->MeasureFlag;
     }

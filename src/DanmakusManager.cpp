@@ -33,6 +33,7 @@ namespace WTFDanmaku {
     DanmakusManager::DanmakusManager() {
         mNextFetchIter = mAllDanmakus.begin();
         mNextPrebuildIter = mAllDanmakus.begin();
+        mPrebuildBitmapValidFlag = mConfig.BitmapValidFlag;
     }
 
     DanmakusManager::~DanmakusManager() {
@@ -150,6 +151,12 @@ namespace WTFDanmaku {
     }
 
     void DanmakusManager::PrebuildRenderableTask(Displayer* displayer, time_t thisFrameTime, time_t remainTime) {
+        if (mPrebuildBitmapValidFlag != mConfig.BitmapValidFlag) {
+            mNextPrebuildIter = mAllDanmakus.begin();
+            mInPrebuildProgress = true;
+            mPrebuildBitmapValidFlag = mConfig.BitmapValidFlag;
+        }
+
         int64_t timepoint = thisFrameTime % 10000;  // clamp time to [0ms, 9999ms], that is 0s ~ 10s
         time_t frameTimeBase = thisFrameTime - timepoint;
         if (mInPrebuildProgress == false) {

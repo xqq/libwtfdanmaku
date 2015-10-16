@@ -124,6 +124,12 @@ WTF_C_API void     __stdcall WTF_Resize(WTF_Instance* instance, uint32_t width, 
     controller->Resize(width, height);
 }
 
+WTF_C_API void     __stdcall WTF_SetDpi(WTF_Instance* instance, uint32_t dpiX, uint32_t dpiY) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->SetDpi(dpiX, dpiY);
+}
+
 WTF_C_API int64_t  __stdcall WTF_GetCurrentPosition(WTF_Instance* instance) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 

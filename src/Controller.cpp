@@ -144,6 +144,17 @@ namespace WTFDanmaku {
         }
     }
 
+    void Controller::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
+            Command cmd(Cmd::kSetDpi);
+            cmd.arg1 = dpiX;
+            cmd.arg2 = dpiY;
+            PushCommand(cmd);
+        } else {
+            mDisplayer->SetDpi(dpiX, dpiY);
+        }
+    }
+
     void Controller::ReLayout() {
         if (mStatus == State::kRunning || mStatus == State::kPaused) {
             PushCommand(Cmd::kReLayout);
@@ -190,6 +201,17 @@ namespace WTFDanmaku {
                     break;
                 case Cmd::kReLayout:
                     mManager->ReLayout();
+                    break;
+                case Cmd::kSetDpi: {
+                    float nowDpiX = mDisplayer->GetDpiX();
+                    float nowDpiY = mDisplayer->GetDpiY();
+                    if (cmd.arg1 != static_cast<uint32_t>(nowDpiX) || cmd.arg2 != static_cast<uint32_t>(nowDpiY)) {
+                        mDisplayer->SetDpi(cmd.arg1, cmd.arg2);
+                        mManager->GetConfig()->MeasureFlag++;
+                        mManager->GetConfig()->BitmapValidFlag++;
+                        mManager->ReLayout();
+                    }
+                }
                     break;
                 case Cmd::kStop:
                     mStatus = State::kStopped;

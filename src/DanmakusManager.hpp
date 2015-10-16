@@ -56,6 +56,7 @@ namespace WTFDanmaku {
         bool mForceFetch = false;
         bool mInPrebuildProgress = false;
         time_t mLastFetchTime = 0;
+        int mPrebuildBitmapValidFlag = -1;
         TimeSortedDanmakus::iterator mNextFetchIter;
         TimeSortedDanmakus::iterator mNextPrebuildIter;
         Win32Mutex mAllDanmakusMutex;

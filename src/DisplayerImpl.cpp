@@ -345,6 +345,11 @@ namespace WTFDanmaku {
         mDeviceContext->SetTarget(mSurfaceBitmap.Get());
     }
 
+    void DisplayerImpl::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        mDpiX = static_cast<float>(dpiX);
+        mDpiY = static_cast<float>(dpiY);
+    }
+
     ComPtr<ID2D1Bitmap1> DisplayerImpl::CreateBitmap(uint32_t width, uint32_t height) {
         if (!mHasBackend)
             return nullptr;

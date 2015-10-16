@@ -43,6 +43,7 @@ WTF_C_API void     __stdcall WTF_Resume(WTF_Instance* instance);
 WTF_C_API void     __stdcall WTF_Stop(WTF_Instance* instance);
 WTF_C_API void     __stdcall WTF_SeekTo(WTF_Instance* instance, int64_t milliseconds);
 WTF_C_API void     __stdcall WTF_Resize(WTF_Instance* instance, uint32_t width, uint32_t height);
+WTF_C_API void     __stdcall WTF_SetDpi(WTF_Instance* instance, uint32_t dpiX, uint32_t dpiY);
 WTF_C_API int64_t  __stdcall WTF_GetCurrentPosition(WTF_Instance* instance);
 WTF_C_API int      __stdcall WTF_IsRunning(WTF_Instance* instance);
 WTF_C_API float    __stdcall WTF_GetFontScaleFactor(WTF_Instance* instance);

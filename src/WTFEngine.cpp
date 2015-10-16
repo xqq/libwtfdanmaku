@@ -88,6 +88,10 @@ namespace WTFDanmaku {
         mController->Resize(width, height);
     }
 
+    void WTFEngine::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        mController->SetDpi(dpiX, dpiY);
+    }
+
     time_t WTFEngine::GetCurrentPosition() {
         return mController->GetCurrentPosition();
     }

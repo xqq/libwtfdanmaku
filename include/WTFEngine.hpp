@@ -50,6 +50,7 @@ namespace WTFDanmaku {
         void Stop();
         void SeekTo(time_t milliseconds);
         void Resize(uint32_t width, uint32_t height);
+        void SetDpi(uint32_t dpiX, uint32_t dpiY);
         time_t GetCurrentPosition();
         bool IsRunning();
         float GetFontScaleFactor();

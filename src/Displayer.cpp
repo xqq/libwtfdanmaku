@@ -45,6 +45,10 @@ namespace WTFDanmaku {
         pImpl->Resize(width, height);
     }
 
+    void Displayer::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        pImpl->SetDpi(dpiX, dpiY);
+    }
+
     ComPtr<ID2D1Bitmap1> Displayer::CreateBitmap(uint32_t width, uint32_t height) {
         return pImpl->CreateBitmap(width, height);
     }
