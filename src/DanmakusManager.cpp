@@ -151,6 +151,10 @@ namespace WTFDanmaku {
     }
 
     void DanmakusManager::PrebuildRenderableTask(Displayer* displayer, time_t thisFrameTime, time_t remainTime) {
+        if (mAllDanmakus.empty()) {
+            return;
+        }
+
         if (mPrebuildBitmapValidFlag != mConfig.BitmapValidFlag) {
             mNextPrebuildIter = mAllDanmakus.begin();
             mInPrebuildProgress = true;
