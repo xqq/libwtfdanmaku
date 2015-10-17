@@ -25,7 +25,7 @@ This project is still under developing.
 - C++/CLI wrapper for .NET
 - Interoperate with Media Player
 - ~~Optimize Renderable building~~
-- Windows Phone / ~~UWP compatible~~
+- ~~Windows Phone / UWP compatible~~
 - ~~Windows 7 compatible (maybe LayeredWindow?)~~
 - ~~Move to Direct3D 11~~
 - Extensible architecture

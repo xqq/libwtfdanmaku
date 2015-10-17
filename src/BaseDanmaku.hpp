@@ -97,6 +97,14 @@ namespace WTFDanmaku {
         inline uint32_t GetDanmakuId() {
             return mDanmakuId;
         }
+
+        inline bool IsSkipped() {
+            return mSkipped;
+        }
+
+        inline void SetSkipped(bool skipped) {
+            mSkipped = skipped;
+        }
     protected:
         time_t mStartTime = 0;
         time_t mDuration = 0;
@@ -114,6 +122,7 @@ namespace WTFDanmaku {
         uint32_t mDanmakuId = 0;
         int mMeasureFlag = 0;
         shared_ptr<Renderable> mRenderable;
+        bool mSkipped = false;
     };
 
     typedef xl::RefPtr<BaseDanmaku> DanmakuRef;

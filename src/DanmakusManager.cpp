@@ -124,6 +124,7 @@ namespace WTFDanmaku {
 
         for (auto iter = mActiveDanmakus.begin(); iter != mActiveDanmakus.end(); /* ignore */) {
             if ((*iter)->GetStartTime() < current && !(*iter)->IsAlive(current)) {
+                (*iter)->SetSkipped(false);
                 (*iter)->ReleaseResources();
                 iter = mActiveDanmakus.erase(iter);
             } else {
@@ -251,17 +252,21 @@ namespace WTFDanmaku {
     }
 
     bool DanmakusManager::IsVisibleDanmakuType(DanmakuRef danmaku, DanmakuConfig* config) {
-        bool visible = true;
-
-        if (danmaku->GetType() == DanmakuType::kScrolling) {
-            visible = config->R2LVisible;
-        } else if (danmaku->GetType() == DanmakuType::kTop) {
-            visible = config->TopVisible;
-        } else if (danmaku->GetType() == DanmakuType::kBottom) {
-            visible = config->BottomVisible;
+        if (danmaku->IsSkipped()) {
+            return false;
         }
 
-        return visible;
+        DanmakuType type = danmaku->GetType();
+
+        if (type == DanmakuType::kScrolling) {
+            return config->R2LVisible;
+        } else if (type == DanmakuType::kTop) {
+            return config->TopVisible;
+        } else if (type == DanmakuType::kBottom) {
+            return config->BottomVisible;
+        }
+
+        return true;
     }
 
     RenderingStatistics DanmakusManager::DrawDanmakus(Displayer* displayer) {

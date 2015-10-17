@@ -106,6 +106,7 @@ namespace WTFDanmaku {
 
                 top = itemRect.bottom + 1.0f;
                 if (top + danmaku->GetHeight() > displayer->GetHeight()) {
+                    danmaku->SetSkipped(true);
                     danmaku->Layout(displayer, config, static_cast<float>(displayer->GetWidth()), -danmaku->GetHeight() - 1);
                     return;
                 }
