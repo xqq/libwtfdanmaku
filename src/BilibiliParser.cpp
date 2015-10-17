@@ -20,7 +20,7 @@ namespace WTFDanmaku {
 
     bool BilibiliParser::ParseFileSource(const char* filePath) {
         file<> xmlFile(filePath);
-        return ParseXml(xmlFile.data());
+        return ParseXml(xmlFile.data(), true);
     }
 
     bool BilibiliParser::ParseFileSource(const wchar_t* filePath) {
