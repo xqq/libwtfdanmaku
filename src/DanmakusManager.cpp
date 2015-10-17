@@ -151,7 +151,7 @@ namespace WTFDanmaku {
     }
 
     void DanmakusManager::PrebuildRenderableTask(Displayer* displayer, time_t thisFrameTime, time_t remainTime) {
-        if (mAllDanmakus.empty()) {
+        if (mAllDanmakus.empty() || mNextPrebuildIter == mAllDanmakus.end()) {
             return;
         }
 
