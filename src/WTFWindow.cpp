@@ -1,5 +1,7 @@
 #include <Windows.h>
+#ifndef _WTF_BUILD_UWP
 #include <CommCtrl.h>
+#endif
 #include "../include/WTFWindow.hpp"
 
 #ifndef _WTF_BUILD_UWP
