@@ -36,7 +36,6 @@ void InitializeWTF(HWND hwnd) {
     if (!wtfInited) {
         wtf = WTF_CreateInstance();
         WTF_InitializeWithHwnd(wtf, (void*)hwnd);
-        WTF_SetDpi(wtf, 96, 96);
         WTF_SetFontName(wtf, L"SimHei");
         WTF_SetFontWeight(wtf, 700);
         WTF_SetFontScaleFactor(wtf, 1.0f);
