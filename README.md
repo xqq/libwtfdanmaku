@@ -29,6 +29,7 @@ This project is still under developing.
 - ~~Windows 7 compatible (maybe LayeredWindow?)~~
 - ~~Move to Direct3D 11~~
 - R2LDanmaku lines limitation
+- Keywords filter by regular expression
 - C++/CX wrapper for C#/WinRT invoking
 - More smooth animation (percision problem when calculating coordinates?)
 - Refactor project files to vcxitems (Shared/Windows/WindowsPhone)
