@@ -28,7 +28,10 @@ This project is still under developing.
 - ~~Windows Phone / UWP compatible~~
 - ~~Windows 7 compatible (maybe LayeredWindow?)~~
 - ~~Move to Direct3D 11~~
-- Extensible architecture
+- R2LDanmaku lines limitation
+- C++/CX wrapper for C#/WinRT invoking
+- More smooth animation (percision problem when calculating coordinates?)
+- Refactor project files to vcxitems (Shared/Windows/WindowsPhone)
 
 ### Build
 My environment: Visual Studio Community 2013. Also tested under VS2015.
