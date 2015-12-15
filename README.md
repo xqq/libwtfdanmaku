@@ -32,7 +32,7 @@ This project is still under developing.
 - Keywords filter by regular expression
 - C++/CX wrapper for C#/WinRT invoking
 - More smooth animation (percision problem when calculating coordinates?)
-- Refactor project files to vcxitems (Shared/Windows/WindowsPhone)
+- ~~Refactor project files to vcxitems (Shared/Windows/WindowsPhone)~~
 
 ### Build
 My environment: Visual Studio Community 2013. Also tested under VS2015.

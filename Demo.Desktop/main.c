@@ -48,7 +48,7 @@ void InitializeWTF(HWND hwnd) {
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
         } else {
-            WTF_LoadBilibiliFile(wtf, "F:\\Downloads\\Downloads\\5cmps.xml");
+            WTF_LoadBilibiliFile(wtf, "E:\\Downloads\\Downloads\\1055660.xml");
         }
         wtfInited = true;
     }
