@@ -37,25 +37,20 @@ This project is still under developing.
 ### Build
 My environment: Visual Studio Community 2013. Also tested under VS2015.
 
-Don't forget to checkout submodule (git submodule init, git submodule update, ...)
+Don't forget to checkout submodule (git submodule update --init)
 
-Launch WTFDanmaku.sln for demo and libwtfdanmaku library.
+- Win32 Desktop
+ - Import project `libwtfdanmaku.Desktop`
+- Win32 Desktop (for Windows7 compatibility)
+ - Import project `libwtfdanmaku.Windows7`
+- Windows 10 Universal Platform
+ - Import project `libwtfdanmaku.Universal`
+- Windows 8.1 WinRT/Universal
+ - Import project `libwtfdanmaku.Windows`
+- Windows Phone 8.1
+ - Import project `libwtfdanmaku.WindowsPhone`
 
 libwtfdanmaku is permitted to work under shared library (DLL) according to the license.
-
-### Build for Win7 or Windows Store
-First, enter the patches directory:
-```bash
-cd patches
-```
-To build for Windows 7 (with Platform Update):
-```bash
-git am 0002-vcxproj-Build-for-Windows7.patch
-```
-or build for Windows 8.1 store app:
-```bash
-git am 0003-vcxproj-Build-for-Windows8.1-store-app.patch
-```
 
 ### Screenshot
 
