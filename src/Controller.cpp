@@ -221,9 +221,18 @@ namespace WTFDanmaku {
     }
 
     void Controller::Working() {
-#ifndef _WTF_BUILD_UWP
-        if (!mHasBackend) DebugBreak();
+        if (!mHasBackend) {
+#ifdef _WTF_BUILD_UWP
+    #ifndef NDEBUG    // Debug
+            assert(false && "No backend for rendering, please Initialize first!");
+    #else             // Release
+            OutputDebugStringW(L"No backend for rendering, please Initialize first!");
+            throw 0;
+    #endif
+#else
+            DebugBreak();
 #endif
+        }
 
         mStatus = State::kRunning;
         mTimer->Start();
