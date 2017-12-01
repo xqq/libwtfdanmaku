@@ -55,12 +55,14 @@ namespace WTFDanmaku {
     }
 
     void WTFEngine::AddDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp, int danmakuId) {
-        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+        std::wstring cmt = comment;
+        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
         mController->GetManager()->AddDanmaku(danmaku);
     }
 
     void WTFEngine::AddLiveDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp, int danmakuId) {
-        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+        std::wstring cmt = comment;
+        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
         mController->GetManager()->AddLiveDanmaku(danmaku);
     }
 

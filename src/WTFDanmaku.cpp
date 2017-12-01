@@ -77,14 +77,16 @@ WTF_C_API void     __stdcall WTF_LoadBilibiliXml(WTF_Instance* instance, const c
 WTF_C_API void     __stdcall WTF_AddDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+    std::wstring cmt = comment;
+    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
     controller->GetManager()->AddDanmaku(danmaku);
 }
 
 WTF_C_API void     __stdcall WTF_AddLiveDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+    std::wstring cmt = comment;
+    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
     controller->GetManager()->AddLiveDanmaku(danmaku);
 }
 
