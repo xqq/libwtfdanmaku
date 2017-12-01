@@ -1,5 +1,6 @@
 #include <cmath>
 #include "BaseDanmaku.hpp"
+#include "PositionDanmaku.hpp"
 #include "Displayer.hpp"
 #include "Renderable.hpp"
 #include "DanmakuConfig.hpp"
@@ -17,7 +18,20 @@ namespace WTFDanmaku {
         float fontSize = mDanmaku->mTextSize * config->FontScaleFactor;
         fontSize *= displayer->GetDpiY() / 96.0f;
 
-        HRESULT hr = dwFactory->CreateTextFormat(config->FontName.c_str(), nullptr, config->FontWeight, config->FontStyle,
+        std::wstring fontName;
+
+        if (mDanmaku->GetType() == DanmakuType::kPosition) {
+            PositionDanmaku* d = static_cast<PositionDanmaku*>(mDanmaku);
+            if (d->HasCustomFont()) {
+                fontName = d->GetCustomFontName();
+            } else {
+                fontName = config->FontName;
+            }
+        } else {
+            fontName = config->FontName;
+        }
+
+        HRESULT hr = dwFactory->CreateTextFormat(fontName.c_str(), nullptr, config->FontWeight, config->FontStyle,
             config->FontStretch, fontSize, L"zh-cn", &textFormat);
         if (FAILED(hr) || nullptr == textFormat)
             return false;

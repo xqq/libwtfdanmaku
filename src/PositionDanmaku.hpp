@@ -22,6 +22,10 @@ namespace WTFDanmaku {
         virtual Rect<float> GetRectAtTime(Displayer* displayer, time_t time) override;
         virtual D2D1_MATRIX_4X4_F GetPerspectiveTransformAtTime(Displayer* displayer, time_t time) override;
         float GetOpacityAtTime(time_t time);
+        std::wstring GetCustomFontName();
+        inline bool HasCustomFont() {
+            return mHasCustomFont;
+        }
     private:
         void Calculate();
     private:

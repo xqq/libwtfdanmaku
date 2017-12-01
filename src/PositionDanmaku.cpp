@@ -107,4 +107,9 @@ namespace WTFDanmaku {
         }
 
     }
+
+    std::wstring PositionDanmaku::GetCustomFontName() {
+        return mCustomFontName;
+    }
+
 }
