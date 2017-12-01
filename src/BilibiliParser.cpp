@@ -92,10 +92,7 @@ namespace WTFDanmaku {
                 DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(type, time, comment, textSize, textColor, timestamp, danmakuId);
                 if (danmaku != nullptr) {
                     if (type == DanmakuType::kPosition) {
-                        std::string params;
-                        params.resize(node->value_size() + 1);
-                        memcpy(&params[0], node->value(), node->value_size());
-                        bool succ = ParsePositionDanmaku(danmaku, params.c_str());
+                        bool succ = ParsePositionDanmaku(danmaku, node->value());
                         if (!succ) continue;
                     }
                     mDanmakus->push_back(danmaku);
