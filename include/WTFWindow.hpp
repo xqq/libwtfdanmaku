@@ -5,6 +5,8 @@
 #include <cstdint>
 #include "WTF_API.h"
 
+#ifndef _WTF_BUILD_UWP
+
 namespace WTFDanmaku {
 
     class WTF_API WTFWindow {
@@ -35,5 +37,7 @@ namespace WTFDanmaku {
     };
 
 }
+
+#endif // !_WTF_BUILD_UWP
 
 #endif // _WTF_SAMPLE_WINDOW_HPP

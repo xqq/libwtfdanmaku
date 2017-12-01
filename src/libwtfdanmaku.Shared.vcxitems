@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{6b39ffa8-cd29-4e39-8bb2-8c6b1f6ef2f9}</ItemsProjectGuid>
+    <ItemsRootNamespace>libwtfdanmaku</ItemsRootNamespace>
+    <ItemsProjectName>libwtfdanmaku.Shared</ItemsProjectName>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\WTFDanmaku.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\WTFEngine.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\WTFWindow.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\WTF_API.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BaseDanmaku.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\Atomic.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\Atomic_GCC.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\Atomic_Win32.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\Noncopyable.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\RefBase.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\RefCounted.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\RefPtr.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)base\SmartRef.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BilibiliParser.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)OutlineTextRenderer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BottomDanmaku.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DanmakusManager.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Displayer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DisplayerImpl.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DanmakuConfig.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ITimer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IParser.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PerformanceTimer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PositionDanmaku.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)R2LDanmaku.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Renderable.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DanmakusRetainer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Controller.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StringUtils.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Win32Mutex.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DanmakuFactory.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Noncopyable.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Rect.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TopDanmaku.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WinmmTimer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)BilibiliParser.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)OutlineTextRenderer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BottomDanmaku.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)DisplayerImpl.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BaseDanmaku.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)DanmakuFactory.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)DanmakusManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Displayer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Controller.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PerformanceTimer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PositionDanmaku.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)R2LDanmaku.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Renderable.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)DanmakusRetainer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StringUtils.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WTFWindow.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TopDanmaku.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WinmmTimer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)dllmain.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WTFEngine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WTFDanmaku.cpp" />
+  </ItemGroup>
+</Project>

@@ -35,7 +35,8 @@ namespace WTFDanmaku {
             kSeek = kBase + 4,
             kStop = kBase + 5,
             kResize = kBase + 6,
-            kReLayout = kBase + 7
+            kReLayout = kBase + 7,
+            kSetDpi = kBase + 8
         };
 
         struct Command {
@@ -49,7 +50,9 @@ namespace WTFDanmaku {
     public:
         explicit Controller();
         ~Controller();
-        void Initialize(void* hwnd);
+        int Initialize(void* hwnd, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
+        void Terminate();
+        int QuerySwapChain(const void* pGuid, void** ppObject);
         DanmakusManager* GetManager();
         void Start();
         void Pause();
@@ -57,6 +60,7 @@ namespace WTFDanmaku {
         void Stop();
         void SeekTo(time_t milliseconds);
         void Resize(uint32_t width, uint32_t height);
+        void SetDpi(uint32_t dpiX, uint32_t dpiY);
         void ReLayout();
         time_t GetCurrentPosition();
         bool IsRunning();
@@ -73,6 +77,7 @@ namespace WTFDanmaku {
         std::mutex mConditionMutex;
         std::condition_variable mCondition;
         void* mHwnd = nullptr;
+        bool mHasBackend = false;
         TimerRef mTimer;
         Win32Mutex mCommandQueueMutex;
         std::queue<Command> mCommandQueue;

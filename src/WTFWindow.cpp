@@ -1,6 +1,10 @@
 #include <Windows.h>
+#ifndef _WTF_BUILD_UWP
 #include <CommCtrl.h>
+#endif
 #include "../include/WTFWindow.hpp"
+
+#ifndef _WTF_BUILD_UWP
 
 #pragma comment (lib, "Comctl32.lib")
 
@@ -126,3 +130,5 @@ namespace WTFDanmaku {
     }
 
 }
+
+#endif // !_WTF_BUILD_UWP

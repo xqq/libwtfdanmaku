@@ -15,6 +15,7 @@ namespace WTFDanmaku {
         virtual ~IParser() = default;
         virtual bool ParseStringSource(const char* str) = 0;
         virtual bool ParseFileSource(const char* filePath) = 0;
+        virtual bool ParseFileSource(const wchar_t* filePath) = 0;
         virtual std::unique_ptr<std::vector<DanmakuRef>> GetDanmakus() = 0;
     };
 

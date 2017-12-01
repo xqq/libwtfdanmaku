@@ -8,8 +8,8 @@ namespace WTFDanmaku {
 
     class Win32Mutex : public Noncopyable {
     public:
-        inline explicit Win32Mutex() {
-            InitializeCriticalSection(&cs);
+        inline Win32Mutex() {
+            InitializeCriticalSectionEx(&cs, 0, CRITICAL_SECTION_NO_DEBUG_INFO);
         }
         
         inline ~Win32Mutex() {

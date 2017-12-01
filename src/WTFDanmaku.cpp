@@ -26,13 +26,39 @@ WTF_C_API void     __stdcall WTF_ReleaseInstance(WTF_Instance* instance) {
     delete instance;
 }
 
-WTF_C_API void     __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd) {
+WTF_C_API int      __stdcall WTF_InitializeWithHwnd(WTF_Instance* instance, void* hwnd) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    controller->Initialize(hwnd);
+    return controller->Initialize(hwnd);
+}
+
+WTF_C_API int      __stdcall WTF_InitializeOffscreen(WTF_Instance* instance, uint32_t initialWidth, uint32_t initialHeight) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    return controller->Initialize(NULL, initialWidth, initialHeight);
+}
+
+WTF_C_API void     __stdcall WTF_Terminate(WTF_Instance* instance) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->Terminate();
+}
+
+WTF_C_API int      __stdcall WTF_QuerySwapChain(WTF_Instance* instance, const void* pGuid, void** ppObject) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    return controller->QuerySwapChain(pGuid, ppObject);
 }
 
 WTF_C_API void     __stdcall WTF_LoadBilibiliFile(WTF_Instance* instance, const char* filePath) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    ParserRef parser = BilibiliParser::Create();
+    parser->ParseFileSource(filePath);
+    controller->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
+}
+
+WTF_C_API void     __stdcall WTF_LoadBilibiliFileW(WTF_Instance* instance, const wchar_t* filePath) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
     ParserRef parser = BilibiliParser::Create();
@@ -51,14 +77,16 @@ WTF_C_API void     __stdcall WTF_LoadBilibiliXml(WTF_Instance* instance, const c
 WTF_C_API void     __stdcall WTF_AddDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+    std::wstring cmt = comment;
+    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
     controller->GetManager()->AddDanmaku(danmaku);
 }
 
 WTF_C_API void     __stdcall WTF_AddLiveDanmaku(WTF_Instance* instance, int type, int64_t time, const wchar_t* comment, int fontSize, int fontColor, int64_t timestamp, int danmakuId) {
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
-    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+    std::wstring cmt = comment;
+    DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
     controller->GetManager()->AddLiveDanmaku(danmaku);
 }
 
@@ -96,6 +124,12 @@ WTF_C_API void     __stdcall WTF_Resize(WTF_Instance* instance, uint32_t width, 
     Controller* controller = reinterpret_cast<Controller*>(instance->controller);
 
     controller->Resize(width, height);
+}
+
+WTF_C_API void     __stdcall WTF_SetDpi(WTF_Instance* instance, uint32_t dpiX, uint32_t dpiY) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+
+    controller->SetDpi(dpiX, dpiY);
 }
 
 WTF_C_API int64_t  __stdcall WTF_GetCurrentPosition(WTF_Instance* instance) {
@@ -168,6 +202,16 @@ WTF_C_API void     __stdcall WTF_SetCompositionOpacity(WTF_Instance* instance, f
     config->CompositionOpacity = value;
 }
 
+WTF_C_API void     __stdcall WTF_SetDanmakuTypeVisibility(WTF_Instance* instance, int params) {
+    Controller* controller = reinterpret_cast<Controller*>(instance->controller);
+    DanmakuConfig* config = controller->GetManager()->GetConfig();
+
+    config->R2LVisible = (params & WTF_DANMAKU_TYPE_SCROLLING_VISIBLE) ? true : false;
+    config->TopVisible = (params & WTF_DANMAKU_TYPE_TOP_VISIBLE) ? true : false;
+    config->BottomVisible = (params & WTF_DANMAKU_TYPE_BOTTOM_VISIBLE) ? true : false;
+}
+
+#ifndef _WTF_BUILD_UWP
 
 WTF_C_API WTF_Window* __stdcall WTFWindow_Create(void* hInstance, int nCmdShow) {
     WTFWindow* wtfwindow = new WTFWindow(static_cast<HINSTANCE>(hInstance), nCmdShow);
@@ -216,3 +260,5 @@ WTF_C_API int        __stdcall WTFWindow_RunMessageLoop(WTF_Window* window) {
 
     return wtfwindow->Run();
 }
+
+#endif // !_WTF_BUILD_UWP

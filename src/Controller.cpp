@@ -2,6 +2,7 @@
 #include "Displayer.hpp"
 #include "DanmakusManager.hpp"
 #include "WinmmTimer.hpp"
+#include "PerformanceTimer.hpp"
 #include "Controller.hpp"
 
 namespace WTFDanmaku {
@@ -12,16 +13,46 @@ namespace WTFDanmaku {
 
     Controller::~Controller() {
         Stop();
+        Terminate();
     }
 
-    void Controller::Initialize(void* hwnd) {
+    int Controller::Initialize(void* hwnd, uint32_t initialWidth, uint32_t initialHeight) {
+        if (hwnd == NULL && (initialWidth == 0 || initialHeight == 0))
+            return -1;
+
         mHwnd = hwnd;
+#ifdef _WTF_BUILD_UWP
+        mTimer = PerformanceTimer::Create();
+#else
         mTimer = WinmmTimer::Create();
+#endif
         mManager = std::make_unique<DanmakusManager>();
         mManager->SetTimer(mTimer);
 
         mDisplayer = std::make_unique<Displayer>();
-        mDisplayer->SetTarget(mHwnd);
+        mDisplayer->SetTarget(mHwnd, initialWidth, initialHeight);
+
+        bool succeed = mDisplayer->SetupBackend();
+        if (!succeed) {
+            mHasBackend = false;
+            return -1;
+        }
+        mHasBackend = true;
+        return 0;
+    }
+
+    void Controller::Terminate() {
+        if (mHasBackend) {
+            mDisplayer->TeardownBackend();
+            mHasBackend = false;
+        }
+    }
+
+    int Controller::QuerySwapChain(const void* pGuid, void** ppObject) {
+        if (mDisplayer == nullptr)
+            return -1;
+
+        return mDisplayer->QuerySwapChain(pGuid, ppObject);
     }
 
     bool Controller::HasCommands() {
@@ -113,6 +144,17 @@ namespace WTFDanmaku {
         }
     }
 
+    void Controller::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        if (mStatus == State::kRunning || mStatus == State::kPaused) {
+            Command cmd(Cmd::kSetDpi);
+            cmd.arg1 = dpiX;
+            cmd.arg2 = dpiY;
+            PushCommand(cmd);
+        } else {
+            mDisplayer->SetDpi(dpiX, dpiY);
+        }
+    }
+
     void Controller::ReLayout() {
         if (mStatus == State::kRunning || mStatus == State::kPaused) {
             PushCommand(Cmd::kReLayout);
@@ -160,6 +202,17 @@ namespace WTFDanmaku {
                 case Cmd::kReLayout:
                     mManager->ReLayout();
                     break;
+                case Cmd::kSetDpi: {
+                    float nowDpiX = mDisplayer->GetDpiX();
+                    float nowDpiY = mDisplayer->GetDpiY();
+                    if (cmd.arg1 != static_cast<uint32_t>(nowDpiX) || cmd.arg2 != static_cast<uint32_t>(nowDpiY)) {
+                        mDisplayer->SetDpi(cmd.arg1, cmd.arg2);
+                        mManager->GetConfig()->MeasureFlag++;
+                        mManager->GetConfig()->BitmapValidFlag++;
+                        mManager->ReLayout();
+                    }
+                }
+                    break;
                 case Cmd::kStop:
                     mStatus = State::kStopped;
                     break;
@@ -168,35 +221,41 @@ namespace WTFDanmaku {
     }
 
     void Controller::Working() {
-        mStatus = State::kRunning;
-        bool succeed = mDisplayer->SetupBackend();
-        if (!succeed) {
-            printf_s("%s", "mDisplayer->SetupBackend() failed!\n");
+        if (!mHasBackend) {
+#ifdef _WTF_BUILD_UWP
+    #ifndef NDEBUG    // Debug
+            assert(false && "No backend for rendering, please Initialize first!");
+    #else             // Release
+            OutputDebugStringW(L"No backend for rendering, please Initialize first!");
+            throw 0;
+    #endif
+#else
             DebugBreak();
+#endif
         }
+
+        mStatus = State::kRunning;
         mTimer->Start();
 
         RenderingStatistics statistics;
 
         while (mStatus == State::kRunning || mStatus == State::kPaused) {
             HandleCommand();
-            if (mStatus == State::kPaused) {
-                std::this_thread::yield();
-                continue;
-            } else if (mStatus == State::kStopped) {
+            if (mStatus == State::kStopped) {
                 break;
             }
 
             statistics = mManager->DrawDanmakus(mDisplayer.get());
-            if (FAILED(statistics.lastHr))
-                DebugBreak();
-
-            // wait for vblank?
+            if (FAILED(statistics.lastHr)) {
+                std::wstring message(L"Received HRESULT Error from DrawDanmakus, hr = ");
+                message.append(std::to_wstring(statistics.lastHr));
+                message.append(L"\n");
+                OutputDebugStringW(message.c_str());
+            }
         }
 
         mTimer->Stop();
         mManager->ReleaseActiveResources();
-        mDisplayer->TeardownBackend();
     }
 
 }

@@ -39,7 +39,11 @@ void InitializeWTF(HWND hwnd) {
         WTF_SetFontName(wtf, L"SimHei");
         WTF_SetFontWeight(wtf, 700);
         WTF_SetFontScaleFactor(wtf, 1.0f);
+        WTF_SetDanmakuStyle(wtf, WTF_DANMAKU_STYLE_OUTLINE);
         WTF_SetCompositionOpacity(wtf, 0.9f);
+        WTF_SetDanmakuTypeVisibility(wtf, WTF_DANMAKU_TYPE_SCROLLING_VISIBLE |
+                                          WTF_DANMAKU_TYPE_TOP_VISIBLE |
+                                          WTF_DANMAKU_TYPE_BOTTOM_VISIBLE);
 
         if (hasArgFile) {
             WTF_LoadBilibiliFile(wtf, optFileName);
@@ -89,6 +93,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_DESTROY:
             ReleaseWTF();
+            break;
+        case WM_DPICHANGED: {
+            uint32_t dpi = LOWORD(wParam);
+            if (wtf != NULL && WTF_IsRunning(wtf)) {
+                WTF_SetDpi(wtf, dpi, dpi);
+            }
+            break;
+        }
     }
     return WTFWindow_DefaultWindowProc(window, (void*)hwnd, message, (WPARAM)wParam, (LPARAM)lParam);
 }

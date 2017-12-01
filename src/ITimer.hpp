@@ -11,12 +11,12 @@ namespace WTFDanmaku {
 
     class ITimer : public Noncopyable {
     public:
-        explicit ITimer() = default;
+        ITimer() = default;
         virtual ~ITimer() = default;
         virtual void Start() = 0;
         virtual void Pause() = 0;
         virtual void Resume() = 0;
-        virtual void Update() = 0;
+        virtual ITimer* Update() = 0;
         virtual void Stop() = 0;
         virtual void AddOffset(int64_t offset) = 0;
         virtual time_t GetMilliseconds() = 0;

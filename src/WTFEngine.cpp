@@ -20,11 +20,29 @@ namespace WTFDanmaku {
         delete mController;
     }
 
-    void WTFEngine::Initialize(void* hwnd) {
-        mController->Initialize(hwnd);
+    int WTFEngine::Initialize(void* hwnd) {
+        return mController->Initialize(hwnd);
+    }
+
+    int WTFEngine::InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight) {
+        return mController->Initialize(NULL, initialWidth, initialHeight);
+    }
+
+    void WTFEngine::Terminate() {
+        mController->Terminate();
+    }
+
+    int WTFEngine::QuerySwapChain(const void* pGuid, void** ppObject) {
+        return mController->QuerySwapChain(pGuid, ppObject);
     }
 
     void WTFEngine::LoadBilibiliFile(const char* filePath) {
+        ParserRef parser = BilibiliParser::Create();
+        parser->ParseFileSource(filePath);
+        mController->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
+    }
+
+    void WTFEngine::LoadBilibiliFile(const wchar_t* filePath) {
         ParserRef parser = BilibiliParser::Create();
         parser->ParseFileSource(filePath);
         mController->GetManager()->SetDanmakuList(std::move(parser->GetDanmakus()));
@@ -37,12 +55,14 @@ namespace WTFDanmaku {
     }
 
     void WTFEngine::AddDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp, int danmakuId) {
-        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+        std::wstring cmt = comment;
+        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
         mController->GetManager()->AddDanmaku(danmaku);
     }
 
     void WTFEngine::AddLiveDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp, int danmakuId) {
-        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, std::wstring(comment), fontSize, fontColor, timestamp, danmakuId);
+        std::wstring cmt = comment;
+        DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(static_cast<DanmakuType>(type), time, cmt, fontSize, fontColor, timestamp, danmakuId);
         mController->GetManager()->AddLiveDanmaku(danmaku);
     }
 
@@ -68,6 +88,10 @@ namespace WTFDanmaku {
 
     void WTFEngine::Resize(uint32_t width, uint32_t height) {
         mController->Resize(width, height);
+    }
+
+    void WTFEngine::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        mController->SetDpi(dpiX, dpiY);
     }
 
     time_t WTFEngine::GetCurrentPosition() {
@@ -110,6 +134,14 @@ namespace WTFDanmaku {
     void WTFEngine::SetCompositionOpacity(float opacity) {
         float value = opacity > 1.0f ? 1.0f : (opacity < 0.0f ? 0.0f : opacity);
         mController->GetManager()->GetConfig()->CompositionOpacity = value;
+    }
+
+    void WTFEngine::SetDanmakuTypeVisibility(int params) {
+        DanmakuConfig* config = mController->GetManager()->GetConfig();
+
+        config->R2LVisible = (params & ScrollingVisible) ? true : false;
+        config->TopVisible = (params & TopVisible) ? true : false;
+        config->BottomVisible = (params & BottomVisible) ? true : false;
     }
 
 }

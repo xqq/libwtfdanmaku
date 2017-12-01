@@ -1,10 +1,13 @@
+#include "BilibiliParser.hpp"
 #include <Windows.h>
+#include <fstream>
 #include "../3rdparty/rapidxml/rapidxml.hpp"
 #include "../3rdparty/rapidxml/rapidxml_utils.hpp"
 #include "../3rdparty/rapidjson/include/rapidjson/document.h"
 #include "DanmakuFactory.hpp"
 #include "PositionDanmaku.hpp"
 #include "BilibiliParser.hpp"
+#include "StringUtils.hpp"
 
 using namespace rapidxml;
 using namespace rapidjson;
@@ -21,21 +24,48 @@ namespace WTFDanmaku {
 
     bool BilibiliParser::ParseFileSource(const char* filePath) {
         file<> xmlFile(filePath);
-        return ParseXml(xmlFile.data());
+        return ParseXml(xmlFile.data(), true);
     }
 
-    bool BilibiliParser::ParseXml(const char* data) {
+    bool BilibiliParser::ParseFileSource(const wchar_t* filePath) {
+        std::ifstream file;
+        file.open(filePath, std::ios::in || std::ios::binary || std::ios::ate);
+        if (file.fail())
+            return false;
+
+        file.seekg(0, std::ios::end);
+        size_t length = static_cast<size_t>(file.tellg());
+
+        std::string buffer;
+        buffer.reserve(length + 1);
+        buffer.resize(length);
+
+        file.seekg(0, std::ios::beg);
+        file.read(&buffer[0], length);
+        file.close();
+
+        return ParseXml(buffer.c_str(), true);
+    }
+
+    bool BilibiliParser::ParseXml(const char* data, bool inplace) {
         if (mDanmakus.get() == nullptr)
             return false;
 
-        size_t bufferSize = strlen(data) + 1;
-        char* buf = new char[bufferSize];
-        std::unique_ptr<char[]> buffer(buf);
-        memset(buf, 0, bufferSize);
-        strcpy_s(buf, bufferSize, data);
+        char* buffer = nullptr;
+        std::unique_ptr<char[]> raii_buffer;
+
+        if (inplace) {
+            buffer = const_cast<char*>(data);
+        } else {
+            size_t buffer_size = strlen(data) + 1;
+            buffer = new char[buffer_size];
+            raii_buffer = std::move(std::unique_ptr<char[]>(buffer));
+            memset(buffer, 0, buffer_size);
+            strcpy_s(buffer, buffer_size, data);
+        }
 
         xml_document<> doc;
-        doc.parse<0>(buf);
+        doc.parse<0>(buffer);
 
         xml_node<char>* root = doc.first_node("i");
         if (root == nullptr)
@@ -107,7 +137,7 @@ namespace WTFDanmaku {
         }
 
         danmaku->mComment = UTF8ToWideString(d[4].GetString());
-        DanmakuFactory::ReplaceStringInplace(danmaku->mComment, L"/n", L"\r\n");
+        ReplaceStringInplace(danmaku->mComment, L"/n", L"\r\n");
 
         if (d.Size() > 5) {  // maybe 7 params
             if (d[5].GetType() == Type::kNumberType) {
@@ -158,24 +188,6 @@ namespace WTFDanmaku {
 
     std::unique_ptr<std::vector<DanmakuRef>> BilibiliParser::GetDanmakus() {
         return std::move(mDanmakus);
-    }
-
-    void BilibiliParser::SplitString(const char* input, char delimiter, std::vector<std::string>& output) {
-        while (auto next = strchr(input, delimiter)) {
-            output.push_back(std::string(input, next));
-            input = next + 1;
-        }
-        output.push_back(std::string(input));
-    }
-
-    std::wstring BilibiliParser::UTF8ToWideString(const char* input) {
-        int length = MultiByteToWideChar(CP_UTF8, 0, input, -1, nullptr, 0);
-        std::wstring result;
-        if (length > 0) {
-            result.resize(length);
-            MultiByteToWideChar(CP_UTF8, 0, input, -1, const_cast<LPWSTR>(result.c_str()), length);
-        }
-        return result;
     }
 
 }

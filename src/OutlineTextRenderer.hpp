@@ -20,7 +20,7 @@ namespace WTFDanmaku {
             ComPtr<ID2D1SolidColorBrush> fillBrush
         );
 
-        ~OutlineTextRenderer() = default;
+        virtual ~OutlineTextRenderer() = default;
 
         IFACEMETHOD(IsPixelSnappingDisabled)(
             __maybenull void* clientDrawingContext,

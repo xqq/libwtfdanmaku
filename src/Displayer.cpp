@@ -9,8 +9,8 @@ namespace WTFDanmaku {
         pImpl.reset();
     }
 
-    void Displayer::SetTarget(void* windowHandle) {
-        pImpl->SetTarget(static_cast<HWND>(windowHandle));
+    void Displayer::SetTarget(void* windowHandle, uint32_t initialWidth, uint32_t initialHeight) {
+        pImpl->SetTarget(static_cast<HWND>(windowHandle), initialWidth, initialHeight);
     }
 
     bool Displayer::SetupBackend() {
@@ -19,6 +19,10 @@ namespace WTFDanmaku {
 
     bool Displayer::TeardownBackend() {
         return pImpl->TeardownBackend();
+    }
+
+    int Displayer::QuerySwapChain(const void* pGuid, void** ppObject) {
+        return pImpl->QuerySwapChain(reinterpret_cast<const IID*>(pGuid), ppObject);
     }
 
     int Displayer::GetWidth() {
@@ -41,16 +45,20 @@ namespace WTFDanmaku {
         pImpl->Resize(width, height);
     }
 
+    void Displayer::SetDpi(uint32_t dpiX, uint32_t dpiY) {
+        pImpl->SetDpi(dpiX, dpiY);
+    }
+
     ComPtr<ID2D1Bitmap1> Displayer::CreateBitmap(uint32_t width, uint32_t height) {
         return pImpl->CreateBitmap(width, height);
     }
 
-    ComPtr<ID2D1RenderTarget> Displayer::AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap) {
-        return pImpl->AcquireRenderTarget(bitmap);
+    ComPtr<ID2D1DeviceContext> Displayer::AcquireDeviceContext(ComPtr<ID2D1Bitmap1> bitmap) {
+        return pImpl->AcquireDeviceContext(bitmap);
     }
 
-    void Displayer::ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget) {
-        pImpl->ReleaseRenderTarget(renderTarget);
+    void Displayer::ReleaseDeviceContext(ComPtr<ID2D1DeviceContext> deviceContext) {
+        pImpl->ReleaseDeviceContext(deviceContext);
     }
 
     ComPtr<ID2D1Factory1> Displayer::GetD2DFactory() {
@@ -71,6 +79,10 @@ namespace WTFDanmaku {
 
     HRESULT Displayer::EndDraw() {
         return pImpl->EndDraw();
+    }
+
+    HRESULT Displayer::Present() {
+        return pImpl->Present();
     }
 
 }

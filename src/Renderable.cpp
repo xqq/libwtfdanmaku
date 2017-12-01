@@ -63,37 +63,37 @@ namespace WTFDanmaku {
         float strokeWidth = 1.5f * config->FontScaleFactor;
         strokeWidth *= displayer->GetDpiY() / 96.0f;
 
-        ComPtr<ID2D1RenderTarget> renderTarget = displayer->AcquireRenderTarget(bmp);
-        if (renderTarget == nullptr)
+        ComPtr<ID2D1DeviceContext> deviceContext = displayer->AcquireDeviceContext(bmp);
+        if (deviceContext == nullptr)
             return false;
 
-        renderTarget->BeginDraw();
+        deviceContext->BeginDraw();
 
-        renderTarget->Clear();
-        renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+        deviceContext->Clear();
+        deviceContext->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 
         ComPtr<ID2D1SolidColorBrush> brush;
-        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
+        deviceContext->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextColor), &brush);
 
         ComPtr<ID2D1SolidColorBrush> outlineBrush;
-        renderTarget->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 1.0f), &outlineBrush);
+        deviceContext->CreateSolidColorBrush(D2D1::ColorF(mDanmaku->mTextShadowColor, 1.0f), &outlineBrush);
 
         switch (config->DanmakuStyle) {
             case kOutline: {
-                ComPtr<OutlineTextRenderer> textRenderer(new OutlineTextRenderer(d2dFactory, renderTarget, outlineBrush, strokeWidth, brush));
-                mTextLayout->Draw(renderTarget.Get(), textRenderer.Get(), 0.0f, 0.0f);
+                ComPtr<OutlineTextRenderer> textRenderer(new OutlineTextRenderer(d2dFactory, deviceContext, outlineBrush, strokeWidth, brush));
+                mTextLayout->Draw(deviceContext.Get(), textRenderer.Get(), 0.0f, 0.0f);
                 break;
             }
             case kProjection: {
-                renderTarget->DrawTextLayout(D2D1::Point2F(1.0f, 1.0f), mTextLayout.Get(), outlineBrush.Get());
-                renderTarget->DrawTextLayout(D2D1::Point2F(0.0f, 0.0f), mTextLayout.Get(), brush.Get());
+                deviceContext->DrawTextLayout(D2D1::Point2F(1.0f, 1.0f), mTextLayout.Get(), outlineBrush.Get());
+                deviceContext->DrawTextLayout(D2D1::Point2F(0.0f, 0.0f), mTextLayout.Get(), brush.Get());
                 break;
             }
         }
 
-        HRESULT hr = renderTarget->EndDraw();
+        HRESULT hr = deviceContext->EndDraw();
 
-        displayer->ReleaseRenderTarget(renderTarget);
+        displayer->ReleaseDeviceContext(deviceContext);
 
         if (FAILED(hr))
             return false;

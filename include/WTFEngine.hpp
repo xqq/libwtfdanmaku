@@ -17,6 +17,15 @@ namespace WTFDanmaku {
         Advanced = 8
     };
 
+    enum TypeVisible : int {
+        ScrollingVisible = 1,
+        BottomVisible = 2,
+        TopVisible = 4,
+        ReserveVisible = 8,
+        PositionVisible = 16,
+        AdvancedVisible = 32
+    };
+
     enum Style : int {
         Outline = 1,
         Projection = 2
@@ -26,8 +35,12 @@ namespace WTFDanmaku {
     public:
         explicit WTFEngine();
         ~WTFEngine();
-        void Initialize(void* hwnd);
+        int Initialize(void* hwnd);
+        int InitializeOffscreen(uint32_t initialWidth, uint32_t initialHeight);
+        void Terminate();
+        int QuerySwapChain(const void* pGuid, void** ppObject);
         void LoadBilibiliFile(const char* filePath);
+        void LoadBilibiliFile(const wchar_t* filePath);
         void LoadBilibiliXml(const char* str);
         void AddDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp = 0, int danmakuId = 0);
         void AddLiveDanmaku(Type type, time_t time, const wchar_t* comment, int fontSize, int fontColor, time_t timestamp = 0, int danmakuId = 0);
@@ -37,6 +50,7 @@ namespace WTFDanmaku {
         void Stop();
         void SeekTo(time_t milliseconds);
         void Resize(uint32_t width, uint32_t height);
+        void SetDpi(uint32_t dpiX, uint32_t dpiY);
         time_t GetCurrentPosition();
         bool IsRunning();
         float GetFontScaleFactor();
@@ -47,6 +61,7 @@ namespace WTFDanmaku {
         void SetFontStretch(int dwriteFontStretch);
         void SetDanmakuStyle(Style style);
         void SetCompositionOpacity(float opacity);
+        void SetDanmakuTypeVisibility(int params);
     private:
         WTFEngine(const WTFEngine&) = delete;
         WTFEngine& operator=(const WTFEngine&) = delete;

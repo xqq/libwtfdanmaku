@@ -2,6 +2,8 @@
 #include <mmsystem.h>
 #include "WinmmTimer.hpp"
 
+#ifndef _WTF_BUILD_UWP
+
 #pragma comment (lib, "winmm.lib")
 
 namespace WTFDanmaku {
@@ -31,8 +33,9 @@ namespace WTFDanmaku {
         mBeginTime = timeGetTime();
     }
 
-    void WinmmTimer::Update() {
+    ITimer* WinmmTimer::Update() {
         mCurrent = timeGetTime() - mBeginTime + mTimeBase;
+        return this;
     }
 
     void WinmmTimer::Stop() {
@@ -49,3 +52,5 @@ namespace WTFDanmaku {
     }
 
 }
+
+#endif // _WTF_BUILD_UWP

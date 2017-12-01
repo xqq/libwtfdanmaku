@@ -6,7 +6,9 @@
 #include <d2d1_1.h>
 #include <d3d11.h>
 #include <dxgi1_2.h>
+#if !defined(_WTF_BUILD_WIN7) && !defined(_WTF_BUILD_UWP)
 #include <dcomp.h>
+#endif
 #include <dwrite.h>
 #include "Win32Mutex.hpp"
 #include "Noncopyable.hpp"
@@ -23,16 +25,19 @@ namespace WTFDanmaku {
     public:
         explicit DisplayerImpl(Displayer* outer);
         ~DisplayerImpl();
-        void SetTarget(HWND windowHandle);
+        void SetTarget(HWND windowHandle, uint32_t initialWidth = 0, uint32_t initialHeight = 0);
         bool SetupBackend();
         bool TeardownBackend();
+        HRESULT QuerySwapChain(const IID* pGuid, void** ppvObject);
         void Resize(uint32_t width, uint32_t height);
+        void SetDpi(uint32_t dpiX, uint32_t dpiY);
         ComPtr<ID2D1Bitmap1> CreateBitmap(uint32_t width, uint32_t height);
-        ComPtr<ID2D1RenderTarget> AcquireRenderTarget(ComPtr<ID2D1Bitmap1> bitmap);
-        void ReleaseRenderTarget(ComPtr<ID2D1RenderTarget> renderTarget);
+        ComPtr<ID2D1DeviceContext> AcquireDeviceContext(ComPtr<ID2D1Bitmap1> bitmap);
+        void ReleaseDeviceContext(ComPtr<ID2D1DeviceContext> deviceContext);
         void DrawDanmakuItem(DanmakuRef item, time_t current, DanmakuConfig* config);
         void BeginDraw();
         HRESULT EndDraw();
+        HRESULT Present();
         ComPtr<ID2D1Factory1> GetD2DFactory();
         ComPtr<IDWriteFactory> GetDWriteFactory();
     public:
@@ -84,9 +89,11 @@ namespace WTFDanmaku {
         ComPtr<ID2D1Device> mD2DDevice;
         ComPtr<ID2D1DeviceContext> mDeviceContext;
         ComPtr<ID2D1DeviceContext> mLendContext;
+#if !defined(_WTF_BUILD_WIN7) && !defined(_WTF_BUILD_UWP)
         ComPtr<IDCompositionDevice> mDCompDevice;
         ComPtr<IDCompositionTarget> mDCompTarget;
         ComPtr<IDCompositionVisual> mDCompVisual;
+#endif
     };
 
 }
