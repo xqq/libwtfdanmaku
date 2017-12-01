@@ -62,7 +62,10 @@ namespace WTFDanmaku {
                 DanmakuRef danmaku = DanmakuFactory::CreateDanmaku(type, time, comment, textSize, textColor, timestamp, danmakuId);
                 if (danmaku != nullptr) {
                     if (type == DanmakuType::kPosition) {
-                        bool succ = ParsePositionDanmaku(danmaku, node->value());
+                        std::string params;
+                        params.resize(node->value_size() + 1);
+                        memcpy(&params[0], node->value(), node->value_size());
+                        bool succ = ParsePositionDanmaku(danmaku, params.c_str());
                         if (!succ) continue;
                     }
                     mDanmakus->push_back(danmaku);
@@ -85,33 +88,65 @@ namespace WTFDanmaku {
         if (d.Size() < 5)
             return false;
 
-        danmaku->mSrcPoint = Point<float>(strtof(d[0].GetString(), nullptr), strtof(d[1].GetString(), nullptr));
+        if (d[0].GetType() == Type::kNumberType) {
+            danmaku->mSrcPoint = Point<float>((float)(d[0].GetDouble()), (float)(d[1].GetDouble()));
+        } else if (d[0].GetType() == Type::kStringType) {
+            danmaku->mSrcPoint = Point<float>(strtof(d[0].GetString(), nullptr), strtof(d[1].GetString(), nullptr));
+        }
+
         std::vector<std::string> alphas;
         alphas.reserve(2);
         SplitString(d[2].GetString(), '-', alphas);
         danmaku->mSrcAlpha = std::stof(alphas[0]);
         danmaku->mDestAlpha = std::stof(alphas[1]);
-        danmaku->mDuration = static_cast<time_t>(strtof(d[3].GetString(), nullptr) * 1000);
+
+        if (d[3].GetType() == Type::kNumberType) {
+            danmaku->mDuration = static_cast<time_t>(d[3].GetDouble() * 1000);
+        } else if (d[3].GetType() == Type::kStringType) {
+            danmaku->mDuration = static_cast<time_t>(strtof(d[3].GetString(), nullptr) * 1000);
+        }
+
         danmaku->mComment = UTF8ToWideString(d[4].GetString());
         DanmakuFactory::ReplaceStringInplace(danmaku->mComment, L"/n", L"\r\n");
 
         if (d.Size() > 5) {  // maybe 7 params
-            danmaku->mRotateZ = std::atoi(d[5].GetString());
-            danmaku->mRotateY = std::atoi(d[6].GetString());
+            if (d[5].GetType() == Type::kNumberType) {
+                danmaku->mRotateZ = d[5].GetInt();
+                danmaku->mRotateY = d[6].GetInt();
+            } else if (d[5].GetType() == Type::kStringType) {
+                danmaku->mRotateZ = std::atoi(d[5].GetString());
+                danmaku->mRotateY = std::atoi(d[6].GetString());
+            }
         }
 
         if (d.Size() > 7) {  // maybe 9 params
             danmaku->mHasMovement = true;
-            danmaku->mDestPoint = Point<float>(strtof(d[7].GetString(), nullptr), strtof(d[8].GetString(), nullptr));
+            if (d[7].GetType() == Type::kNumberType) {
+                danmaku->mDestPoint = Point<float>((float)(d[7].GetDouble()), (float)(d[8].GetDouble()));
+            } else if (d[7].GetType() == Type::kStringType) {
+                danmaku->mDestPoint = Point<float>(strtof(d[7].GetString(), nullptr), strtof(d[8].GetString(), nullptr));
+            }
         }
 
         if (d.Size() > 9) {  // maybe 11 params
-            danmaku->mDelayAfterStop = strtoll(d[9].GetString(), nullptr, 10);
-            danmaku->mOffsetTime = strtoll(d[10].GetString(), nullptr, 10);
+            if (d[9].GetType() == Type::kNumberType) {
+                danmaku->mDelayAfterStop = d[9].GetInt64();
+                danmaku->mOffsetTime = d[10].GetInt64();
+            } else if (d[9].GetType() == Type::kStringType) {
+                danmaku->mDelayAfterStop = strtoll(d[9].GetString(), nullptr, 10);
+                danmaku->mOffsetTime = strtoll(d[10].GetString(), nullptr, 10);
+            }
         }
 
         if (d.Size() > 11) {  // maybe 13 params
-            danmaku->mHasCustomFont = strcmp(d[11].GetString(), "true") == 0;
+            if (d[11].GetType() == Type::kStringType) {
+                danmaku->mHasCustomFont = strcmp(d[11].GetString(), "true") == 0;
+            } else if (d[11].GetType() == Type::kTrueType) {
+                danmaku->mHasCustomFont = true;
+            } else if (d[11].GetType() == Type::kFalseType) {
+                danmaku->mHasCustomFont = false;
+            }
+
             if (danmaku->mHasCustomFont) {
                 danmaku->mCustomFontName = UTF8ToWideString(d[12].GetString());
             }
